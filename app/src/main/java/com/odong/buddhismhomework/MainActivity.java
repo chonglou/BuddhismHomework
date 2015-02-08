@@ -58,6 +58,12 @@ public class MainActivity extends Activity {
                     names.add("courses/" + s + ".mp3");
                 }
                 new Downloader().execute(names.toArray(new String[names.size()]));
+
+//                    new AlertDialog.Builder(
+//                            MainActivity.this).setMessage(
+//                            R.string.lbl_error_download).setPositiveButton(
+//                            android.R.string.ok, null).create().show();
+//
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -144,7 +150,7 @@ public class MainActivity extends Activity {
     }
 
 
-    private class Downloader extends AsyncTask<String, String, String> {
+    private class Downloader extends AsyncTask<String, String, Boolean> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -153,7 +159,7 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        protected String doInBackground(String... names) {
+        protected Boolean doInBackground(String... names) {
             dlgDownload.setMax(names.length);
 
             try {
@@ -185,13 +191,7 @@ public class MainActivity extends Activity {
 
             boolean success = dlgDownload.getProgress() == dlgDownload.getMax();
             dlgDownload.dismiss();
-            if (!success) {
-                new AlertDialog.Builder(
-                        MainActivity.this).setMessage(
-                        R.string.lbl_error_download).setPositiveButton(
-                        android.R.string.ok, null).create().show();
-            }
-            return null;
+            return success;
         }
     }
 
