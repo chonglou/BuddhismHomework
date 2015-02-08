@@ -128,8 +128,16 @@ public class MainActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //todo
-                setTitle("Click"+homeworkActions.get(position));
+                String act = homeworkActions.get(position);
+                if(act.equals("morning")||act.equals("night")){
+
+                }
+                else if(act.equals("sitting")){
+
+                }
+                else{
+
+                }
             }
         });
     }
