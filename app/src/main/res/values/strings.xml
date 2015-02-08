@@ -3,6 +3,8 @@
 
     <string name="app_name">佛教朝暮课诵</string>
     <string name="homework">功课列表</string>
+
     <string name="action_settings">设置</string>
+    <string name="action_about_me">关于我们</string>
 
 </resources>

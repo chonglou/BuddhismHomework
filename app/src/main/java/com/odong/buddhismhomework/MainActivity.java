@@ -1,17 +1,43 @@
 package com.odong.buddhismhomework;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        List<Map<String,String>>items= new ArrayList<Map<String, String>>();
+        for(int i=0; i<12; i++){
+            Map<String,String> item = new HashMap<String, String>();
+            item.put("title", "aaa"+i+"1");
+            item.put("details", "aaa"+i+"2");
+            items.add(item);
+        }
+
+        ListAdapter adapter = new SimpleAdapter(this,
+                items,
+                android.R.layout.two_line_list_item,
+                new String[]{"title", "details"},
+                new int[]{android.R.id.text1, android.R.id.text2});
+
+        setListAdapter(adapter);
     }
 
 

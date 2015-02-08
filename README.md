@@ -4,8 +4,8 @@
 
 ### 开发帮助
 
-#### Logo
-    convert  -resize 96x96 /tmp/logo.png ic_launcher.png
+#### Logo(使用 dia)
+    cd tools && sh logo.sh
 
 ### Gradle环境
 #### 安装 
