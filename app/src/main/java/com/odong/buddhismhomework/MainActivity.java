@@ -3,7 +3,6 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,7 +53,7 @@ public class MainActivity extends Activity {
                     names.add("musics/" + s + ".mp3");
                 }
                 for (String s : getResources().getStringArray(R.array.lv_courses)) {
-                    names.add("books/" + s + ".txt");
+                    names.add("courses/" + s + ".txt");
                     names.add("courses/" + s + ".mp3");
                 }
                 new Downloader().execute(names.toArray(new String[names.size()]));
@@ -156,34 +155,33 @@ public class MainActivity extends Activity {
         protected String doInBackground(String... names) {
             dlgDownload.setMax(names.length);
 
-            for (String name : names) {
-                File f = new File(name);
-                if(!f.getParentFile().exists()){
-                    f.getParentFile().mkdirs();
-                }
-                if (!f.exists()) {
-                    try {
+            try {
+                for (String name : names) {
+                    File f = new File(name);
+                    if (!f.getParentFile().exists()) {
+                        f.getParentFile().mkdirs();
+                    }
+                    if (!f.exists()) {
+
                         DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
 
                         byte[] buf = new byte[1024];
                         int len;
 
-                        FileOutputStream fos = openFileOutput(name, Context.MODE_PRIVATE);
+                        FileOutputStream fos = new FileOutputStream(f); // openFileOutput(name, Context.MODE_PRIVATE);
                         while ((len = dis.read(buf)) > 0) {
                             fos.write(buf, 0, len);
                         }
-
-                    } catch (MalformedURLException e) {
-                        Log.e("下载", "地址错误", e);
-                    } catch (IOException e) {
-                        Log.e("下载", "IO错误", e);
-                    } catch (SecurityException e) {
-                        Log.e("下载", "安全错误", e);
                     }
-
+                    dlgDownload.incrementProgressBy(1);
                 }
-                dlgDownload.incrementProgressBy(1);
 
+            } catch (MalformedURLException e) {
+                Log.e("下载", "地址错误", e);
+            } catch (IOException e) {
+                Log.e("下载", "IO错误", e);
+            } catch (SecurityException e) {
+                Log.e("下载", "安全错误", e);
             }
 
             boolean success = dlgDownload.getProgress() == dlgDownload.getMax();
