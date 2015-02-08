@@ -5,7 +5,7 @@
 ### 开发帮助
 
 #### Logo(使用 dia)
-    cd tools/logo && sh logo.sh
+    cd tools && sh png.sh ic_launcher
 
 #### 去掉多余的空行
     sed -i  '/^$/d' file.txt
