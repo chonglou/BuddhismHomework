@@ -32,21 +32,21 @@
         android:id="@+id/btn_main_courses"
         android:layout_gravity="start"
         android:contentDescription="@string/title_courses"
-        android:src="@drawable/ic_course"
+        android:src="@drawable/ic_courses"
         />
 
     <ImageButton
         android:id="@+id/btn_main_books"
         android:layout_gravity="start"
         android:contentDescription="@string/title_books"
-        android:src="@drawable/ic_book"
+        android:src="@drawable/ic_books"
         />
 
     <ImageButton
         android:id="@+id/btn_main_music"
         android:layout_gravity="start"
         android:contentDescription="@string/title_music"
-        android:src="@drawable/ic_music"
+        android:src="@drawable/ic_musics"
         />
 
 </GridLayout>

@@ -28,25 +28,25 @@
     <string name="lbl_about_me">报告BUG：https://github.com/chonglou/BuddhismHomework/issues</string>
 
     <string-array name="lv_musics">
-        <item>fagushan|法鼓山</item>
-        <item>fagusong|法鼓颂</item>
-        <item>sizhongfozigongmianyu|四众佛子共勉语</item>
-        <item>woweinizhufu|我为你祝福</item>
-        <item>pingange|平安歌</item>
+        <item>fagushan|法鼓山|法鼓山</item>
+        <item>fagusong|法鼓颂|法鼓山</item>
+        <item>sizhongfozigongmianyu|四众佛子共勉语|法鼓山</item>
+        <item>woweinizhufu|我为你祝福|法鼓山</item>
+        <item>pingange|平安歌|法鼓山</item>
     </string-array>
 
     <string-array name="lv_courses">
-        <item>lengyanzhou</item>
-        <item>foshuoemituojing</item>
-        <item>dabeizhou</item>
-        <item>shixiaozhou</item>
-        <item>xinjingwangshengzhou</item>
-        <item>lifochanhuiwen</item>
-        <item>emituofosizifohao</item>
+        <item>lengyanzhou|楞严咒|圣严法师</item>
+        <item>foshuoemituojing|佛说阿弥陀经|圣严法师</item>
+        <item>dabeizhou|大悲咒|圣严法师</item>
+        <item>shixiaozhou|十小咒|圣严法师</item>
+        <item>xinjingwangshengzhou|心经+往生咒|圣严法师</item>
+        <item>lifochanhuiwen|礼佛忏悔文|圣严法师</item>
+        <item>emituofosizifohao|阿弥陀佛四字佛号|圣严法师</item>
     </string-array>
 
     <string-array name="lv_books">
-        <item>jingangjing</item>
-        <item>lengyanjing</item>
+        <item>jingangjing|金刚经|姚秦 三藏法师 鸠摩罗什 译</item>
+        <item>lengyanjing|楞严经|唐天竺 沙门般剌密帝 译</item>
     </string-array>
 </resources>

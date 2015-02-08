@@ -47,14 +47,15 @@ public class MainActivity extends Activity {
             case R.id.action_download:
                 List<String> names = new ArrayList<String>();
                 for (String s : getResources().getStringArray(R.array.lv_books)) {
-                    names.add("books/" + s + ".txt");
+                    names.add("books/" + s.split("\\|")[0] + ".txt");
                 }
                 for (String s : getResources().getStringArray(R.array.lv_musics)) {
                     names.add("musics/" + s.split("\\|")[0] + ".mp3");
                 }
                 for (String s : getResources().getStringArray(R.array.lv_courses)) {
-                    names.add("courses/" + s + ".txt");
-                    names.add("courses/" + s + ".mp3");
+                    String n = s.split("\\|")[0];
+                    names.add("courses/" + n + ".txt");
+                    names.add("courses/" + n + ".mp3");
                 }
 
 
@@ -86,7 +87,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CourseActivity.class);
-                intent.putExtra("name", "morning");
+                intent.putExtra("type", "morning");
                 startActivity(intent);
             }
         });
@@ -95,7 +96,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CourseActivity.class);
-                intent.putExtra("name", "night");
+                intent.putExtra("type", "night");
                 startActivity(intent);
             }
         });
@@ -106,11 +107,12 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this, SittingActivity.class));
             }
         });
+
         events.put(R.id.btn_main_courses, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("name", "courses");
+                intent.putExtra("lvId", R.array.lv_courses);
                 startActivity(intent);
             }
         });
@@ -118,7 +120,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("name", "books");
+                intent.putExtra("lvId", R.array.lv_books);
                 startActivity(intent);
             }
         });
@@ -126,7 +128,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("name", "musics");
+                intent.putExtra("lvId", R.array.lv_musics);
                 startActivity(intent);
             }
         });

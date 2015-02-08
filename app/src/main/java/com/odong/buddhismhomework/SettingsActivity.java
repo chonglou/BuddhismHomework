@@ -2,8 +2,6 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 
 public class SettingsActivity extends Activity {

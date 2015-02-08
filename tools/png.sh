@@ -1,10 +1,16 @@
 #!/bin/sh
 
 TARGET=../app/src/main/res/drawable
-if [ -f images/$1.png ]
-then
-	convert  -resize 48x48 images/$1.png $TARGET-mdpi/$1.png
-	convert  -resize 72x72 images/$1.png $TARGET-hdpi/$1.png
-	convert  -resize 96x96 images/$1.png $TARGET-xhdpi/$1.png
-	convert  -resize 144x144 images/$1.png $TARGET-xxhdpi/$1.png
-fi
+
+for i in books courses launcher morning musics night sitting
+do
+	j=ic_$i.png
+	if [ -f images/$j.png ]
+	then
+		convert  -resize 48x48 images/$j $TARGET-mdpi/$j
+		convert  -resize 72x72 images/$j $TARGET-hdpi/$j
+		convert  -resize 96x96 images/$j $TARGET-xhdpi/$j
+		convert  -resize 144x144 images/$j $TARGET-xxhdpi/$j
+	fi
+done
+
