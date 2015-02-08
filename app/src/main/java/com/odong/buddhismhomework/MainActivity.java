@@ -3,7 +3,6 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,11 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.DataInputStream;
-import java.io.FileOutputStream;
+import com.odong.buddhismhomework.models.CacheFile;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,23 +42,14 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_download:
-                List<String> names = new ArrayList<String>();
-                for (String s : getResources().getStringArray(R.array.lv_books)) {
-                    names.add("books/" + s.split("\\|")[0] + ".txt");
-                }
-                for (String s : getResources().getStringArray(R.array.lv_musics)) {
-                    names.add("musics/" + s.split("\\|")[0] + ".mp3");
-                }
-                for (String s : getResources().getStringArray(R.array.lv_courses)) {
-                    String n = s.split("\\|")[0];
-                    names.add("courses/" + n + ".txt");
-                    names.add("courses/" + n + ".mp3");
-                }
-
+                List<CacheFile> files = new ArrayList<CacheFile>();
+                files.addAll(CacheFile.all(this, "books", R.array.lv_books, "txt"));
+                files.addAll(CacheFile.all(this, "courses", R.array.lv_courses, "mp3", "txt"));
+                files.addAll(CacheFile.all(this, "musics", R.array.lv_musics, "mp3"));
 
                 initDownloadDialog();
                 dlgDownload.show();
-                new Downloader().execute(names.toArray(new String[names.size()]));
+                new Downloader().execute(files.toArray(new CacheFile[files.size()]));
 
                 break;
             case R.id.action_settings:
@@ -149,37 +138,16 @@ public class MainActivity extends Activity {
     }
 
 
-    private class Downloader extends AsyncTask<String, String, String> {
+    private class Downloader extends AsyncTask<CacheFile, String, String> {
 
         @Override
-        protected String doInBackground(String... names) {
-            dlgDownload.setMax(names.length);
+        protected String doInBackground(CacheFile... files) {
+            dlgDownload.setMax(files.length);
             dlgDownload.setProgress(0);
 
             try {
-                for (String name : names) {
-
-                    String fn = name.replace('/', '-');
-                    if (!getFileStreamPath(fn).exists()) {
-                        URL url = new URL(
-                                (BuildConfig.DEBUG ?
-                                        "http://192.168.1.102/tools/" :
-                                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/")
-
-                                        + name);
-                        Log.d("下载", url.toString());
-                        DataInputStream dis = new DataInputStream(
-                                url.openStream());
-
-                        byte[] buf = new byte[1024];
-                        int len;
-
-                        FileOutputStream fos = openFileOutput(fn, Context.MODE_PRIVATE);
-                        while ((len = dis.read(buf)) > 0) {
-                            fos.write(buf, 0, len);
-                        }
-                        fos.flush();
-                    }
+                for (CacheFile cf : files) {
+                    cf.sync();
                     dlgDownload.incrementProgressBy(1);
                 }
 

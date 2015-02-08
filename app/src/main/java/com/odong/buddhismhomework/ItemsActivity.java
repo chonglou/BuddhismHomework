@@ -5,12 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import com.odong.buddhismhomework.models.CacheFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,24 +52,22 @@ public class ItemsActivity extends Activity {
         //getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private List<Map<String, String>> loadListItems() {
-
-        List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-
-        for (String s : getResources().getStringArray(lvId)) {
-            String[] ss = s.split("\\|");
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("title", ss[1]);
-            map.put("details", ss[2]);
-            items.add(map);
-        }
-        return items;
-    }
 
     private void initListView() {
 
+        final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
+        CacheFile.each(this, getIntent().getIntExtra("type", R.array.lv_books), new CacheFile.ItemCallback() {
+            @Override
+            public void call(String name, String title, String details) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("title", title);
+                map.put("details", details);
+                items.add(map);
+            }
+        });
+
         ListAdapter adapter = new SimpleAdapter(this,
-                loadListItems(),
+                items,
                 android.R.layout.two_line_list_item,
                 new String[]{"title", "details"},
                 new int[]{android.R.id.text1, android.R.id.text2});
@@ -113,14 +112,14 @@ public class ItemsActivity extends Activity {
 
                         switch (lvId) {
                             case R.array.lv_courses:
-                                deleteFile("courses", R.array.lv_courses, position, "mp3");
-                                deleteFile("courses", R.array.lv_courses, position, "txt");
+                                new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "mp3").rm();
+                                new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "txt").rm();
                                 break;
                             case R.array.lv_musics:
-                                deleteFile("musics", R.array.lv_musics, position, "mp3");
+                                new CacheFile(ItemsActivity.this, "musics", R.array.lv_musics, position, "mp3").rm();
                                 break;
                             case R.array.lv_books:
-                                deleteFile("books", R.array.lv_books, position, "txt");
+                                new CacheFile(ItemsActivity.this, "books", R.array.lv_books, position, "txt").rm();
                                 break;
                         }
 
@@ -135,12 +134,6 @@ public class ItemsActivity extends Activity {
         });
     }
 
-
-    private void deleteFile(String type, int sid, int position, String ext) {
-        String name = type+"-" + getResources().getStringArray(sid)[position].split("\\|")[0] + "." + ext;
-        deleteFile(name);
-        Log.d("删除文件", name);
-    }
 
     private int lvId;
 
