@@ -3,6 +3,7 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,20 +35,21 @@ public class CourseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
-
-
-        initDownloadDialog();
-        initHomework();
-
-        List<String> names = new ArrayList<String>();
-        for (String s : getResources().getStringArray(R.array.lv_items_homework)) {
-            String name = s.split("\\|")[0];
-            if (name.equals("morning") || name.equals("night") || name.equals("sitting")) {
-                continue;
-            }
-            names.add(name);
-        }
-        new Downloader().execute(names.toArray(new String[names.size()]));
+        String name = getIntent().getStringExtra("name");
+//
+//
+//        initDownloadDialog();
+//        initHomework();
+//
+//        List<String> names = new ArrayList<String>();
+//        for (String s : getResources().getStringArray(R.array.lv_items_homework)) {
+//            String name = s.split("\\|")[0];
+//            if (name.equals("morning") || name.equals("night") || name.equals("sitting")) {
+//                continue;
+//            }
+//            names.add(name);
+//        }
+//        new Downloader().execute(names.toArray(new String[names.size()]));
     }
 
 

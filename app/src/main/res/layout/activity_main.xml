@@ -10,42 +10,42 @@
     <ImageButton
         android:id="@+id/btn_main_morning"
         android:layout_gravity="start"
-        android:contentDescription="@string/btn_main_morning"
+        android:contentDescription="@string/title_morning"
         android:src="@drawable/ic_morning"
         />
 
     <ImageButton
         android:id="@+id/btn_main_night"
         android:layout_gravity="start"
-        android:contentDescription="@string/btn_main_night"
+        android:contentDescription="@string/title_night"
         android:src="@drawable/ic_night"
         />
 
     <ImageButton
         android:id="@+id/btn_main_sitting"
         android:layout_gravity="start"
-        android:contentDescription="@string/btn_main_sitting"
+        android:contentDescription="@string/title_sitting"
         android:src="@drawable/ic_sitting"
         />
 
     <ImageButton
         android:id="@+id/btn_main_courses"
         android:layout_gravity="start"
-        android:contentDescription="@string/btn_main_courses"
+        android:contentDescription="@string/title_courses"
         android:src="@drawable/ic_course"
         />
 
     <ImageButton
         android:id="@+id/btn_main_books"
         android:layout_gravity="start"
-        android:contentDescription="@string/btn_main_books"
+        android:contentDescription="@string/title_books"
         android:src="@drawable/ic_book"
         />
 
     <ImageButton
         android:id="@+id/btn_main_music"
         android:layout_gravity="start"
-        android:contentDescription="@string/btn_main_music"
+        android:contentDescription="@string/title_music"
         android:src="@drawable/ic_music"
         />
 

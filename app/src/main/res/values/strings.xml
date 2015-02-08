@@ -9,13 +9,14 @@
     <string name="action_download">下载数据</string>
     <string name="action_settings">参数设置</string>
     <string name="action_about_me">关于我们</string>
-
-    <string name="btn_main_morning">早课</string>
-    <string name="btn_main_night">晚课</string>
-    <string name="btn_main_sitting">打坐</string>
-    <string name="btn_main_courses">梵呗</string>
-    <string name="btn_main_music">佛乐</string>
-    <string name="btn_main_books">典籍</string>
+    
+    
+    <string name="title_morning">早课</string>
+    <string name="title_night">晚课</string>
+    <string name="title_sitting">打坐</string>
+    <string name="title_courses">梵呗</string>
+    <string name="title_music">佛乐</string>
+    <string name="title_books">典籍</string>
 
     <string name="lbl_every_day">每天</string>
     <string name="lbl_already_download">已经下载</string>

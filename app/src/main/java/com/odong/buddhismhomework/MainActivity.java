@@ -2,9 +2,16 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends Activity {
@@ -14,29 +21,25 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        initButtonEvent();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_download:
+                //todo
                 break;
             case R.id.action_settings:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_about_me:
                 AlertDialog.Builder adbAboutMe = new AlertDialog.Builder(this);
@@ -49,8 +52,64 @@ public class MainActivity extends Activity {
         }
         return true;
 
-
     }
 
+    private void initButtonEvent(){
+        //Map<Integer, View.OnClickListener> events = new HashMap<Integer, View.OnClickListener>();
+        SparseArray< View.OnClickListener> events = new SparseArray<View.OnClickListener>();
+        events.put(R.id.btn_main_morning, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                intent.putExtra("name", "morning");
+                startActivity(intent);
+            }
+        });
+
+        events.put(R.id.btn_main_night, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                intent.putExtra("name", "night");
+                startActivity(intent);
+            }
+        });
+
+        events.put(R.id.btn_main_sitting, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SittingActivity.class));
+            }
+        });
+        events.put(R.id.btn_main_courses, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+                intent.putExtra("name", "course");
+                startActivity(intent);
+            }
+        });
+        events.put(R.id.btn_main_books, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+                intent.putExtra("name", "book");
+                startActivity(intent);
+            }
+        });
+        events.put(R.id.btn_main_music, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+                intent.putExtra("name", "music");
+                startActivity(intent);
+            }
+        });
+
+        for(int i=0; i<events.size(); i++){
+            findViewById(events.keyAt(i)).setOnClickListener(events.valueAt(i));
+        }
+
+    }
 
 }
