@@ -3,16 +3,16 @@
     <item android:id="@+id/action_download"
         android:title="@string/action_download"
         android:icon="@drawable/ic_action_download"
-        android:orderInCategory="90"
-        android:showAsAction="never" />
+        android:orderInCategory="120"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_about_me"
         android:title="@string/action_about_me"
         android:icon="@drawable/ic_action_help"
-        android:orderInCategory="110"
-        android:showAsAction="never" />
+        android:orderInCategory="200"
+        android:showAsAction="ifRoom" />
 </menu>

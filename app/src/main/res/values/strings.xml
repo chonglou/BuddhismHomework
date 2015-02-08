@@ -7,12 +7,13 @@
     <string name="title_activity_settings">参数设置</string>
     <string name="title_activity_main">功课列表</string>
 
-    <string name="action_download">同步离线数据</string>
-    <string name="action_settings">设置</string>
+    <string name="action_download">下载数据</string>
+    <string name="action_settings">参数设置</string>
     <string name="action_about_me">关于我们</string>
     <string name="lbl_every_day">每天</string>
     <string name="lbl_already_download">已经下载</string>
     <string name="lbl_non_exists">尚未下载</string>
+    <string name="lbl_download">下载资源文件</string>
     <string name="lbl_about_me">报告BUG：https://github.com/chonglou/BuddhismHomework/issues</string>
 
     <string-array name="lv_items_homework" formatted="false">

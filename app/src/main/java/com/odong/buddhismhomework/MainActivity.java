@@ -1,8 +1,11 @@
 package com.odong.buddhismhomework;
 
 import android.app.Activity;
-import android.app.ListActivity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +16,12 @@ import android.widget.SimpleAdapter;
 
 import com.odong.buddhismhomework.models.Calendar;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +35,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        initDownloadDialog();
         initHomework();
     }
 
@@ -46,14 +56,35 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_download:
+                List<String> names = new ArrayList<String>();
+                for (String s : getResources().getStringArray(R.array.lv_items_homework)) {
+                    String name = s.split("\\|")[0];
+                    if (name.equals("morning") || name.equals("night") || name.equals("sitting")) {
+                        continue;
+                    }
+                    names.add(name);
+                }
+                new Downloader().execute(names.toArray(new String[names.size()]));
+                break;
+            case R.id.action_settings:
+                break;
+            case R.id.action_about_me:
+                AlertDialog.Builder adbAboutMe = new AlertDialog.Builder(this);
+                adbAboutMe.setMessage(R.string.lbl_about_me).setTitle(R.string.action_about_me);
+                adbAboutMe.setPositiveButton(android.R.string.ok, null);
+                adbAboutMe.create().show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+        return true;
 
-        return super.onOptionsItemSelected(item);
+
     }
 
-    private void initHomework(){
+    private void initHomework() {
 
         DwDbHelper dh = new DwDbHelper(this);
 
@@ -122,24 +153,82 @@ public class MainActivity extends Activity {
                 new String[]{"title", "details"},
                 new int[]{android.R.id.text1, android.R.id.text2});
 
-        ListView lv = (ListView)findViewById(R.id.lv_homework);
+        ListView lv = (ListView) findViewById(R.id.lv_homework);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String act = homeworkActions.get(position);
-                if(act.equals("morning")||act.equals("night")){
+                if (act.equals("morning") || act.equals("night")) {
 
-                }
-                else if(act.equals("sitting")){
+                } else if (act.equals("sitting")) {
 
-                }
-                else{
-
+                } else {
+                    new Downloader().execute(act);
                 }
             }
         });
     }
+
+    private void initDownloadDialog() {
+        dlgDownload = new ProgressDialog(this);
+        dlgDownload.setTitle(R.string.action_download);
+        dlgDownload.setMessage(getString(R.string.lbl_download));
+        dlgDownload.setCancelable(true);
+        dlgDownload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+    }
+
+
+    private class Downloader extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dlgDownload.setProgress(0);
+            dlgDownload.show();
+        }
+
+        @Override
+        protected String doInBackground(String... names) {
+            dlgDownload.setMax(names.length*2);
+            String[] exts = new String[]{"mp3", "txt"};
+            for (String name : names) {
+                for (String ext : exts) {
+                    File f = new File(name + "." + ext);
+                    if (!f.exists()) {
+                        try {
+                            DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
+
+                            byte[] buf = new byte[1024];
+                            int len;
+
+                            FileOutputStream fos = new FileOutputStream(f);
+                            while ((len = dis.read(buf)) > 0) {
+                                fos.write(buf, 0, len);
+                            }
+
+
+                        } catch (MalformedURLException e) {
+                            Log.e("下载", "地址错误", e);
+                        } catch (IOException e) {
+                            Log.e("下载", "IO错误", e);
+                        } catch (SecurityException e) {
+                            Log.e("下载", "安全错误", e);
+                        }
+
+                    }
+                    dlgDownload.incrementProgressBy(1);
+                }
+
+            }
+            dlgDownload.dismiss();
+            return null;
+        }
+    }
+
     private List<String> homeworkActions;
+    private ProgressDialog dlgDownload;
+
 }
