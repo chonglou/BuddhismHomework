@@ -2,16 +2,23 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class MainActivity extends Activity {
@@ -54,9 +61,9 @@ public class MainActivity extends Activity {
 
     }
 
-    private void initButtonEvent(){
+    private void initButtonEvent() {
         //Map<Integer, View.OnClickListener> events = new HashMap<Integer, View.OnClickListener>();
-        SparseArray< View.OnClickListener> events = new SparseArray<View.OnClickListener>();
+        SparseArray<View.OnClickListener> events = new SparseArray<View.OnClickListener>();
         events.put(R.id.btn_main_morning, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,10 +113,67 @@ public class MainActivity extends Activity {
             }
         });
 
-        for(int i=0; i<events.size(); i++){
+        for (int i = 0; i < events.size(); i++) {
             findViewById(events.keyAt(i)).setOnClickListener(events.valueAt(i));
         }
 
     }
 
+
+    private void initDownloadDialog() {
+        dlgDownload = new ProgressDialog(this);
+        dlgDownload.setTitle(R.string.action_download);
+        dlgDownload.setMessage(getString(R.string.lbl_download));
+        dlgDownload.setCancelable(true);
+        dlgDownload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+    }
+
+
+    private class Downloader extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dlgDownload.setProgress(0);
+            dlgDownload.show();
+        }
+
+        @Override
+        protected String doInBackground(String... names) {
+            dlgDownload.setMax(names.length);
+
+            for (String name : names) {
+                File f = new File(name);
+                if (!f.exists()) {
+                    try {
+                        DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
+
+                        byte[] buf = new byte[1024];
+                        int len;
+
+                        FileOutputStream fos = openFileOutput(name, Context.MODE_PRIVATE);
+                        while ((len = dis.read(buf)) > 0) {
+                            fos.write(buf, 0, len);
+                        }
+
+                    } catch (MalformedURLException e) {
+                        Log.e("下载", "地址错误", e);
+                    } catch (IOException e) {
+                        Log.e("下载", "IO错误", e);
+                    } catch (SecurityException e) {
+                        Log.e("下载", "安全错误", e);
+                    }
+
+                }
+                dlgDownload.incrementProgressBy(1);
+
+
+            }
+            dlgDownload.dismiss();
+            return null;
+        }
+    }
+
+
+    private ProgressDialog dlgDownload;
 }

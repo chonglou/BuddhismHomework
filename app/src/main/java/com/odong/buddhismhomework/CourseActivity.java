@@ -134,70 +134,11 @@ public class CourseActivity extends Activity {
                 } else if (act.equals("sitting")) {
 
                 } else {
-                    new Downloader().execute(act);
+                    //new Downloader().execute(act);
                 }
             }
         });
     }
 
-    private void initDownloadDialog() {
-        dlgDownload = new ProgressDialog(this);
-        dlgDownload.setTitle(R.string.action_download);
-        dlgDownload.setMessage(getString(R.string.lbl_download));
-        dlgDownload.setCancelable(true);
-        dlgDownload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-
-    }
-
-
-    private class Downloader extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dlgDownload.setProgress(0);
-            dlgDownload.show();
-        }
-
-        @Override
-        protected String doInBackground(String... names) {
-            dlgDownload.setMax(names.length * 2);
-            String[] exts = new String[]{"mp3", "txt"};
-            for (String name : names) {
-                for (String ext : exts) {
-                    File f = new File(name + "." + ext);
-                    if (!f.exists()) {
-                        try {
-
-                            DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name + "." + ext).openStream());
-
-                            byte[] buf = new byte[1024];
-                            int len;
-
-                            FileOutputStream fos = openFileOutput(name + "." + ext, Context.MODE_PRIVATE);
-                            while ((len = dis.read(buf)) > 0) {
-                                fos.write(buf, 0, len);
-                            }
-
-
-                        } catch (MalformedURLException e) {
-                            Log.e("下载", "地址错误", e);
-                        } catch (IOException e) {
-                            Log.e("下载", "IO错误", e);
-                        } catch (SecurityException e) {
-                            Log.e("下载", "安全错误", e);
-                        }
-
-                    }
-                    dlgDownload.incrementProgressBy(1);
-                }
-
-            }
-            dlgDownload.dismiss();
-            return null;
-        }
-    }
-
     private List<String> homeworkActions;
-    private ProgressDialog dlgDownload;
 }

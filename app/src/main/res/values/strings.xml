@@ -4,11 +4,11 @@
     <string name="app_name">佛教朝暮课诵</string>
     <string name="homework">功课列表</string>
 
-    <string name="title_activity_settings">参数设置</string>
 
-    <string name="action_download">下载数据</string>
-    <string name="action_settings">参数设置</string>
-    <string name="action_about_me">关于我们</string>
+
+    <string name="action_download">更新</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about_me">关于</string>
     
     
     <string name="title_morning">早课</string>
@@ -17,6 +17,7 @@
     <string name="title_courses">梵呗</string>
     <string name="title_music">佛乐</string>
     <string name="title_books">典籍</string>
+    <string name="title_settings">参数设置</string>
 
     <string name="lbl_every_day">每天</string>
     <string name="lbl_already_download">已经下载</string>
@@ -24,22 +25,28 @@
     <string name="lbl_download">下载资源文件</string>
     <string name="lbl_about_me">报告BUG：https://github.com/chonglou/BuddhismHomework/issues</string>
 
+    <string-array name="lv_items_music">
+        <item>fagushan|法鼓山</item>
+        <item>fagusong|法鼓颂</item>
+        <item>sizhongfozigongmianyu|四众佛子共勉语</item>
+        <item>woweinizhufu|我为你祝福</item>
+        <item>pingange|平安歌</item>
+    </string-array>
+    <string-array name="lv_items_course">
+        <item>lengyanzhou|楞严咒</item>
+        <item>foshuoemituojing|佛说阿弥陀经</item>
+        <item>dabeizhou|大悲咒</item>
+        <item>shixiaozhou|十小咒</item>
+        <item>xinjingwangshengzhou|心經┼往生咒</item>
+        <item>lifochanhuiwen|礼佛忏悔文</item>
+        <item>emituofosizijing|阿弥陀佛四字经</item>
+    </string-array>
     <string-array name="lv_items_homework" formatted="false">
         <item>morning|早课|%02d:%02d开始，持续%02d分钟(%s)</item>
         <item>night|晚课|%02d:%02d开始，持续%02d分钟(%s)</item>
         <item>sitting|打坐|持续%02d分钟</item>
-        <item>lengyanzhou|楞严咒|圣严法师梵呗(%s)</item>
-        <item>foshuoemituojing|佛说阿弥陀经|圣严法师梵呗(%s)</item>
-        <item>dabeizhou|大悲咒|圣严法师梵呗(%s)</item>
-        <item>shixiaozhou|十小咒|圣严法师梵呗(%s)</item>
-        <item>xinjingwangshengzhou|心經┼往生咒|圣严法师梵呗(%s)</item>
-        <item>lifochanhuiwen|礼佛忏悔文|圣严法师梵呗(%s)</item>
-        <item>emituofosizijing|阿弥陀佛四字经|圣严法师梵呗(%s)</item>
-        <item>fagushan|法鼓山|佛曲(%s)</item>
-        <item>fagusong|法鼓颂|佛曲(%s)</item>
-        <item>sizhongfozigongmianyu|四众佛子共勉语|佛曲(%s)</item>
-        <item>woweinizhufu|我为你祝福|佛曲(%s)</item>
-        <item>pingange|平安歌|佛曲(%s)</item>
+
+
     </string-array>
 
 
