@@ -3,6 +3,7 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -199,12 +200,13 @@ public class MainActivity extends Activity {
                     File f = new File(name + "." + ext);
                     if (!f.exists()) {
                         try {
-                            DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
+
+                            DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name+"."+ext).openStream());
 
                             byte[] buf = new byte[1024];
                             int len;
 
-                            FileOutputStream fos = new FileOutputStream(f);
+                            FileOutputStream fos = openFileOutput(name+"."+ext, Context.MODE_PRIVATE);
                             while ((len = dis.read(buf)) > 0) {
                                 fos.write(buf, 0, len);
                             }
