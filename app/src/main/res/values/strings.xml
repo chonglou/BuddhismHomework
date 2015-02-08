@@ -4,9 +4,11 @@
     <string name="app_name">佛教朝暮课诵</string>
     <string name="homework">功课列表</string>
 
+    <string name="title_activity_settings">参数设置</string>
+    <string name="title_activity_main">功课列表</string>
+
     <string name="action_settings">设置</string>
     <string name="action_about_me">关于我们</string>
-
     <string name="lbl_every_day">每天</string>
     <string name="lbl_already_download">已经下载</string>
     <string name="lbl_non_exists">尚未下载</string>
@@ -29,5 +31,6 @@
         <item>woweinizhufu|我为你祝福|佛曲(%s)</item>
         <item>pingange|平安歌|佛曲(%s)</item>
     </string-array>
+
 
 </resources>
