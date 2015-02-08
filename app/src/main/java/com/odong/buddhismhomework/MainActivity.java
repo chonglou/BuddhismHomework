@@ -151,23 +151,23 @@ public class MainActivity extends Activity {
 
 
     private class Downloader extends AsyncTask<String, String, Boolean> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dlgDownload.setProgress(0);
-            dlgDownload.show();
-        }
 
         @Override
         protected Boolean doInBackground(String... names) {
             dlgDownload.setMax(names.length);
+            dlgDownload.setProgress(0);
+            dlgDownload.show();
 
             try {
                 for (String name : names) {
 
                     String fn = name.replace('/', '-');
                     if (!new File(fn).exists()) {
-                        DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
+                        DataInputStream dis = new DataInputStream(
+                                new URL(
+                                        //"https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/"
+                                        "http://192.168.1.102/tools/"
+                                                + name).openStream());
 
                         byte[] buf = new byte[1024];
                         int len;
