@@ -2,6 +2,11 @@
 --------------------
 音频来源：[http://www.shengyen.org/content/music/music_01.aspx?MType=3](http://www.shengyen.org/content/music/music_01.aspx?MType=3)
 
+### 开发帮助
+
+#### Logo
+    convert  -resize 96x96 /tmp/logo.png ic_launcher.png
+
 ### Gradle环境
 #### 安装 
     cd /tmp && wget https://services.gradle.org/distributions/gradle-2.2.1-bin.zip
