@@ -3,6 +3,7 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
                     names.add("books/" + s + ".txt");
                 }
                 for (String s : getResources().getStringArray(R.array.lv_musics)) {
-                    names.add("musics/" + s + ".mp3");
+                    names.add("musics/" + s.split("\\|")[0] + ".mp3");
                 }
                 for (String s : getResources().getStringArray(R.array.lv_courses)) {
                     names.add("courses/" + s + ".txt");
@@ -157,21 +158,19 @@ public class MainActivity extends Activity {
 
             try {
                 for (String name : names) {
-                    File f = new File(name);
-                    if (!f.getParentFile().exists()) {
-                        f.getParentFile().mkdirs();
-                    }
-                    if (!f.exists()) {
 
+                    String fn = name.replace('/', '-');
+                    if (!new File(fn).exists()) {
                         DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
 
                         byte[] buf = new byte[1024];
                         int len;
 
-                        FileOutputStream fos = new FileOutputStream(f); // openFileOutput(name, Context.MODE_PRIVATE);
+                        FileOutputStream fos = openFileOutput(fn, Context.MODE_PRIVATE);
                         while ((len = dis.read(buf)) > 0) {
                             fos.write(buf, 0, len);
                         }
+                        fos.flush();
                     }
                     dlgDownload.incrementProgressBy(1);
                 }
