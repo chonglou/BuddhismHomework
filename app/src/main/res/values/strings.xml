@@ -7,6 +7,7 @@
     <string name="title_activity_settings">参数设置</string>
     <string name="title_activity_main">功课列表</string>
 
+    <string name="action_download">同步离线数据</string>
     <string name="action_settings">设置</string>
     <string name="action_about_me">关于我们</string>
     <string name="lbl_every_day">每天</string>
