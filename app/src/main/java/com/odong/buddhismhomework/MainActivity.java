@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         initButtonEvent();
-        initDownloadDialog();
     }
 
 
@@ -57,13 +56,12 @@ public class MainActivity extends Activity {
                     names.add("courses/" + s + ".txt");
                     names.add("courses/" + s + ".mp3");
                 }
+
+
+                initDownloadDialog();
+                dlgDownload.show();
                 new Downloader().execute(names.toArray(new String[names.size()]));
 
-//                    new AlertDialog.Builder(
-//                            MainActivity.this).setMessage(
-//                            R.string.lbl_error_download).setPositiveButton(
-//                            android.R.string.ok, null).create().show();
-//
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -144,19 +142,18 @@ public class MainActivity extends Activity {
         dlgDownload = new ProgressDialog(this);
         dlgDownload.setTitle(R.string.action_download);
         dlgDownload.setMessage(getString(R.string.lbl_download));
-        dlgDownload.setCancelable(true);
+        dlgDownload.setCancelable(false);
         dlgDownload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
     }
 
 
-    private class Downloader extends AsyncTask<String, String, Boolean> {
+    private class Downloader extends AsyncTask<String, String, String> {
 
         @Override
-        protected Boolean doInBackground(String... names) {
+        protected String doInBackground(String... names) {
             dlgDownload.setMax(names.length);
             dlgDownload.setProgress(0);
-            dlgDownload.show();
 
             try {
                 for (String name : names) {
@@ -165,8 +162,10 @@ public class MainActivity extends Activity {
                     if (!new File(fn).exists()) {
                         DataInputStream dis = new DataInputStream(
                                 new URL(
-                                        //"https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/"
-                                        "http://192.168.1.102/tools/"
+                                        (BuildConfig.DEBUG ?
+                                                "http://192.168.1.102/tools/" :
+                                                "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/")
+
                                                 + name).openStream());
 
                         byte[] buf = new byte[1024];
@@ -181,6 +180,7 @@ public class MainActivity extends Activity {
                     dlgDownload.incrementProgressBy(1);
                 }
 
+
             } catch (MalformedURLException e) {
                 Log.e("下载", "地址错误", e);
             } catch (IOException e) {
@@ -189,9 +189,8 @@ public class MainActivity extends Activity {
                 Log.e("下载", "安全错误", e);
             }
 
-            boolean success = dlgDownload.getProgress() == dlgDownload.getMax();
             dlgDownload.dismiss();
-            return success;
+            return null;
         }
     }
 
