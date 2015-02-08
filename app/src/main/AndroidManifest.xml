@@ -24,7 +24,7 @@
         <activity android:name=".CourseActivity" />
         <activity android:name=".HomeworkActivity" />
         <activity android:name=".ItemsActivity" />
-        <activity android:name=".MusicsActivity" />
+        <activity android:name=".MusicActivity" />
         <activity android:name=".SittingActivity" />
 
     </application>

@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -161,14 +160,16 @@ public class MainActivity extends Activity {
                 for (String name : names) {
 
                     String fn = name.replace('/', '-');
-                    if (!new File(fn).exists()) {
-                        DataInputStream dis = new DataInputStream(
-                                new URL(
-                                        (BuildConfig.DEBUG ?
-                                                "http://192.168.1.102/tools/" :
-                                                "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/")
+                    if (!getFileStreamPath(fn).exists()) {
+                        URL url = new URL(
+                                (BuildConfig.DEBUG ?
+                                        "http://192.168.1.102/tools/" :
+                                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/")
 
-                                                + name).openStream());
+                                        + name);
+                        Log.d("下载", url.toString());
+                        DataInputStream dis = new DataInputStream(
+                                url.openStream());
 
                         byte[] buf = new byte[1024];
                         int len;
