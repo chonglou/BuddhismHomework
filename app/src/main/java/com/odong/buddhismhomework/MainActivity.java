@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
         events.put(R.id.btn_main_morning, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
                 intent.putExtra("type", "morning");
                 startActivity(intent);
             }
@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
         events.put(R.id.btn_main_night, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
                 intent.putExtra("type", "night");
                 startActivity(intent);
             }

@@ -19,6 +19,7 @@
     <string name="title_books">典籍</string>
     <string name="title_settings">参数设置</string>
 
+    <string name="lbl_empty">暂无</string>
     <string name="lbl_remove_item">删除该条记录</string>
     <string name="lbl_are_you_sure">你确定要进行此操作么？</string>
     <string name="lbl_every_day">每天</string>

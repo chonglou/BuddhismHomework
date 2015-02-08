@@ -56,7 +56,7 @@ public class ItemsActivity extends Activity {
     private void initListView() {
 
         final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        CacheFile.each(this, getIntent().getIntExtra("type", R.array.lv_books), new CacheFile.ItemCallback() {
+        CacheFile.each(this, lvId, new CacheFile.ItemCallback() {
             @Override
             public void call(String name, String title, String details) {
                 Map<String, String> map = new HashMap<String, String>();
@@ -82,13 +82,16 @@ public class ItemsActivity extends Activity {
                 Intent intent = null;
                 switch (lvId) {
                     case R.array.lv_courses:
-                        intent = new Intent(ItemsActivity.this, CourseActivity.class);
+                        intent = new Intent(ItemsActivity.this, PlayerActivity.class);
+                        intent.putExtra("type", R.array.lv_courses);
                         break;
                     case R.array.lv_musics:
-                        intent = new Intent(ItemsActivity.this, MusicActivity.class);
+                        intent = new Intent(ItemsActivity.this, PlayerActivity.class);
+                        intent.putExtra("type", R.array.lv_musics);
                         break;
                     case R.array.lv_books:
-                        intent = new Intent(ItemsActivity.this, BookActivity.class);
+                        intent = new Intent(ItemsActivity.this, PlayerActivity.class);
+                        intent.putExtra("type", R.array.lv_books);
                         break;
                 }
 
@@ -112,14 +115,14 @@ public class ItemsActivity extends Activity {
 
                         switch (lvId) {
                             case R.array.lv_courses:
-                                new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "mp3").rm();
-                                new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "txt").rm();
+                                new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "mp3").remove();
+                                new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "txt").remove();
                                 break;
                             case R.array.lv_musics:
-                                new CacheFile(ItemsActivity.this, "musics", R.array.lv_musics, position, "mp3").rm();
+                                new CacheFile(ItemsActivity.this, "musics", R.array.lv_musics, position, "mp3").remove();
                                 break;
                             case R.array.lv_books:
-                                new CacheFile(ItemsActivity.this, "books", R.array.lv_books, position, "txt").rm();
+                                new CacheFile(ItemsActivity.this, "books", R.array.lv_books, position, "txt").remove();
                                 break;
                         }
 

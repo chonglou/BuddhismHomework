@@ -52,8 +52,8 @@ public class CacheFile {
     }
 
     public String read() throws IOException {
-        FileInputStream fis = context.openFileInput(realName());
-        Log.d("读取缓存", realName());
+        FileInputStream fis = context.openFileInput(getRealName());
+        Log.d("读取缓存", getRealName());
         StringBuilder sb = new StringBuilder();
         byte[] buf = new byte[1024];
         int n;
@@ -63,26 +63,26 @@ public class CacheFile {
         return sb.toString();
     }
 
-    public void rm() {
-        context.deleteFile(realName());
-        Log.d("删除文件", realName());
+    public void remove() {
+        context.deleteFile(getRealName());
+        Log.d("删除文件", getRealName());
     }
 
     public void sync() throws IOException {
-        if (!context.getFileStreamPath(realName()).exists()) {
+        if (!context.getFileStreamPath(getRealName()).exists()) {
             URL url = new URL(
                     (BuildConfig.DEBUG ?
                             "http://192.168.1.102/tools" :
                             "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools")
 
-                            + httpName());
-            Log.d("同步缓存", url.toString() + " " + realName());
+                            + getHttpName());
+            Log.d("同步缓存", url.toString() + " " + getRealName());
             DataInputStream dis = new DataInputStream(url.openStream());
 
             byte[] buf = new byte[1024];
             int len;
 
-            FileOutputStream fos = context.openFileOutput(realName(), Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(getRealName(), Context.MODE_PRIVATE);
             while ((len = dis.read(buf)) > 0) {
                 fos.write(buf, 0, len);
             }
@@ -90,11 +90,11 @@ public class CacheFile {
         }
     }
 
-    private String realName() {
+    public String getRealName() {
         return "cache-" + type + "-" + name + "." + ext;
     }
 
-    private String httpName() {
+    public String getHttpName() {
         return "/" + type + "/" + name + "." + ext;
     }
 

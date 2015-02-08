@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
