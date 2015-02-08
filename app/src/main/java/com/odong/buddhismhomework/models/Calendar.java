@@ -1,7 +1,6 @@
 package com.odong.buddhismhomework.models;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by flamen on 15-2-7.

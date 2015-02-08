@@ -5,7 +5,7 @@
     tools:context=".MainActivity">
 
     <ListView
-        android:id="@+id/android:list"
+        android:id="@+id/lv_homework"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         />
