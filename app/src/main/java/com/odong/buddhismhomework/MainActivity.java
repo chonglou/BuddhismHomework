@@ -19,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         initButtonEvent();
+        initDownloadDialog();
     }
 
 
@@ -43,7 +46,18 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_download:
-                //todo
+                List<String> names = new ArrayList<String>();
+                for (String s : getResources().getStringArray(R.array.lv_books)) {
+                    names.add("books/" + s + ".txt");
+                }
+                for (String s : getResources().getStringArray(R.array.lv_musics)) {
+                    names.add("musics/" + s + ".mp3");
+                }
+                for (String s : getResources().getStringArray(R.array.lv_courses)) {
+                    names.add("books/" + s + ".txt");
+                    names.add("courses/" + s + ".mp3");
+                }
+                new Downloader().execute(names.toArray(new String[names.size()]));
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -92,7 +106,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("name", "course");
+                intent.putExtra("name", "courses");
                 startActivity(intent);
             }
         });
@@ -100,7 +114,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("name", "book");
+                intent.putExtra("name", "books");
                 startActivity(intent);
             }
         });
@@ -108,7 +122,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("name", "music");
+                intent.putExtra("name", "musics");
                 startActivity(intent);
             }
         });
@@ -144,6 +158,9 @@ public class MainActivity extends Activity {
 
             for (String name : names) {
                 File f = new File(name);
+                if(!f.getParentFile().exists()){
+                    f.getParentFile().mkdirs();
+                }
                 if (!f.exists()) {
                     try {
                         DataInputStream dis = new DataInputStream(new URL("https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/" + name).openStream());
@@ -167,9 +184,16 @@ public class MainActivity extends Activity {
                 }
                 dlgDownload.incrementProgressBy(1);
 
-
             }
+
+            boolean success = dlgDownload.getProgress() == dlgDownload.getMax();
             dlgDownload.dismiss();
+            if (!success) {
+                new AlertDialog.Builder(
+                        MainActivity.this).setMessage(
+                        R.string.lbl_error_download).setPositiveButton(
+                        android.R.string.ok, null).create().show();
+            }
             return null;
         }
     }
