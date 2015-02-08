@@ -7,6 +7,9 @@
 #### Logo(使用 dia)
     cd tools && sh logo.sh
 
+#### 去掉多余的空行
+    sed -i  '/^$/d' file.txt
+
 ### Gradle环境
 #### 安装 
     cd /tmp && wget https://services.gradle.org/distributions/gradle-2.2.1-bin.zip
