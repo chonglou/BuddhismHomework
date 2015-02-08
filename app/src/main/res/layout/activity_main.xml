@@ -1,9 +1,52 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="3"
+    android:rowCount="4"
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
+    <ImageButton
+        android:id="@+id/btn_main_morning"
+        android:layout_gravity="start"
+        android:contentDescription="@string/btn_main_morning"
+        android:src="@drawable/ic_morning"
+        />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/btn_main_night"
+        android:layout_gravity="start"
+        android:contentDescription="@string/btn_main_night"
+        android:src="@drawable/ic_night"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_main_sitting"
+        android:layout_gravity="start"
+        android:contentDescription="@string/btn_main_sitting"
+        android:src="@drawable/ic_sitting"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_main_courses"
+        android:layout_gravity="start"
+        android:contentDescription="@string/btn_main_courses"
+        android:src="@drawable/ic_course"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_main_books"
+        android:layout_gravity="start"
+        android:contentDescription="@string/btn_main_books"
+        android:src="@drawable/ic_book"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_main_music"
+        android:layout_gravity="start"
+        android:contentDescription="@string/btn_main_music"
+        android:src="@drawable/ic_music"
+        />
+
+</GridLayout>
