@@ -3,13 +3,18 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 
+import com.odong.buddhismhomework.models.Calendar;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +26,65 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DwDbHelper dh = new DwDbHelper(this);
+
+        List<Map<String, String>> items = new ArrayList<Map<String, String>>();
+        homeworkActions = new ArrayList<String>();
+
+        for (String s : getResources().getStringArray(R.array.lv_homework)) {
+            String[] ss = s.split("\\|");
+            if (ss.length == 3) {
+                String name = ss[0];
+                homeworkActions.add(name);
 
 
-        List<Map<String,String>>items= new ArrayList<Map<String, String>>();
-        for(int i=0; i<12; i++){
-            Map<String,String> item = new HashMap<String, String>();
-            item.put("title", "aaa"+i+"1");
-            item.put("details", "aaa"+i+"2");
-            items.add(item);
+                Map<String, String> item = new HashMap<String, String>();
+                item.put("title", ss[1]);
+
+                String details = ss[2];
+                if (name.equals("morning") || name.equals("night")) {
+                    Calendar cal = dh.get("homework." + name, Calendar.class);
+                    if (cal == null) {
+                        cal = new Calendar();
+                        cal.setHour(7);
+                        cal.setMinute(0);
+                        cal.setLength(30);
+                        cal.setMon(true);
+                        cal.setTues(true);
+                        cal.setWed(true);
+                        cal.setThur(true);
+                        cal.setFri(true);
+                        cal.setSat(true);
+                        cal.setSun(true);
+                        dh.set("homework." + name, cal);
+                    }
+                    item.put("details", String.format(details,
+                            cal.getHour(),
+                            cal.getMinute(),
+                            cal.getLength(),
+                            getResources().getString(R.string.lbl_every_day)));
+                } else if (name.equals("sitting")) {
+                    Integer begin = dh.get("homework." + name, Integer.class);
+                    if (begin == null) {
+                        begin = 30;
+                        dh.set("homework." + name, begin);
+                    }
+                    item.put("details", String.format(details, begin));
+                } else {
+                    item.put(
+                            "details",
+                            String.format(
+                                    details,
+                                    getResources().getString(
+                                            new File(name + ".mp3").exists() && new File(name + ".txt").exists() ?
+                                                    R.string.lbl_already_download :
+                                                    R.string.lbl_non_exists)
+                            )
+                    );
+                }
+
+                items.add(item);
+            }
         }
 
         ListAdapter adapter = new SimpleAdapter(this,
@@ -62,4 +118,6 @@ public class MainActivity extends ListActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private List<String> homeworkActions;
 }

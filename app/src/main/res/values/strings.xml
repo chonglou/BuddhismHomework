@@ -7,16 +7,20 @@
     <string name="action_settings">设置</string>
     <string name="action_about_me">关于我们</string>
 
-    <string-array name="lv_homework">
-        <item>morning|早课|%s至%s(%s)</item>
-        <item>night|晚课|%s至%s(%s)</item>
-        <item>sitting|打坐|%s</item>
-        <item>lengyanzhou|楞严咒|梵呗(%s)</item>
-        <item>foshuoemituojing|佛说阿弥陀经|梵呗(%s)</item>
-        <item>dabeizhou|大悲咒|梵呗(%s)</item>
-        <item>shixiaozhou|十小咒|梵呗(%s)</item>
-        <item>xinjingwangshengzhou|心經┼往生咒|梵呗(%s)</item>
-        <item>lifochanhuiwen|礼佛忏悔文|梵呗(%s)</item>
+    <string name="lbl_every_day">每天</string>
+    <string name="lbl_already_download">已经下载</string>
+    <string name="lbl_non_exists">尚未下载</string>
+
+    <string-array name="lv_homework" formatted="false">
+        <item>morning|早课|%02d:%02d开始，持续%02d分钟(%s)</item>
+        <item>night|晚课|%02d:%02d开始，持续%02d分钟(%s)</item>
+        <item>sitting|打坐|持续%02d分钟</item>
+        <item>lengyanzhou|楞严咒|圣严法师梵呗(%s)</item>
+        <item>foshuoemituojing|佛说阿弥陀经|圣严法师梵呗(%s)</item>
+        <item>dabeizhou|大悲咒|圣严法师梵呗(%s)</item>
+        <item>shixiaozhou|十小咒|圣严法师梵呗(%s)</item>
+        <item>xinjingwangshengzhou|心經┼往生咒|圣严法师梵呗(%s)</item>
+        <item>lifochanhuiwen|礼佛忏悔文|圣严法师梵呗(%s)</item>
         <item>emituofosizijing|阿弥陀佛四字经|圣严法师梵呗(%s)</item>
         <item>fagushan|法鼓山|佛曲(%s)</item>
         <item>fagusong|法鼓颂|佛曲(%s)</item>
