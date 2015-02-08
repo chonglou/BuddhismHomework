@@ -10,19 +10,19 @@
     <string-array name="lv_homework">
         <item>morning|早课|%s至%s(%s)</item>
         <item>night|晚课|%s至%s(%s)</item>
-        <item>sitting|打坐|%s至%s</item>
-        <item>lengyanzhou|楞严咒|梵呗</item>
-        <item>foshuoemituojing|佛说阿弥陀经|梵呗</item>
-        <item>dabeizhou|大悲咒|梵呗</item>
-        <item>shixiaozhou|十小咒|梵呗</item>
-        <item>xinjingwangshengzhou|心經┼往生咒|梵呗</item>
-        <item>lifochanhuiwen|礼佛忏悔文|梵呗</item>
-        <item>emituofosizijing|阿弥陀佛四字经|圣严法师梵呗</item>
-        <item>fagushan|法鼓山|佛曲</item>
-        <item>fagusong|法鼓颂|佛曲</item>
-        <item>sizhongfozigongmianyu|四众佛子共勉语|佛曲</item>
-        <item>woweinizhufu|我为你祝福|佛曲</item>
-        <item>pingange|平安歌|佛曲</item>
+        <item>sitting|打坐|%s</item>
+        <item>lengyanzhou|楞严咒|梵呗(%s)</item>
+        <item>foshuoemituojing|佛说阿弥陀经|梵呗(%s)</item>
+        <item>dabeizhou|大悲咒|梵呗(%s)</item>
+        <item>shixiaozhou|十小咒|梵呗(%s)</item>
+        <item>xinjingwangshengzhou|心經┼往生咒|梵呗(%s)</item>
+        <item>lifochanhuiwen|礼佛忏悔文|梵呗(%s)</item>
+        <item>emituofosizijing|阿弥陀佛四字经|圣严法师梵呗(%s)</item>
+        <item>fagushan|法鼓山|佛曲(%s)</item>
+        <item>fagusong|法鼓颂|佛曲(%s)</item>
+        <item>sizhongfozigongmianyu|四众佛子共勉语|佛曲(%s)</item>
+        <item>woweinizhufu|我为你祝福|佛曲(%s)</item>
+        <item>pingange|平安歌|佛曲(%s)</item>
     </string-array>
 
 </resources>

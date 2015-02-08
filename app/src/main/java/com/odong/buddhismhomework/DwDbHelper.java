@@ -87,7 +87,10 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void uninstall(SQLiteDatabase db, int version) {
         switch (version) {
             case 1:
-                for (String s : new String[]{"homework", "logs", "settings"}) {
+                for (String s : new String[]{
+                        //"homework",
+                        "logs",
+                        "settings"}) {
                     db.execSQL(drop_table(s));
                 }
                 break;
@@ -98,7 +101,8 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
         switch (version) {
             case 1:
-                for (String s : new String[]{"CREATE TABLE homework(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(32) NOT NULL, details VARCHAR(500) NOT NULL) IF NOT EXISTS",
+                for (String s : new String[]{
+                        //"CREATE TABLE homework(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(32) NOT NULL, details VARCHAR(500) NOT NULL) IF NOT EXISTS",
                         "CREATE TABLE logs(id INTEGER PRIMARY KEY AUTOINCREMENT, message VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) IF NOT EXISTS",
                         "CREATE TABLE settings(`key` VARCHAR(32) PRIMARY KEY, val TEXT NOT NULL) IF NOT EXISTS"}) {
                     db.execSQL(s);
