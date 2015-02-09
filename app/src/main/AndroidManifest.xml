@@ -25,6 +25,7 @@
         <activity android:name=".PlayerActivity" />
         <activity android:name=".SittingActivity" />
         <activity android:name=".HomeworkActivity" />
+        <service android:exported="false" android:name=".BackgroundService"/>
     </application>
 
 </manifest>

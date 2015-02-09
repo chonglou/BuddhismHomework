@@ -6,9 +6,9 @@
 
 
 
-    <string name="action_download">更新</string>
-    <string name="action_settings">设置</string>
-    <string name="action_about_me">关于</string>
+    <string name="action_refresh">同步数据</string>
+    <string name="action_settings">参数设置</string>
+    <string name="action_about_me">关于我们</string>
     
     <string name="btn_play">播放</string>
     <string name="btn_pause">暂停</string>

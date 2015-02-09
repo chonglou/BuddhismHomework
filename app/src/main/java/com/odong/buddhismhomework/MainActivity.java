@@ -2,22 +2,12 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.odong.buddhismhomework.models.CacheFile;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -41,16 +31,10 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_download:
-                List<CacheFile> files = new ArrayList<CacheFile>();
-                files.addAll(CacheFile.all(this, "books", R.array.lv_books, "txt"));
-                files.addAll(CacheFile.all(this, "courses", R.array.lv_courses, "mp3", "txt"));
-                files.addAll(CacheFile.all(this, "musics", R.array.lv_musics, "mp3"));
-
-                initDownloadDialog();
-                dlgDownload.show();
-                new Downloader().execute(files.toArray(new CacheFile[files.size()]));
-
+            case R.id.action_refresh:
+                Intent intent = new Intent(this, BackgroundService.class);
+                intent.putExtra("action", "sync");
+                startService(intent);
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -69,7 +53,6 @@ public class MainActivity extends Activity {
     }
 
     private void initButtonEvent() {
-        //Map<Integer, View.OnClickListener> events = new HashMap<Integer, View.OnClickListener>();
         SparseArray<View.OnClickListener> events = new SparseArray<View.OnClickListener>();
         events.put(R.id.btn_main_morning, new View.OnClickListener() {
             @Override
@@ -128,43 +111,4 @@ public class MainActivity extends Activity {
     }
 
 
-    private void initDownloadDialog() {
-        dlgDownload = new ProgressDialog(this);
-        dlgDownload.setTitle(R.string.action_download);
-        dlgDownload.setMessage(getString(R.string.lbl_download));
-        dlgDownload.setCancelable(false);
-        dlgDownload.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-
-    }
-
-
-    private class Downloader extends AsyncTask<CacheFile, String, String> {
-
-        @Override
-        protected String doInBackground(CacheFile... files) {
-            dlgDownload.setMax(files.length);
-            dlgDownload.setProgress(0);
-
-            try {
-                for (CacheFile cf : files) {
-                    cf.sync();
-                    dlgDownload.incrementProgressBy(1);
-                }
-
-
-            } catch (MalformedURLException e) {
-                Log.e("下载", "地址错误", e);
-            } catch (IOException e) {
-                Log.e("下载", "IO错误", e);
-            } catch (SecurityException e) {
-                Log.e("下载", "安全错误", e);
-            }
-
-            dlgDownload.dismiss();
-            return null;
-        }
-    }
-
-
-    private ProgressDialog dlgDownload;
 }
