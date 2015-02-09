@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.odong.buddhismhomework.models.CacheFile;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by flamen on 15-2-8.
@@ -132,11 +133,14 @@ public class PlayerActivity extends Activity {
         public void run() {
             timeElapsed = mp3Player.getCurrentPosition();
             mp3Seeker.setProgress(timeElapsed);
+
+            int timeRemaining = finalTime - timeElapsed;
+            ((TextView) findViewById(R.id.tv_player_duration)).setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) timeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining))));
             durationHandler.postDelayed(this, 100);
         }
     };
 
-    private int timeElapsed = 0, finalTime = 0, forwardTime = 2000, backwardTime = 2000;
+    private int timeElapsed = 0, finalTime = 0, forwardTime = 5000, backwardTime = 5000;
 
     private CacheFile txtFile;
     private CacheFile mp3File;
