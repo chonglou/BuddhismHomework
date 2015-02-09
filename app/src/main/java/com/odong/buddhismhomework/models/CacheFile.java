@@ -17,16 +17,17 @@ import java.util.List;
  * Created by flamen on 15-2-8.
  */
 public class CacheFile {
-    public interface ItemCallback{
+    public interface ItemCallback {
         void call(String name, String title, String details);
     }
 
-    public static void each(Context context, int id, ItemCallback callback){
+    public static void each(Context context, int id, ItemCallback callback) {
         for (String item : context.getResources().getStringArray(id)) {
             String[] ss = item.split("\\|");
             callback.call(ss[0], ss[1], ss[2]);
         }
     }
+
     public static List<CacheFile> all(Context context, String type, int id, String... exts) {
         List<CacheFile> files = new ArrayList<CacheFile>();
         for (String item : context.getResources().getStringArray(id)) {
