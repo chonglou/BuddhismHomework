@@ -17,9 +17,10 @@ import java.util.List;
 /**
  * Created by flamen on 15-2-8.
  */
-public class BackgroundService extends IntentService {
-    public static final String NOTIFICATION = BackgroundService.class.getCanonicalName()+".receiver";
-    public BackgroundService() {
+public class RefreshService extends IntentService {
+    public static final String NOTIFICATION = RefreshService.class.getCanonicalName() + ".receiver";
+
+    public RefreshService() {
         super("BackgroundService");
     }
 
@@ -53,13 +54,13 @@ public class BackgroundService extends IntentService {
             Log.e("下载", "安全错误", e);
         }
 
-        String msg =  getString(R.string.lbl_refresh_result, i, files.size());
+        String msg = getString(R.string.lbl_refresh_result, i, files.size());
         Log.d("后台", msg);
         response(msg);
 
     }
 
-    private void response(final String msg){
+    private void response(final String msg) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override

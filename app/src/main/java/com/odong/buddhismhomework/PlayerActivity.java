@@ -144,7 +144,7 @@ public class PlayerActivity extends Activity {
 
     private CacheFile txtFile;
     private CacheFile mp3File;
-    private MediaPlayer mp3Player;
+    //private MediaPlayer mp3Player;
     private SeekBar mp3Seeker;
     private Handler durationHandler = new Handler();
 }

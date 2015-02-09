@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MainActivity.this, BackgroundService.class);
+                        Intent intent = new Intent(MainActivity.this, RefreshService.class);
                         intent.putExtra("action", "sync");
                         startService(intent);
                     }
