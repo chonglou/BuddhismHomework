@@ -2,6 +2,7 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
@@ -16,7 +17,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initButtonEvent();
     }
 
@@ -32,9 +32,19 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_refresh:
-                Intent intent = new Intent(this, BackgroundService.class);
-                intent.putExtra("action", "sync");
-                startService(intent);
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setTitle(R.string.action_refresh);
+                adb.setMessage(R.string.lbl_download);
+                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this, BackgroundService.class);
+                        intent.putExtra("action", "sync");
+                        startService(intent);
+                    }
+                });
+                adb.setNegativeButton(android.R.string.no, null);
+                adb.create().show();
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));

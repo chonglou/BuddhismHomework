@@ -2,7 +2,10 @@ package com.odong.buddhismhomework;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.odong.buddhismhomework.models.CacheFile;
 
@@ -15,6 +18,7 @@ import java.util.List;
  * Created by flamen on 15-2-8.
  */
 public class BackgroundService extends IntentService {
+    public static final String NOTIFICATION = BackgroundService.class.getCanonicalName()+".receiver";
     public BackgroundService() {
         super("BackgroundService");
     }
@@ -22,9 +26,11 @@ public class BackgroundService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getStringExtra("action");
+
         if (action.equals("sync")) {
             onSync();
         }
+
     }
 
     private void onSync() {
@@ -46,7 +52,22 @@ public class BackgroundService extends IntentService {
         } catch (SecurityException e) {
             Log.e("下载", "安全错误", e);
         }
-        Log.d("同步完成", "" + i + "/" + files.size());
+
+        String msg =  getString(R.string.lbl_refresh_result, i, files.size());
+        Log.d("后台", msg);
+        response(msg);
 
     }
+
+    private void response(final String msg){
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }
