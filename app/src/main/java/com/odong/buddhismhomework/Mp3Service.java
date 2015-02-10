@@ -1,18 +1,17 @@
 package com.odong.buddhismhomework;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 
 /**
  * Created by flamen on 15-2-8.
  */
 public class Mp3Service extends IntentService implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+
     MediaPlayer player = null;
 
     public Mp3Service() {
@@ -28,6 +27,7 @@ public class Mp3Service extends IntentService implements MediaPlayer.OnPreparedL
         player.setOnErrorListener(this);
         player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.prepareAsync();
+
 //        WifiManager.WifiLock wifiLock = ((WifiManager) getSystemService(Context.WIFI_SERVICE))
 //                .createWifiLock(WifiManager.WIFI_MODE_FULL, "mylock");
 //
@@ -44,5 +44,22 @@ public class Mp3Service extends IntentService implements MediaPlayer.OnPreparedL
     public boolean onError(MediaPlayer mp, int what, int extra) {
         //todo
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (player != null) {
+            player.release();
+        }
+    }
+
+    interface Callback {
+        void call(Intent intent);
+    }
+
+    private void sendMessage(Callback callback) {
+        Intent intent = new Intent("android.intent.action.MAIN");
+        callback.call(intent);
+        sendBroadcast(intent);
     }
 }
