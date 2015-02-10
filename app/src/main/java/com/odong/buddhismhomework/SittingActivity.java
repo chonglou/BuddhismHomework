@@ -6,15 +6,12 @@ import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import java.util.Arrays;
 
 /**
  * Created by flamen on 15-2-8.
@@ -75,10 +72,10 @@ public class SittingActivity extends Activity {
             }
         });
 
-        
+
         int[] vals = getResources().getIntArray(R.array.sitting_clocks_items);
-        for(int i=0; i<vals.length; i++){
-            if(vals[i] == clock){
+        for (int i = 0; i < vals.length; i++) {
+            if (vals[i] == clock) {
                 spinner.setSelection(i);
                 break;
             }
@@ -106,7 +103,7 @@ public class SittingActivity extends Activity {
         findViewById(R.id.btn_sitting_play).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.sp_sitting_clocks);
+                Spinner spinner = (Spinner) findViewById(R.id.sp_sitting_clocks);
                 if (((ToggleButton) findViewById(R.id.btn_sitting_play)).isChecked()) {
                     timer.start();
                     spinner.setEnabled(false);

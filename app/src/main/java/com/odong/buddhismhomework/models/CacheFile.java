@@ -52,6 +52,7 @@ public class CacheFile {
         this(context, type, context.getResources().getStringArray(saId)[index], ext);
     }
 
+
     public String read() throws IOException {
         FileInputStream fis = context.openFileInput(getRealName());
         Log.d("读取缓存", getRealName());
@@ -70,7 +71,7 @@ public class CacheFile {
     }
 
     public void sync() throws IOException {
-        if (!context.getFileStreamPath(getRealName()).exists()) {
+        if (!exists()) {
             URL url = new URL(
                     (BuildConfig.DEBUG ?
                             "http://192.168.1.102/tools" :
@@ -97,6 +98,10 @@ public class CacheFile {
 
     public String getHttpName() {
         return "/" + type + "/" + name + "." + ext;
+    }
+
+    public boolean exists(){
+        return context.getFileStreamPath(getRealName()).exists();
     }
 
     private String name;

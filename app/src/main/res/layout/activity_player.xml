@@ -28,7 +28,7 @@
             android:textOff=""
             android:textOn=""
             android:background="@drawable/play_pause"
-            android:src="@android:drawable/ic_media_play" />
+            />
 
 
     </GridLayout>

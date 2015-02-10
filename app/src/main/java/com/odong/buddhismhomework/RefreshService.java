@@ -39,6 +39,9 @@ public class RefreshService extends IntentService {
         files.addAll(CacheFile.all(this, "books", R.array.lv_books, "txt"));
         files.addAll(CacheFile.all(this, "courses", R.array.lv_courses, "mp3", "txt"));
         files.addAll(CacheFile.all(this, "musics", R.array.lv_musics, "mp3"));
+        files.addAll(CacheFile.all(this, "homework", R.array.homework_morning_titles, "txt"));
+        files.addAll(CacheFile.all(this, "homework", R.array.homework_night_titles, "txt"));
+
 
         int i = 0;
         try {

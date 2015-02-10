@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -51,8 +50,7 @@ public class PlayerActivity extends Activity {
             adb.setCancelable(false);
             adb.create().show();
 
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
 

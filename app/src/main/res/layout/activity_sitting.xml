@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:textSize="20sp"
-            android:text="@string/btn_clocks"
+            android:text="@string/tv_clocks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Spinner
@@ -33,5 +33,5 @@
         android:textOff=""
         android:textOn=""
         android:background="@drawable/play_stop"
-        android:src="@android:drawable/ic_media_play" />
+        />
 </LinearLayout>
