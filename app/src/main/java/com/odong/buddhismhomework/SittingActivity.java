@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,7 +74,16 @@ public class SittingActivity extends Activity {
                 setClock(30);
             }
         });
-        spinner.setSelection(Arrays.asList(getResources().getIntArray(R.array.sitting_clocks_items)).indexOf(clock));
+
+        
+        int[] vals = getResources().getIntArray(R.array.sitting_clocks_items);
+        for(int i=0; i<vals.length; i++){
+            if(vals[i] == clock){
+                spinner.setSelection(i);
+                break;
+            }
+        }
+
     }
 
     private void setClock(int clock) {
@@ -113,5 +123,4 @@ public class SittingActivity extends Activity {
         tv.setText(String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60));
     }
 
-    private boolean isPlaying = false;
 }
