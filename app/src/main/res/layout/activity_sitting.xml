@@ -9,11 +9,14 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center" />
 
-    <ImageButton
+
+    <ToggleButton
         android:id="@+id/btn_sitting_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:contentDescription="@string/btn_play"
-        android:src="@android:drawable/ic_media_play"/>
+        android:textOff=""
+        android:textOn=""
+        android:background="@drawable/play_stop"
+        android:src="@android:drawable/ic_media_play" />
 </LinearLayout>

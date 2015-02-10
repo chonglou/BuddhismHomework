@@ -38,7 +38,7 @@ public class PlayerActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (mp3Player != null && mp3Player.isPlaying()) {
+        if (((ToggleButton) findViewById(R.id.btn_player)).isChecked()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setMessage(R.string.lbl_will_pause);
             adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
