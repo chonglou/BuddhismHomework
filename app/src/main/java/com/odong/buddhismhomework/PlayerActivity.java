@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.odong.buddhismhomework.models.CacheFile;
 
@@ -78,13 +79,9 @@ public class PlayerActivity extends Activity {
         findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageButton ib = (ImageButton) findViewById(R.id.btn_player);
-                if (mp3Player.isPlaying()) {
-                    mp3Player.pause();
-                    ib.setImageResource(android.R.drawable.ic_media_play);
-                } else {
+                ToggleButton tb = (ToggleButton) findViewById(R.id.btn_player);
+                if (tb.isChecked()) {
                     mp3Player.start();
-                    ib.setImageResource(android.R.drawable.ic_media_pause);
                     durationHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -92,6 +89,8 @@ public class PlayerActivity extends Activity {
                             durationHandler.postDelayed(this, 100);
                         }
                     }, 100);
+                } else {
+                    mp3Player.pause();
                 }
             }
         });
