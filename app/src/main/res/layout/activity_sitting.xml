@@ -2,6 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:gravity="end"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="20sp"
+            android:text="@string/btn_clocks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/sp_sitting_clocks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
 <TextView
     android:id="@+id/tv_sitting_clock"
     android:textSize="64sp"

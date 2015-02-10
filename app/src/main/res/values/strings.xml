@@ -14,6 +14,7 @@
     <string name="btn_pause">暂停</string>
     <string name="btn_rewind">回退</string>
     <string name="btn_forward">快进</string>
+    <string name="btn_clocks">时间</string>
     
     
     <string name="title_morning">早课</string>
@@ -33,7 +34,7 @@
     <string name="lbl_error_io">读取数据出错，请清理缓存</string>
     <string name="lbl_error_download">下载数据出错</string>
     <string name="lbl_download">下载资源文件会耗费不超过70M的流量，确定要继续？</string>
-    <string name="lbl_will_pause">返回页面将会停止播放, 确定？</string>
+    <string name="lbl_will_pause">返回页面将会中断, 确定？</string>
     <string name="lbl_refresh_result">数据同步完成%1$d/%2$d个文件。</string>
     <string name="lbl_success">操作成功</string>
     <string name="lbl_about_me">报告BUG：https://github.com/chonglou/BuddhismHomework/issues</string>
@@ -60,4 +61,24 @@
         <item>jingangjing|金刚经|姚秦 三藏法师 鸠摩罗什 译</item>
         <item>lengyanjing|楞严经|唐天竺 沙门般剌密帝 译</item>
     </string-array>
+
+    <string-array name="sitting_clocks_titles">
+        <item>一刻钟</item>
+        <item>20分钟</item>
+        <item>半小时</item>
+        <item>45分钟</item>
+        <item>一小时</item>
+        <item>1.5小时</item>
+        <item>2小时</item>
+    </string-array>
+
+    <integer-array name="sitting_clocks_items">
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+    </integer-array>
 </resources>
