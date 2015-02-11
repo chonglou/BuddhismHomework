@@ -13,10 +13,10 @@
     <string name="btn_pause">暂停</string>
     <string name="btn_rewind">回退</string>
     <string name="btn_forward">快进</string>
-    <string name="btn_submit">提交</string>
+    <string name="btn_re_down">重新下载</string>
 
     <string name="tv_clocks">时间</string>
-    <string name="tv_clear_cache">清理缓存</string>
+    <string name="tv_last_sync">上次更新在：%s</string>
     <string name="tv_replay">循环播放</string>
 
 
@@ -28,6 +28,7 @@
     <string name="title_books">典籍</string>
     <string name="title_settings">参数设置</string>
 
+    <string name="lbl_never">从未</string>
     <string name="lbl_empty">暂无内容，请同步数据。</string>
     <string name="lbl_remove_item">删除该条记录</string>
     <string name="lbl_are_you_sure">你确定要进行此操作么？</string>

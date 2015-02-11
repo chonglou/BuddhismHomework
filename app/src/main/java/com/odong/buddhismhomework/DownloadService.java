@@ -8,10 +8,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.utils.DwDbHelper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +62,7 @@ public class DownloadService extends IntentService {
         }
 
         String msg = getString(R.string.lbl_refresh_result, i, files.size());
+        new DwDbHelper(this).set("sync.last", new Date());
         Log.d("后台", msg);
         response(msg);
 

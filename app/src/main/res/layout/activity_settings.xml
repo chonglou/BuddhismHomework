@@ -11,17 +11,17 @@
         android:orientation="horizontal">
 
         <TextView
-            android:textSize="20sp"
+            android:id="@+id/tv_setting_sync"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_clear_cache" />
+             />
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
         <Button
-            android:id="@+id/btn_setting_clear"
-            android:text="@string/btn_submit"
+            android:id="@+id/btn_setting_sync"
+            android:text="@string/btn_re_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -38,7 +38,6 @@
 
         <TextView
             android:text="@string/tv_replay"
-            android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
