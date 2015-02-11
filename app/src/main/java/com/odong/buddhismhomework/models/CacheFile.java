@@ -70,26 +70,29 @@ public class CacheFile {
         Log.d("删除文件", getRealName());
     }
 
-    public void sync() throws IOException {
-        if (!exists()) {
-            URL url = new URL(
-                    (BuildConfig.DEBUG ?
-                            "http://192.168.1.102/tools" :
-                            "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools")
-
-                            + getHttpName());
-            Log.d("同步缓存", url.toString() + " " + getRealName());
-            DataInputStream dis = new DataInputStream(url.openStream());
-
-            byte[] buf = new byte[1024];
-            int len;
-
-            FileOutputStream fos = context.openFileOutput(getRealName(), Context.MODE_PRIVATE);
-            while ((len = dis.read(buf)) > 0) {
-                fos.write(buf, 0, len);
-            }
-            fos.flush();
+    public void sync(boolean redo) throws IOException {
+        if (!redo && exists()) {
+            return;
         }
+
+        URL url = new URL(
+                (BuildConfig.DEBUG ?
+                        "http://192.168.1.102/tools" :
+                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools")
+
+                        + getHttpName());
+        Log.d("下载", url.toString() + " => " + getRealName());
+        DataInputStream dis = new DataInputStream(url.openStream());
+
+        byte[] buf = new byte[1024];
+        int len;
+
+        FileOutputStream fos = context.openFileOutput(getRealName(), Context.MODE_PRIVATE);
+        while ((len = dis.read(buf)) > 0) {
+            fos.write(buf, 0, len);
+        }
+        fos.flush();
+        /**/
     }
 
     public String getRealName() {
@@ -100,7 +103,7 @@ public class CacheFile {
         return "/" + type + "/" + name + "." + ext;
     }
 
-    public boolean exists(){
+    public boolean exists() {
         return context.getFileStreamPath(getRealName()).exists();
     }
 

@@ -17,24 +17,26 @@ import java.util.List;
 /**
  * Created by flamen on 15-2-8.
  */
-public class RefreshService extends IntentService {
-    public static final String NOTIFICATION = RefreshService.class.getCanonicalName() + ".receiver";
+public class DownloadService extends IntentService {
 
-    public RefreshService() {
-        super("BackgroundService");
+    public DownloadService() {
+        super("DownloadService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getStringExtra("action");
 
+
         if (action.equals("sync")) {
-            onSync();
+            boolean redo = intent.getBooleanExtra("redo", false);
+            onSync(redo);
         }
 
     }
 
-    private void onSync() {
+
+    private void onSync(boolean redo) {
         List<CacheFile> files = new ArrayList<CacheFile>();
         files.addAll(CacheFile.all(this, "books", R.array.lv_books, "txt"));
         files.addAll(CacheFile.all(this, "courses", R.array.lv_courses, "mp3", "txt"));
@@ -46,7 +48,7 @@ public class RefreshService extends IntentService {
         int i = 0;
         try {
             for (CacheFile cf : files) {
-                cf.sync();
+                cf.sync(redo);
                 i++;
             }
         } catch (MalformedURLException e) {

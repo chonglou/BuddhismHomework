@@ -13,8 +13,11 @@
     <string name="btn_pause">暂停</string>
     <string name="btn_rewind">回退</string>
     <string name="btn_forward">快进</string>
+    <string name="btn_submit">提交</string>
 
     <string name="tv_clocks">时间</string>
+    <string name="tv_clear_cache">清理缓存</string>
+    <string name="tv_replay">循环播放</string>
 
 
     <string name="title_morning">早课</string>
