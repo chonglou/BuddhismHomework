@@ -15,6 +15,13 @@
 #### 去掉多余的空行
     sed -i  '/^$/d' file.txt
 
+#### 异体字说明
+
+ * 左口右犁 [http://chardb.iis.sinica.edu.tw/char/31563] (http://chardb.iis.sinica.edu.tw/char/31563)
+ * 左赤右皮 [http://chardb.iis.sinica.edu.tw/char/60089] (http://chardb.iis.sinica.edu.tw/char/60089)
+ * 左合右牛 [http://chardb.iis.sinica.edu.tw/char/45725] (http://chardb.iis.sinica.edu.tw/char/45725)
+ * 同「兔」[http://chardb.iis.sinica.edu.tw/char/7490] (http://chardb.iis.sinica.edu.tw/char/7490)
+
 ### Gradle环境
 #### 安装 
     cd /tmp && wget https://services.gradle.org/distributions/gradle-2.2.1-bin.zip
