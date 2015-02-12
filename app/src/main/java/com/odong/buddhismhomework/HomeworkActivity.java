@@ -30,13 +30,7 @@ public class HomeworkActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
         String type = getIntent().getStringExtra("type");
-        homeworkList = new ArrayList<Homework>();
-
-        for (Homework hw : new XmlHelper(this).getHomeworkList()) {
-            if (type.equals(hw.getType())) {
-                homeworkList.add(hw);
-            }
-        }
+        homeworkList = new XmlHelper(this).getHomeworkList(type);
 
         ((TextView) findViewById(R.id.tv_homework_content)).setMovementMethod(new ScrollingMovementMethod());
         initSpinner();

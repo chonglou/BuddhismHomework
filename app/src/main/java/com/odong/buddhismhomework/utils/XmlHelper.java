@@ -43,9 +43,9 @@ public class XmlHelper {
 
     }
 
-    public List<Book> getBookList(String type) {
+    public List<Book> getBookList(String name) {
        final List<Book> books = new ArrayList<Book>();
-        read(type, new Callback() {
+        read(name, new Callback() {
             @Override
             public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException{
                 Book b = new Book();
@@ -75,41 +75,20 @@ public class XmlHelper {
         return clocks;
     }
 
-    public List<Homework> getHomeworkList() {
-        List<Homework> homework = new ArrayList<Homework>();
-        try {
-            XmlResourceParser xrp = context.getResources().getXml(R.xml.homework);
+    public List<Homework> getHomeworkList(String name) {
+        final List<Homework> homework = new ArrayList<Homework>();
+        read(name, new Callback() {
+            @Override
+            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
 
-            Homework hw = null;
-            for (int et = xrp.getEventType(); et != XmlPullParser.END_DOCUMENT; et = xrp.next()) {
-
-                switch (et) {
-                    case XmlPullParser.START_TAG:
-                        if (xrp.getName().equals("entry")) {
-                            hw = new Homework();
-                        } else if (xrp.getName().equals("id")) {
-                            hw.setId(readText(xrp));
-                        } else if (xrp.getName().equals("name")) {
-                            hw.setName(readText(xrp));
-                        } else if (xrp.getName().equals("type")) {
-                            hw.setType(readText(xrp));
-                        } else if (xrp.getName().equals("incantation")) {
-                            hw.getIncantations().add(name2rid("raw", readText(xrp)));
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        if (xrp.getName().equals("entry")) {
-                            homework.add(hw);
-                        }
-                        break;
-
+                Homework h = new Homework();
+                h.setName(xrp.getAttributeValue(null, "name"));
+                for(String name : readText(xrp).split("\\n")){
+                    h.getIncantations().add(name2rid("raw", name));
                 }
+                homework.add(h);
             }
-        } catch (XmlPullParserException e) {
-            Log.e("XML", "HOMEWORK", e);
-        } catch (IOException e) {
-            Log.e("XML", "HOMEWORK", e);
-        }
+        });
 
         return homework;
     }
