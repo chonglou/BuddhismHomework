@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
+import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 
 /**
@@ -21,6 +22,7 @@ public class PlayerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+       //
 //
 //        loadFiles();
 //        initTextView();

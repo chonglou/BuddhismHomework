@@ -66,7 +66,7 @@ public class CacheFile {
     }
 
     public String getRealName() {
-        return "cache-" + name;
+        return "cache-" + name.replace('/', '-');
     }
 
     public boolean exists() {

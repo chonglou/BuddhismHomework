@@ -26,17 +26,22 @@ public class XmlHelper {
 
     public List<String> getDownloadFileList() {
         final List<String> files = new ArrayList<String>();
-        Callback cb = new Callback() {
+        class  DownloadCB implements Callback{
+            DownloadCB(String type) {
+                this.type = type;
+            }
+
             @Override
             public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
                 String mp3 = xrp.getAttributeValue(null, "mp3");
                 if (mp3 != null) {
-                    files.add(mp3 + ".mp3");
+                    files.add(type+"/"+mp3 + ".mp3");
                 }
             }
-        };
-        read("courses", cb);
-        read("musics", cb);
+            private String type;
+        }
+        read("courses", new DownloadCB("courses"));
+        read("musics", new DownloadCB("musics"));
         return files;
 
     }
