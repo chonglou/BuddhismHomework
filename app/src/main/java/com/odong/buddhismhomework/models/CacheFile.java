@@ -47,8 +47,8 @@ public class CacheFile {
 
         URL url = new URL(
                 (BuildConfig.DEBUG ?
-                        "http://192.168.1.102/tools/" :
-                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/")
+                        "http://192.168.1.102/tools/mp3/" :
+                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/mp3/")
 
                         + name);
         Log.d("下载", url.toString() + " => " + getRealName());
@@ -66,7 +66,7 @@ public class CacheFile {
     }
 
     public String getRealName() {
-        return "cache-" + name.replace('/', '-');
+        return "cache-" + name;
     }
 
     public boolean exists() {

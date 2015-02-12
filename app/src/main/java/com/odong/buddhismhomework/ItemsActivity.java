@@ -71,17 +71,17 @@ public class ItemsActivity extends Activity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                Book book = books.get(position);
+                final Book book = books.get(position);
                 if(book.getMp3() != null){
 
                     AlertDialog.Builder adb = new AlertDialog.Builder(ItemsActivity.this);
-                    adb.setMessage(R.string.lbl_remove_item);
+                    adb.setMessage(R.string.lbl_remove_item_cache);
                     adb.setTitle(R.string.lbl_are_you_sure);
 
                     adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new CacheFile(ItemsActivity.this, "courses", R.array.lv_courses, position, "mp3").remove();
+                            new CacheFile(ItemsActivity.this, book.getMp3()).remove();
                         }
                     });
                     adb.setNegativeButton(android.R.string.no, null);
