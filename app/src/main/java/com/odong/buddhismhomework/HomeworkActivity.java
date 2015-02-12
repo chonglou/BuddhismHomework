@@ -3,6 +3,7 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -13,9 +14,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Homework;
+import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +30,17 @@ public class HomeworkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
+        String type = getIntent().getStringExtra("type");
+        homeworkList = new ArrayList<Homework>();
 
+        for (Homework hw : new XmlHelper(this).getHomeworkList()) {
+            if (type.equals(hw.getType())) {
+                homeworkList.add(hw);
+            }
+        }
 
-        String homework = getIntent().getStringExtra("type");
-
-        initSpinner(homework);
-        initHomework(homework, 0);
+        ((TextView)findViewById(R.id.tv_homework_content)).setMovementMethod(new ScrollingMovementMethod());
+        initSpinner();
     }
 
     @Override
@@ -56,62 +64,63 @@ public class HomeworkActivity extends Activity {
 
     }
 
-    private void initSpinner(final String type) {
-        List<String> items = new ArrayList<String>();
-        for (String s : getResources().getStringArray(titles(type))) {
-            items.add(new CacheFile(this, "homework", s, "txt").getTitle());
-        }
+    private void initSpinner() {
+
         Spinner spinner = (Spinner) findViewById(R.id.sp_homework);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, items);
+        ArrayAdapter<Homework> adapter = new ArrayAdapter<Homework>(this,
+                android.R.layout.simple_spinner_item, homeworkList);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                initHomework(type, position);
+                initHomework(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                initHomework(type, 0);
+                initHomework(0);
             }
         });
 
     }
 
-    private int titles(String type) {
-        int homework;
-        if (type.equals("morning")) {
-            homework = R.array.homework_morning_titles;
-        } else if (type.equals("night")) {
-            homework = R.array.homework_night_titles;
-        } else {
-            throw new IllegalArgumentException();
-        }
-        return homework;
-    }
 
-    private void initHomework(String type, int index) {
-        CacheFile cf = new CacheFile(this, "homework", getResources().getStringArray(titles(type))[index], "txt");
-        setTitle(cf.getTitle());
+    private void initHomework(int index) {
+
+        Homework hw = homeworkList.get(index);
+
+        setTitle(hw.getName());
 
         TextView tv = (TextView) findViewById(R.id.tv_homework_content);
-        if (!cf.exists()) {
-            tv.setText(R.string.lbl_empty);
-            return;
-        }
-
         try {
-            tv.setText(cf.read());
-        } catch (IOException e) {
-            Log.e("读取文件", cf.getRealName(), e);
+            StringBuilder sb = new StringBuilder();
+            for (Integer i : hw.getIncantations()) {
+
+
+                InputStream is = getResources().openRawResource(i);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    sb.append(new String(buf, 0, len));
+                }
+                sb.append("\n\n");
+
+            }
+            tv.setText(sb.toString());
+            tv.scrollTo(0,0);
+        }
+        catch (Resources.NotFoundException e){
+            Log.e("读取文件", hw.getName(), e);
+            tv.setText(R.string.lbl_error_io);
+        } catch (Exception e) {
+            Log.e("读取文件", hw.getName(), e);
             tv.setText(R.string.lbl_error_io);
         }
 
-        tv.setMovementMethod(new ScrollingMovementMethod());
     }
 
+    private List<Homework> homeworkList;
 
 }

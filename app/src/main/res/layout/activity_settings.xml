@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:orientation="vertical">
     <LinearLayout
         android:paddingTop="20dp"
@@ -11,6 +12,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textColor="@android:color/white"
             android:id="@+id/tv_setting_sync"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,11 +21,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-        <Button
+        <ImageButton
             android:id="@+id/btn_setting_sync"
-            android:text="@string/btn_re_down"
+            android:src="@drawable/ic_action_download"
+            android:contentDescription="@string/lbl_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
     <View
         android:layout_width="fill_parent"
@@ -37,6 +41,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textColor="@android:color/white"
             android:text="@string/tv_replay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

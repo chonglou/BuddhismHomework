@@ -47,9 +47,14 @@ public class NavIconAdapter extends BaseAdapter {
             NavIcon icon = icons.get(position);
 
 
-            ((ImageButton)grid.findViewById(R.id.btn_nav_icon)).setImageResource(icon.getImage());
-            ((TextView)grid.findViewById(R.id.tv_nav_icon)).setText(icon.getTitle());
-            grid.findViewById(R.id.nav_icon).setOnClickListener(icon.getClick());
+            ImageButton ib = (ImageButton)grid.findViewById(R.id.btn_nav_icon);
+            ib.setImageResource(icon.getImage());
+            ib.setOnClickListener(icon.getClick());
+
+            TextView tv = (TextView)grid.findViewById(R.id.tv_nav_icon);
+            tv.setText(icon.getTitle());
+            tv.setOnClickListener(icon.getClick());
+
         }
         else {
             grid = convertView;

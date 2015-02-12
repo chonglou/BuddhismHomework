@@ -4,7 +4,7 @@
         <id>lengyanzhou_fagushan</id>
         <type>morning</type>
         <name>楞严咒朝课(法鼓山)</name>
-        <incantation>nanmolengyanhuishangfopusa</incantation>
+        <incantation>namolengyanhuishangfopusa</incantation>
         <incantation>lengyanzhou</incantation>
         <incantation>xinjing</incantation>
         <incantation>moheboreboluomiduo</incantation>
@@ -20,7 +20,7 @@
         <incantation>namodabeiguanshiyinpusa</incantation>
         <incantation>dabeizhou</incantation>
         <incantation>shixiaozhou</incantation>
-        <incantation>xijing</incantation>
+        <incantation>xinjing</incantation>
         <incantation>moheboreboluomiduo</incantation>
         <incantation>puxianshidayuanwang</incantation>
         <incantation>sishengjiuyou</incantation>
@@ -33,7 +33,7 @@
         <name>禅修朝课(法鼓山)</name>
         <incantation>namodabeiguanshiyinpusa</incantation>
         <incantation>dabeizhou</incantation>
-        <incantation>xijing</incantation>
+        <incantation>xinjing</incantation>
         <incantation>moheboreboluomiduo</incantation>
         <incantation>puxianshidayuanwang</incantation>
         <incantation>sishengjiuyou</incantation>
@@ -57,6 +57,7 @@
         <type>evening</type>
         <name>礼佛忏悔文晚课(法鼓山)</name>
         <incantation>namobenshishijiamonifo</incantation>
+        <incantation>bashibafo</incantation>
         <incantation>sihongshiyuan</incantation>
         <incantation>puxianjingzhongji</incantation>
         <incantation>sanguiyi</incantation>
