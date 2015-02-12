@@ -2,7 +2,7 @@
 
 TARGET=../app/src/main/res/drawable
 
-for i in books courses launcher morning musics night sitting
+for i in books courses launcher morning musics osd_sun sitting
 do
 	j=ic_$i.png
 	if [ -f images/$j.png ]

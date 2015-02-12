@@ -15,10 +15,10 @@
         />
 
     <ImageButton
-        android:id="@+id/btn_main_night"
+        android:id="@+id/btn_main_evening"
         android:layout_gravity="start"
-        android:contentDescription="@string/title_night"
-        android:src="@drawable/ic_night"
+        android:contentDescription="@string/title_evening"
+        android:src="@drawable/ic_evening"
         />
 
     <ImageButton

@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        events.put(R.id.btn_main_night, new View.OnClickListener() {
+        events.put(R.id.btn_main_evening, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
