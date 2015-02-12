@@ -32,6 +32,6 @@
         android:layout_gravity="center"
         android:textOff=""
         android:textOn=""
-        android:background="@drawable/play_stop"
+        android:background="@drawable/play_pause"
         />
 </LinearLayout>
