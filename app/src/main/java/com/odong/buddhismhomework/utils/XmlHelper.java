@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
-import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
-import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
 
@@ -26,14 +24,14 @@ public class XmlHelper {
     }
 
 
-    public List<CacheFile> getCacheFileList(){
-        final List<CacheFile> files = new ArrayList<CacheFile>();
-        Callback cb  = new Callback() {
+    public List<String> getDownloadFileList() {
+        final List<String> files = new ArrayList<String>();
+        Callback cb = new Callback() {
             @Override
             public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
                 String mp3 = xrp.getAttributeValue(null, "mp3");
-                if(mp3 != null){
-//todo
+                if (mp3 != null) {
+                    files.add(mp3 + ".mp3");
                 }
             }
         };
@@ -44,14 +42,15 @@ public class XmlHelper {
     }
 
     public List<Book> getBookList(String name) {
-       final List<Book> books = new ArrayList<Book>();
+        final List<Book> books = new ArrayList<Book>();
         read(name, new Callback() {
             @Override
-            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException{
+            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
                 Book b = new Book();
                 b.setName(xrp.getAttributeValue(null, "name"));
                 b.setAuthor(xrp.getAttributeValue(null, "author"));
-                for(String name : readText(xrp).split("\\n")){
+                b.setMp3(xrp.getAttributeValue(null, "mp3"));
+                for (String name : readText(xrp).split("\\n")) {
                     b.getFiles().add(name2rid("raw", name));
                 }
                 books.add(b);
@@ -83,7 +82,7 @@ public class XmlHelper {
 
                 Homework h = new Homework();
                 h.setName(xrp.getAttributeValue(null, "name"));
-                for(String name : readText(xrp).split("\\n")){
+                for (String name : readText(xrp).split("\\n")) {
                     h.getIncantations().add(name2rid("raw", name));
                 }
                 homework.add(h);
@@ -93,10 +92,11 @@ public class XmlHelper {
         return homework;
     }
 
-    interface Callback{
+    interface Callback {
         void run(XmlResourceParser xrp) throws IOException, XmlPullParserException;
     }
-    private void read(String name, Callback cb){
+
+    private void read(String name, Callback cb) {
 
         try {
             XmlResourceParser xrp = context.getResources().getXml(name2rid("xml", name));
@@ -119,6 +119,7 @@ public class XmlHelper {
         }
 
     }
+
     private String readText(XmlResourceParser xrp) throws IOException, XmlPullParserException {
         String result = null;
         if (xrp.next() == XmlPullParser.TEXT) {
@@ -128,13 +129,14 @@ public class XmlHelper {
         return result;
     }
 
-    private int name2rid(String type, String name){
+    private int name2rid(String type, String name) {
         name = name.trim();
         int rid = context.getResources().getIdentifier(name, type, context.getPackageName());
         if (rid == 0) {
-            Log.d("XML Helper", "资源["+type+"," + name + "]不存在");
+            Log.d("XML Helper", "资源[" + type + "," + name + "]不存在");
         }
         return rid;
     }
+
     private Context context;
 }

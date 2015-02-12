@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <books>
     <entry
+        mp3="lengyanzhou"
         name="楞严咒"
         author="圣严法师">
         namolengyanhuishangfopusa
         lengyanzhou
     </entry>
     <entry
+        mp3="foshuoemituojing"
         name="佛说阿弥陀经"
         author="圣严法师">
         foshuoemituojing
     </entry>
     <entry
+        mp3="dabeizhou"
         name="大悲咒"
         author="圣严法师">
         namodabeiguanshiyinpusa
         dabeizhou
     </entry>
     <entry
+        mp3="shixiaozhou"
         name="十小咒"
         author="圣严法师">
         shixiaozhou
     </entry>
     <entry
+        mp3 = "xinjingwangshengzhou"
         name="心经+往生咒"
         author="圣严法师">
         xinjing
         wangshengzhou
     </entry>
     <entry
+        mp3="lifochanhuiwen"
         name="礼佛忏悔文"
         author="圣严法师">
         bashibafo
     </entry>
     <entry
+        mp3="emituofosizifohao"
         name="阿弥陀佛四字佛号"
         author="圣严法师">
         emituofosizifohao

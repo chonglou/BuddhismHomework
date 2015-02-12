@@ -27,8 +27,8 @@ public class ItemsActivity extends Activity {
         setContentView(R.layout.activity_items);
 
         String type = getIntent().getStringExtra("type");
-        setTitle(getResources().getIdentifier("title_" + type,"string",  getPackageName()));
-        getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable",  getPackageName()));
+        setTitle(getResources().getIdentifier("title_" + type, "string", getPackageName()));
+        getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
 
         books = new XmlHelper(this).getBookList(type);
         initListView(type);

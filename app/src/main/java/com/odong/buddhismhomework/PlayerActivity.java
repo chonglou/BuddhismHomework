@@ -4,21 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.View;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.odong.buddhismhomework.models.CacheFile;
-
-import java.io.IOException;
 
 /**
  * Created by flamen on 15-2-8.

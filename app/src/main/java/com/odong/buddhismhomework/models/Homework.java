@@ -16,6 +16,7 @@ public class Homework implements Serializable {
     public String toString() {
         return name;
     }
+
     private String name;
     private List<Integer> incantations;
 

@@ -19,10 +19,19 @@ public class Book implements Serializable {
 
     private String name;
     private String author;
+    private String mp3;
     private List<Integer> files;
 
     public List<Integer> getFiles() {
         return files;
+    }
+
+    public String getMp3() {
+        return mp3;
+    }
+
+    public void setMp3(String mp3) {
+        this.mp3 = mp3;
     }
 
     public String getName() {

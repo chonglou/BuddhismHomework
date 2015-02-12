@@ -18,7 +18,6 @@ import com.odong.buddhismhomework.models.Homework;
 import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

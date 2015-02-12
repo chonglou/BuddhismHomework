@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <books>
     <entry
+        mp3="fagushan"
         name="法鼓山"
         author="法鼓山">
         fagushan
     </entry>
     <entry
+        mp3="fagusong"
         name="法鼓颂"
         author="法鼓山">
         fagusong
     </entry>
     <entry
+        mp3="sizhongfozigongmianyu"
         name="四众佛子共勉语"
         author="法鼓山">
         sizhongfozigongmianyu
     </entry>
     <entry
+        mp3="woweinizhufu"
         name="我为你祝福"
         author="法鼓山">
         woweinizhufu
     </entry>
     <entry
+        mp3="pingange"
         name="平安歌"
         author="法鼓山">
         pingange

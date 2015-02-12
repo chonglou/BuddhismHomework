@@ -13,7 +13,6 @@ import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,12 +39,12 @@ public class DownloadService extends IntentService {
 
 
     private void onSync(boolean redo) {
-        List<CacheFile> files = new XmlHelper(this).getCacheFileList();
+        List<String> files = new XmlHelper(this).getDownloadFileList();
 
         int i = 0;
         try {
-            for (CacheFile cf : files) {
-                cf.sync(redo);
+            for (String f : files) {
+                new CacheFile(this, f).sync(redo);
                 i++;
             }
         } catch (MalformedURLException e) {
