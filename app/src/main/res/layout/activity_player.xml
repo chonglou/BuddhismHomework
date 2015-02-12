@@ -18,8 +18,7 @@
             android:id="@+id/sb_player"
             android:layout_gravity="fill_horizontal"
             android:layout_height="wrap_content"
-            android:layout_columnSpan="4"
-            />
+            android:layout_columnSpan="4" />
 
         <ToggleButton
             android:id="@+id/btn_player"
@@ -27,8 +26,7 @@
             android:layout_height="wrap_content"
             android:textOff=""
             android:textOn=""
-            android:background="@drawable/play_pause"
-            />
+            android:background="@drawable/play_pause" />
 
 
     </GridLayout>

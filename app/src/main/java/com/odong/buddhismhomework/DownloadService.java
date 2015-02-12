@@ -45,7 +45,6 @@ public class DownloadService extends IntentService {
         files.addAll(CacheFile.all(this, "musics", R.array.lv_musics, "mp3"));
 
 
-
         int i = 0;
         try {
             for (CacheFile cf : files) {

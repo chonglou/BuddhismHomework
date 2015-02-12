@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="5dp"
     android:orientation="vertical">
+
     <ImageButton
         android:id="@+id/btn_nav_icon"
         android:layout_width="wrap_content"
@@ -11,13 +12,13 @@
         android:layout_gravity="center"
         android:src="@drawable/ic_launcher"
         android:contentDescription="@string/lbl_null"
-        android:background="@null"
-        />
+        android:background="@null" />
+
     <TextView
         android:id="@+id/tv_nav_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:textSize="15sp"         />
+        android:textSize="15sp" />
 </LinearLayout>

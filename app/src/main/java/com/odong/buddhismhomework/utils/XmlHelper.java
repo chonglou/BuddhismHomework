@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
-import com.odong.buddhismhomework.MainActivity;
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -21,6 +21,35 @@ import java.util.List;
 public class XmlHelper {
     public XmlHelper(Context context) {
         this.context = context;
+    }
+
+    public List<Clock> getClockList() {
+        List<Clock> clocks = new ArrayList<Clock>();
+        try {
+            XmlResourceParser xrp = context.getResources().getXml(R.xml.clocks);
+
+
+            for (int et = xrp.getEventType(); et != XmlPullParser.END_DOCUMENT; et = xrp.next()) {
+
+                switch (et) {
+                    case XmlPullParser.START_TAG:
+                        if (xrp.getName().equals("entry")) {
+                            Clock c = new Clock();
+                            c.setMinutes(xrp.getAttributeIntValue(null, "key", 0));
+                            c.setName(readText(xrp));
+                            clocks.add(c);
+                        }
+                        break;
+
+                }
+            }
+        } catch (XmlPullParserException e) {
+            Log.e("XML", "HOMEWORK", e);
+        } catch (IOException e) {
+            Log.e("XML", "HOMEWORK", e);
+        }
+
+        return clocks;
     }
 
     public List<Homework> getHomeworkList() {
@@ -44,8 +73,8 @@ public class XmlHelper {
                         } else if (xrp.getName().equals("incantation")) {
                             String file = readText(xrp);
                             int rid = context.getResources().getIdentifier(file, "raw", context.getPackageName());
-                            if(rid == 0){
-                                Log.e("XML Helper", "资源"+file+"不存在");
+                            if (rid == 0) {
+                                Log.e("XML Helper", "资源" + file + "不存在");
                             }
                             hw.getIncantations().add(rid);
                         }
@@ -67,9 +96,9 @@ public class XmlHelper {
         return homework;
     }
 
-    private String readText(XmlResourceParser xrp) throws IOException, XmlPullParserException{
+    private String readText(XmlResourceParser xrp) throws IOException, XmlPullParserException {
         String result = null;
-        if(xrp.next() == XmlPullParser.TEXT){
+        if (xrp.next() == XmlPullParser.TEXT) {
             result = xrp.getText();
             xrp.nextTag();
         }

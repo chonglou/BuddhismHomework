@@ -17,7 +17,6 @@ import android.widget.ToggleButton;
 import com.odong.buddhismhomework.models.Homework;
 import com.odong.buddhismhomework.utils.XmlHelper;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class HomeworkActivity extends Activity {
             }
         }
 
-        ((TextView)findViewById(R.id.tv_homework_content)).setMovementMethod(new ScrollingMovementMethod());
+        ((TextView) findViewById(R.id.tv_homework_content)).setMovementMethod(new ScrollingMovementMethod());
         initSpinner();
     }
 
@@ -109,9 +108,8 @@ public class HomeworkActivity extends Activity {
 
             }
             tv.setText(sb.toString());
-            tv.scrollTo(0,0);
-        }
-        catch (Resources.NotFoundException e){
+            tv.scrollTo(0, 0);
+        } catch (Resources.NotFoundException e) {
             Log.e("读取文件", hw.getName(), e);
             tv.setText(R.string.lbl_error_io);
         } catch (Exception e) {

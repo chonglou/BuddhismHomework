@@ -13,6 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.odong.buddhismhomework.models.Clock;
+import com.odong.buddhismhomework.utils.XmlHelper;
+
+import java.util.List;
+
 /**
  * Created by flamen on 15-2-8.
  */
@@ -23,12 +28,8 @@ public class SittingActivity extends Activity {
         setContentView(R.layout.activity_sitting);
 
         setTitle(R.string.title_sitting);
-
-
-        int clock = getIntent().getIntExtra("clock", 30);
-        initSpinner(clock);
-        setClock(clock);
-
+        clocks = new XmlHelper(this).getClockList();
+        initSpinner();
     }
 
     @Override
@@ -52,40 +53,29 @@ public class SittingActivity extends Activity {
 
     }
 
-    private void initSpinner(int clock) {
+    private void initSpinner() {
         Spinner spinner = (Spinner) findViewById(R.id.sp_sitting_clocks);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sitting_clocks_titles,
-                android.R.layout.simple_spinner_item);
+        ArrayAdapter<Clock> adapter = new ArrayAdapter<Clock>(this,
+                android.R.layout.simple_spinner_item, clocks);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setClock(getResources().getIntArray(R.array.sitting_clocks_items)[position]);
+                setClock(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                setClock(30);
+                setClock(0);
             }
         });
 
-
-        int[] vals = getResources().getIntArray(R.array.sitting_clocks_items);
-        for (int i = 0; i < vals.length; i++) {
-            if (vals[i] == clock) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
-
     }
 
-    private void setClock(int clock) {
-
-        clock = clock * 60;
+    private void setClock(int index) {
+        int clock = clocks.get(index).getMinutes() * 60;
         setClockText(clock);
 
         final CountDownTimer timer = new CountDownTimer(clock * 1000, 1000) {
@@ -119,5 +109,7 @@ public class SittingActivity extends Activity {
         TextView tv = (TextView) findViewById(R.id.tv_sitting_clock);
         tv.setText(String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60));
     }
+
+    private List<Clock> clocks;
 
 }

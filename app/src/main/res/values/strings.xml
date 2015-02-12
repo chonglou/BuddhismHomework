@@ -15,7 +15,7 @@
     <string name="btn_forward">快进</string>
     <string name="btn_re_down">重新下载</string>
 
-    <string name="tv_clocks">时间</string>
+    <string name="tv_clocks">从现在开始：</string>
     <string name="tv_last_sync">上次检查在：%s</string>
     <string name="tv_replay">循环播放</string>
 
@@ -67,24 +67,4 @@
         <item>lengyanjing|楞严经|唐天竺 沙门般剌密帝 译</item>
     </string-array>
 
-
-    <string-array name="sitting_clocks_titles">
-        <item>一刻钟</item>
-        <item>20分钟</item>
-        <item>半小时</item>
-        <item>45分钟</item>
-        <item>一小时</item>
-        <item>1.5小时</item>
-        <item>2小时</item>
-    </string-array>
-
-    <integer-array name="sitting_clocks_items">
-        <item>15</item>
-        <item>20</item>
-        <item>30</item>
-        <item>45</item>
-        <item>60</item>
-        <item>90</item>
-        <item>120</item>
-    </integer-array>
 </resources>

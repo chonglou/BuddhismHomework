@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clocks>
+    <entry key="15">一刻钟</entry>
+    <entry key="20">20分钟</entry>
+    <entry key="30">半小时</entry>
+    <entry key="45">45分钟</entry>
+    <entry key="60">一小时</entry>
+    <entry key="90">1.5小时</entry>
+    <entry key="120">2小时</entry>
+</clocks>

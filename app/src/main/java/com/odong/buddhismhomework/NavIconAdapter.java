@@ -39,24 +39,23 @@ public class NavIconAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View grid;
-        if(convertView == null){
+        if (convertView == null) {
 
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             grid = inflater.inflate(R.layout.nav_icon, null);
 
             NavIcon icon = icons.get(position);
 
 
-            ImageButton ib = (ImageButton)grid.findViewById(R.id.btn_nav_icon);
+            ImageButton ib = (ImageButton) grid.findViewById(R.id.btn_nav_icon);
             ib.setImageResource(icon.getImage());
             ib.setOnClickListener(icon.getClick());
 
-            TextView tv = (TextView)grid.findViewById(R.id.tv_nav_icon);
+            TextView tv = (TextView) grid.findViewById(R.id.tv_nav_icon);
             tv.setText(icon.getTitle());
             tv.setOnClickListener(icon.getClick());
 
-        }
-        else {
+        } else {
             grid = convertView;
         }
         return grid;
