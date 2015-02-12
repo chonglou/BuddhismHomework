@@ -5,6 +5,8 @@ import android.content.res.XmlResourceParser;
 import android.util.Log;
 
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.models.Book;
+import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
 
@@ -23,31 +25,52 @@ public class XmlHelper {
         this.context = context;
     }
 
-    public List<Clock> getClockList() {
-        List<Clock> clocks = new ArrayList<Clock>();
-        try {
-            XmlResourceParser xrp = context.getResources().getXml(R.xml.clocks);
 
-
-            for (int et = xrp.getEventType(); et != XmlPullParser.END_DOCUMENT; et = xrp.next()) {
-
-                switch (et) {
-                    case XmlPullParser.START_TAG:
-                        if (xrp.getName().equals("entry")) {
-                            Clock c = new Clock();
-                            c.setMinutes(xrp.getAttributeIntValue(null, "key", 0));
-                            c.setName(readText(xrp));
-                            clocks.add(c);
-                        }
-                        break;
-
+    public List<CacheFile> getCacheFileList(){
+        final List<CacheFile> files = new ArrayList<CacheFile>();
+        Callback cb  = new Callback() {
+            @Override
+            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
+                String mp3 = xrp.getAttributeValue(null, "mp3");
+                if(mp3 != null){
+//todo
                 }
             }
-        } catch (XmlPullParserException e) {
-            Log.e("XML", "HOMEWORK", e);
-        } catch (IOException e) {
-            Log.e("XML", "HOMEWORK", e);
-        }
+        };
+        read("courses", cb);
+        read("musics", cb);
+        return files;
+
+    }
+
+    public List<Book> getBookList(String type) {
+       final List<Book> books = new ArrayList<Book>();
+        read(type, new Callback() {
+            @Override
+            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException{
+                Book b = new Book();
+                b.setName(xrp.getAttributeValue(null, "name"));
+                b.setAuthor(xrp.getAttributeValue(null, "author"));
+                for(String name : readText(xrp).split("\\n")){
+                    b.getFiles().add(name2rid("raw", name));
+                }
+                books.add(b);
+            }
+        });
+        return books;
+    }
+
+    public List<Clock> getClockList() {
+        final List<Clock> clocks = new ArrayList<Clock>();
+        read("clocks", new Callback() {
+            @Override
+            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
+                Clock c = new Clock();
+                c.setMinutes(xrp.getAttributeIntValue(null, "key", 0));
+                c.setName(readText(xrp));
+                clocks.add(c);
+            }
+        });
 
         return clocks;
     }
@@ -71,12 +94,7 @@ public class XmlHelper {
                         } else if (xrp.getName().equals("type")) {
                             hw.setType(readText(xrp));
                         } else if (xrp.getName().equals("incantation")) {
-                            String file = readText(xrp);
-                            int rid = context.getResources().getIdentifier(file, "raw", context.getPackageName());
-                            if (rid == 0) {
-                                Log.e("XML Helper", "资源" + file + "不存在");
-                            }
-                            hw.getIncantations().add(rid);
+                            hw.getIncantations().add(name2rid("raw", readText(xrp)));
                         }
                         break;
                     case XmlPullParser.END_TAG:
@@ -96,6 +114,32 @@ public class XmlHelper {
         return homework;
     }
 
+    interface Callback{
+        void run(XmlResourceParser xrp) throws IOException, XmlPullParserException;
+    }
+    private void read(String name, Callback cb){
+
+        try {
+            XmlResourceParser xrp = context.getResources().getXml(name2rid("xml", name));
+
+
+            for (int et = xrp.getEventType(); et != XmlPullParser.END_DOCUMENT; et = xrp.next()) {
+                switch (et) {
+                    case XmlPullParser.START_TAG:
+                        if (xrp.getName().equals("entry")) {
+                            cb.run(xrp);
+                        }
+                        break;
+
+                }
+            }
+        } catch (XmlPullParserException e) {
+            Log.e("XML", "PARSER", e);
+        } catch (IOException e) {
+            Log.e("XML", "IO", e);
+        }
+
+    }
     private String readText(XmlResourceParser xrp) throws IOException, XmlPullParserException {
         String result = null;
         if (xrp.next() == XmlPullParser.TEXT) {
@@ -105,5 +149,13 @@ public class XmlHelper {
         return result;
     }
 
+    private int name2rid(String type, String name){
+        name = name.trim();
+        int rid = context.getResources().getIdentifier(name, type, context.getPackageName());
+        if (rid == 0) {
+            Log.d("XML Helper", "资源["+type+"," + name + "]不存在");
+        }
+        return rid;
+    }
     private Context context;
 }

@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <books>
-    <entry>
-        <id>jingangboreboluomijing</id>
-        <name>金刚般若波罗蜜经</name>
-        <author>姚秦三藏法师鸠摩罗什译</author>
+    <entry
+        name="金刚般若波罗蜜经"
+        author="姚秦三藏法师鸠摩罗什译">
+        jingangboreboluomijing
     </entry>
-    <entry>
-        <id>boreboluomiduoxinjing</id>
-        <name>般若波罗密多心经</name>
-        <author>唐三藏法师玄奘译</author>
+    <entry
+        name="般若波罗密多心经"
+        author="唐三藏法师玄奘译">
+        boreboluomiduoxinjing
     </entry>
-    <entry>
-        <id>dafangguangyuanjuetuoluonijing</id>
-        <name>大方广圆觉陀罗尼经</name>
-        <author>唐佛陀多罗译</author>
+    <entry
+        name="大方广圆觉陀罗尼经"
+        author="唐佛陀多罗译">
+        dafangguangyuanjuetuoluonijing
     </entry>
-    <entry>
-        <id>dafodingshoulengyanjing</id>
-        <name>大佛顶首楞严经</name>
-        <author>唐天竺沙门般剌密帝译</author>
+    <entry
+        name="大佛顶首楞严经"
+        author="唐天竺沙门般剌密帝译">
+        dafodingshoulengyanjing
     </entry>
-    <entry>
-        <id>dashengrulengqiejing</id>
-        <name>大乘入楞伽经</name>
-        <author>唐代于阗国实叉难陀译</author>
+    <entry
+        name="大乘入楞伽经"
+        author="唐代于阗国实叉难陀译">
+        dashengrulengqiejing
     </entry>
-    <entry>
-        <id>weimojiesuoshuojing</id>
-        <name>维摩诘所说经</name>
-        <author>后秦鸠摩罗什译</author>
+    <entry
+        name="维摩诘所说经"
+        author="后秦鸠摩罗什译">
+        weimojiesuoshuojing
     </entry>
-    <entry>
-        <id>liuzudashifabaotanjing</id>
-        <name>六祖大师法宝坛经</name>
-        <author>元宗宝编</author>
+    <entry
+        name="六祖大师法宝坛经"
+        author="元宗宝编">
+        liuzudashifabaotanjing
     </entry>
 </books>

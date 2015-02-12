@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<books>
+    <entry
+        name="法鼓山"
+        author="法鼓山">
+        fagushan
+    </entry>
+    <entry
+        name="法鼓颂"
+        author="法鼓山">
+        fagusong
+    </entry>
+    <entry
+        name="四众佛子共勉语"
+        author="法鼓山">
+        sizhongfozigongmianyu
+    </entry>
+    <entry
+        name="我为你祝福"
+        author="法鼓山">
+        woweinizhufu
+    </entry>
+    <entry
+        name="平安歌"
+        author="法鼓山">
+        pingange
+    </entry>
+</books>

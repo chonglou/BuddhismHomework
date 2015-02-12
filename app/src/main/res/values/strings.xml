@@ -15,7 +15,7 @@
     <string name="btn_forward">快进</string>
     <string name="btn_re_down">重新下载</string>
 
-    <string name="tv_clocks">从现在开始：</string>
+    <string name="tv_clocks">从现在开始打坐：</string>
     <string name="tv_last_sync">上次检查在：%s</string>
     <string name="tv_replay">循环播放</string>
 
@@ -43,28 +43,5 @@
     <string name="lbl_refresh_result">数据同步完成%1$d/%2$d个文件。</string>
     <string name="lbl_success">操作成功</string>
     <string name="lbl_about_me"><i>配套图书</i>：《<b>佛教朝暮课诵本</b>》法鼓文化出版社 \n<i>BUG报告地址</i>：<u>https://github.com/chonglou/BuddhismHomework/issues</u></string>
-
-    <string-array name="lv_musics">
-        <item>fagushan|法鼓山|法鼓山</item>
-        <item>fagusong|法鼓颂|法鼓山</item>
-        <item>sizhongfozigongmianyu|四众佛子共勉语|法鼓山</item>
-        <item>woweinizhufu|我为你祝福|法鼓山</item>
-        <item>pingange|平安歌|法鼓山</item>
-    </string-array>
-
-    <string-array name="lv_courses">
-        <item>lengyanzhou|楞严咒|圣严法师</item>
-        <item>foshuoemituojing|佛说阿弥陀经|圣严法师</item>
-        <item>dabeizhou|大悲咒|圣严法师</item>
-        <item>shixiaozhou|十小咒|圣严法师</item>
-        <item>xinjingwangshengzhou|心经+往生咒|圣严法师</item>
-        <item>lifochanhuiwen|礼佛忏悔文|圣严法师</item>
-        <item>emituofosizifohao|阿弥陀佛四字佛号|圣严法师</item>
-    </string-array>
-
-    <string-array name="lv_books">
-        <item>jingangjing|金刚经|姚秦 三藏法师 鸠摩罗什 译</item>
-        <item>lengyanjing|楞严经|唐天竺 沙门般剌密帝 译</item>
-    </string-array>
 
 </resources>

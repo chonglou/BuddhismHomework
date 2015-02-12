@@ -1,77 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <homework>
-    <entry>
-        <id>lengyanzhou_fagushan</id>
-        <type>morning</type>
-        <name>楞严咒朝课(法鼓山)</name>
-        <incantation>namolengyanhuishangfopusa</incantation>
-        <incantation>lengyanzhou</incantation>
-        <incantation>xinjing</incantation>
-        <incantation>moheboreboluomiduo</incantation>
-        <incantation>sihongshiyuan</incantation>
-        <incantation>sishengjiuyou</incantation>
-        <incantation>sanguiyi</incantation>
-        <incantation>huixiangji</incantation>
+    <entry name="佛说阿弥陀经晚课(法鼓山)">
+        namolianchihaihuifopusa
+        foshuoemituojing
+        wangshengzhou
+        sihongshiyuan
+        puxianjingzhongji
+        sanguiyi
+        huixiangji
     </entry>
-    <entry>
-        <id>dabeizhou_fagushan</id>
-        <type>morning</type>
-        <name>大悲咒朝课(法鼓山)</name>
-        <incantation>namodabeiguanshiyinpusa</incantation>
-        <incantation>dabeizhou</incantation>
-        <incantation>shixiaozhou</incantation>
-        <incantation>xinjing</incantation>
-        <incantation>moheboreboluomiduo</incantation>
-        <incantation>puxianshidayuanwang</incantation>
-        <incantation>sishengjiuyou</incantation>
-        <incantation>sanguiyi</incantation>
-        <incantation>huixiangji</incantation>
+    <entry name="礼佛忏悔文晚课(法鼓山)">
+        namobenshishijiamonifo
+        bashibafo
+        sihongshiyuan
+        puxianjingzhongji
+        sanguiyi
+        huixiangji
     </entry>
-    <entry>
-        <id>chanxiu_fagushan</id>
-        <type>morning</type>
-        <name>禅修朝课(法鼓山)</name>
-        <incantation>namodabeiguanshiyinpusa</incantation>
-        <incantation>dabeizhou</incantation>
-        <incantation>xinjing</incantation>
-        <incantation>moheboreboluomiduo</incantation>
-        <incantation>puxianshidayuanwang</incantation>
-        <incantation>sishengjiuyou</incantation>
-        <incantation>sanguiyi</incantation>
-        <incantation>huixiangji</incantation>
-    </entry>
-    <entry>
-        <id>foshuoemituojing_fagushan</id>
-        <type>evening</type>
-        <name>佛说阿弥陀经晚课(法鼓山)</name>
-        <incantation>namolianchihaihuifopusa</incantation>
-        <incantation>foshuoemituojing</incantation>
-        <incantation>wangshengzhou</incantation>
-        <incantation>sihongshiyuan</incantation>
-        <incantation>puxianjingzhongji</incantation>
-        <incantation>sanguiyi</incantation>
-        <incantation>huixiangji</incantation>
-    </entry>
-    <entry>
-        <id>lifochanhuiwen_fagushan</id>
-        <type>evening</type>
-        <name>礼佛忏悔文晚课(法鼓山)</name>
-        <incantation>namobenshishijiamonifo</incantation>
-        <incantation>bashibafo</incantation>
-        <incantation>sihongshiyuan</incantation>
-        <incantation>puxianjingzhongji</incantation>
-        <incantation>sanguiyi</incantation>
-        <incantation>huixiangji</incantation>
-    </entry>
-    <entry>
-        <id>chanxiu_fagushan</id>
-        <type>evening</type>
-        <name>禅修晚课(法鼓山)</name>
-        <incantation>namodabeiguanshiyinpusa</incantation>
-        <incantation>dabeizhou</incantation>
-        <incantation>sihongshiyuan</incantation>
-        <incantation>puxianjingzhongji</incantation>
-        <incantation>sanguiyi</incantation>
-        <incantation>huixiangji</incantation>
+    <entry name="禅修晚课(法鼓山)">
+        namodabeiguanshiyinpusa
+        dabeizhou
+        sihongshiyuan
+        puxianjingzhongji
+        sanguiyi
+        huixiangji
     </entry>
 </homework>

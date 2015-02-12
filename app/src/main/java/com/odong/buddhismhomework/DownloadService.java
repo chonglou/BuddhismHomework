@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,11 +40,7 @@ public class DownloadService extends IntentService {
 
 
     private void onSync(boolean redo) {
-        List<CacheFile> files = new ArrayList<CacheFile>();
-        files.addAll(CacheFile.all(this, "books", R.array.lv_books, "txt"));
-        files.addAll(CacheFile.all(this, "courses", R.array.lv_courses, "mp3", "txt"));
-        files.addAll(CacheFile.all(this, "musics", R.array.lv_musics, "mp3"));
-
+        List<CacheFile> files = new XmlHelper(this).getCacheFileList();
 
         int i = 0;
         try {
