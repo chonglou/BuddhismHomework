@@ -24,10 +24,11 @@
     <string name="title_evening">晚课</string>
     <string name="title_sitting">打坐</string>
     <string name="title_courses">梵呗</string>
-    <string name="title_music">佛乐</string>
+    <string name="title_musics">佛乐</string>
     <string name="title_books">典籍</string>
     <string name="title_settings">参数设置</string>
 
+    <string name="lbl_null"/>
     <string name="lbl_never">从未</string>
     <string name="lbl_empty">暂无内容，请同步数据。</string>
     <string name="lbl_remove_item">删除该条记录</string>

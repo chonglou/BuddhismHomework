@@ -2,10 +2,10 @@
 
 TARGET=../app/src/main/res/drawable
 
-for i in books courses launcher morning musics osd_sun sitting
+for i in books courses launcher morning musics evening sitting
 do
 	j=ic_$i.png
-	if [ -f images/$j.png ]
+	if [ -f images/$j ]
 	then
 		convert  -resize 48x48 images/$j $TARGET-mdpi/$j
 		convert  -resize 72x72 images/$j $TARGET-hdpi/$j

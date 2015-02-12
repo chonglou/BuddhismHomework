@@ -1,52 +1,19 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="3"
-    android:rowCount="4"
-    android:orientation="horizontal"
+    android:background="@android:color/black"
     tools:context=".MainActivity">
 
-    <ImageButton
-        android:id="@+id/btn_main_morning"
-        android:layout_gravity="start"
-        android:contentDescription="@string/title_morning"
-        android:src="@drawable/ic_morning"
-        />
+    <GridView
+        android:id="@+id/gv_main_icons"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="90dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"/>
 
-    <ImageButton
-        android:id="@+id/btn_main_evening"
-        android:layout_gravity="start"
-        android:contentDescription="@string/title_evening"
-        android:src="@drawable/ic_evening"
-        />
-
-    <ImageButton
-        android:id="@+id/btn_main_sitting"
-        android:layout_gravity="start"
-        android:contentDescription="@string/title_sitting"
-        android:src="@drawable/ic_sitting"
-        />
-
-    <ImageButton
-        android:id="@+id/btn_main_courses"
-        android:layout_gravity="start"
-        android:contentDescription="@string/title_courses"
-        android:src="@drawable/ic_courses"
-        />
-
-    <ImageButton
-        android:id="@+id/btn_main_books"
-        android:layout_gravity="start"
-        android:contentDescription="@string/title_books"
-        android:src="@drawable/ic_books"
-        />
-
-    <ImageButton
-        android:id="@+id/btn_main_music"
-        android:layout_gravity="start"
-        android:contentDescription="@string/title_music"
-        android:src="@drawable/ic_musics"
-        />
-
-</GridLayout>
+</LinearLayout>

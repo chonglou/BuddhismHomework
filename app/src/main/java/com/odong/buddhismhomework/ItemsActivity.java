@@ -43,7 +43,7 @@ public class ItemsActivity extends Activity {
                 getActionBar().setIcon(R.drawable.ic_courses);
                 break;
             case R.array.lv_musics:
-                setTitle(R.string.title_music);
+                setTitle(R.string.title_musics);
                 getActionBar().setIcon(R.drawable.ic_musics);
                 break;
         }

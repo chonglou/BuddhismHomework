@@ -9,6 +9,12 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
+
+import com.odong.buddhismhomework.models.NavIcon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -17,9 +23,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initButtonEvent();
-    }
 
+        initGrid();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,63 +68,107 @@ public class MainActivity extends Activity {
 
     }
 
-    private void initButtonEvent() {
-        SparseArray<View.OnClickListener> events = new SparseArray<View.OnClickListener>();
-        events.put(R.id.btn_main_morning, new View.OnClickListener() {
+    private void initGrid(){
+        List<NavIcon> icons = new ArrayList<NavIcon>();
+        icons.add(new NavIcon(R.string.title_morning, R.drawable.ic_morning, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
-                intent.putExtra("type", "morning");
-                startActivity(intent);
-            }
-        });
 
-        events.put(R.id.btn_main_evening, new View.OnClickListener() {
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_evening, R.drawable.ic_evening, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
-                intent.putExtra("type", "night");
-                startActivity(intent);
-            }
-        });
 
-        events.put(R.id.btn_main_sitting, new View.OnClickListener() {
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_sitting, R.drawable.ic_sitting, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SittingActivity.class));
-            }
-        });
 
-        events.put(R.id.btn_main_courses, new View.OnClickListener() {
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_courses, R.drawable.ic_courses, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("lvId", R.array.lv_courses);
-                startActivity(intent);
-            }
-        });
-        events.put(R.id.btn_main_books, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("lvId", R.array.lv_books);
-                startActivity(intent);
-            }
-        });
-        events.put(R.id.btn_main_music, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
-                intent.putExtra("lvId", R.array.lv_musics);
-                startActivity(intent);
-            }
-        });
 
-        for (int i = 0; i < events.size(); i++) {
-            findViewById(events.keyAt(i)).setOnClickListener(events.valueAt(i));
-        }
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_musics, R.drawable.ic_musics, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }));
+
+
+
+        ((GridView)findViewById(R.id.gv_main_icons)).setAdapter(new NavIconAdapter(this, icons));
 
     }
+//    private void initButtonEvent() {
+//        SparseArray<View.OnClickListener> events = new SparseArray<View.OnClickListener>();
+//        events.put(R.id.btn_main_morning, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
+//                intent.putExtra("type", "morning");
+//                startActivity(intent);
+//            }
+//        });
+//
+//        events.put(R.id.btn_main_evening, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, HomeworkActivity.class);
+//                intent.putExtra("type", "night");
+//                startActivity(intent);
+//            }
+//        });
+//
+//        events.put(R.id.btn_main_sitting, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, SittingActivity.class));
+//            }
+//        });
+//
+//        events.put(R.id.btn_main_courses, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+//                intent.putExtra("lvId", R.array.lv_courses);
+//                startActivity(intent);
+//            }
+//        });
+//        events.put(R.id.btn_main_books, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+//                intent.putExtra("lvId", R.array.lv_books);
+//                startActivity(intent);
+//            }
+//        });
+//        events.put(R.id.btn_main_musics, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+//                intent.putExtra("lvId", R.array.lv_musics);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        for (int i = 0; i < events.size(); i++) {
+//            findViewById(events.keyAt(i)).setOnClickListener(events.valueAt(i));
+//        }
+//
+//    }
 
 
 }
