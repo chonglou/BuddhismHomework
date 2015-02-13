@@ -22,6 +22,7 @@
  * 左合右牛 [http://chardb.iis.sinica.edu.tw/char/45725] (http://chardb.iis.sinica.edu.tw/char/45725)
  * 同「兔」[http://chardb.iis.sinica.edu.tw/char/7490] (http://chardb.iis.sinica.edu.tw/char/7490)
 
+
 ### Gradle环境
 #### 安装 
     cd /tmp && wget https://services.gradle.org/distributions/gradle-2.2.1-bin.zip
