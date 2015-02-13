@@ -88,7 +88,7 @@ public class HomeworkActivity extends Activity {
         TextView tv = (TextView) findViewById(R.id.tv_homework_content);
         try {
             StringBuilder sb = new StringBuilder();
-            for (Integer i : hw.getIncantations()) {
+            for (int i : hw.getIncantations()) {
 
 
                 InputStream is = getResources().openRawResource(i);

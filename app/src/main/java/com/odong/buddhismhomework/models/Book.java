@@ -12,10 +12,12 @@ public class Book implements Serializable {
         files = new ArrayList<Integer>();
     }
 
+
     @Override
     public String toString() {
         return name;
     }
+
 
     private String name;
     private String author;

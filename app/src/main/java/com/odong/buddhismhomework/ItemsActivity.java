@@ -11,6 +11,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.XmlHelper;
@@ -63,8 +64,8 @@ public class ItemsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ItemsActivity.this, PlayerActivity.class);
-                intent.putExtra("type", type);
-                intent.putExtra("files", books.get(position));
+                Book book = books.get(position);
+                intent.putExtra("book", new Gson().toJson(book));
                 startActivity(intent);
             }
         });
@@ -72,7 +73,7 @@ public class ItemsActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 final Book book = books.get(position);
-                if(book.getMp3() != null){
+                if (book.getMp3() != null) {
 
                     AlertDialog.Builder adb = new AlertDialog.Builder(ItemsActivity.this);
                     adb.setMessage(R.string.lbl_remove_item_cache);
