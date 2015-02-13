@@ -28,7 +28,7 @@ public class BooksActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_books);
+        setContentView(R.layout.activity_items);
 
         String type = getIntent().getStringExtra("type");
         setTitle(getResources().getIdentifier("title_" + type, "string", getPackageName()));

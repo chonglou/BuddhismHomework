@@ -26,6 +26,7 @@
         <activity android:name=".SittingActivity" />
         <activity android:name=".HomeworkActivity" />
         <activity android:name=".VideosActivity"/>
+        <activity android:name=".ShowVideoActivity"/>
         <activity android:name=".DictActivity"/>
 
         <service android:exported="false" android:name=".DownloadService"/>

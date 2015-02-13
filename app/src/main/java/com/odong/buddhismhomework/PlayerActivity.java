@@ -44,12 +44,12 @@ public class PlayerActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if(book.getMp3() == null){
-            TextView tv = (TextView)findViewById(R.id.tv_player_content);
+        if (book.getMp3() == null) {
+            TextView tv = (TextView) findViewById(R.id.tv_player_content);
             Point p = new Point();
             p.setX(tv.getScrollX());
             p.setY(tv.getScrollY());
-            new DwDbHelper(this).set("scroll://"+book.getName(), p);
+            new DwDbHelper(this).set("scroll://" + book.getName(), p);
         }
         if (((ToggleButton) findViewById(R.id.btn_player)).isChecked()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -71,48 +71,46 @@ public class PlayerActivity extends Activity {
     }
 
 
-
     private void initMp3View() {
-        if (book.getMp3() == null) {
+        CacheFile cf = new CacheFile(this, book.getMp3());
+        if (book.getMp3() != null && cf.exists()) {
+
+            mp3Player = MediaPlayer.create(this,
+                    Uri.parse(getFileStreamPath(cf.getRealName()).getAbsolutePath()));
+
+            mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+            mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
+
+            mp3Seeker.setProgress(0);
+            mp3Seeker.setMax(mp3Player.getDuration());
+            mp3Seeker.setClickable(false);
+
+
+            findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToggleButton tb = (ToggleButton) findViewById(R.id.btn_player);
+                    if (tb.isChecked()) {
+                        mp3Player.start();
+                        findViewById(R.id.tv_player_content).scrollTo(0, 0);
+                        durationHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mp3Seeker.setProgress(mp3Player.getCurrentPosition());
+                                durationHandler.postDelayed(this, 100);
+                            }
+                        }, 100);
+                    } else {
+                        mp3Player.pause();
+                    }
+                }
+            });
+
+        } else {
             findViewById(R.id.gl_player_mp3).setVisibility(View.GONE);
-            return;
         }
 
-        mp3Player = MediaPlayer.create(this,
-                Uri.parse(
-                        getFileStreamPath(
-                                new CacheFile(
-                                        this, book.getMp3()).getRealName()
-                        ).getAbsolutePath()));
-
-        mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
-
-        mp3Seeker.setProgress(0);
-        mp3Seeker.setMax(mp3Player.getDuration());
-        mp3Seeker.setClickable(false);
-
-
-        findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToggleButton tb = (ToggleButton) findViewById(R.id.btn_player);
-                if (tb.isChecked()) {
-                    mp3Player.start();
-                    findViewById(R.id.tv_player_content).scrollTo(0, 0);
-                    durationHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mp3Seeker.setProgress(mp3Player.getCurrentPosition());
-                            durationHandler.postDelayed(this, 100);
-                        }
-                    }, 100);
-                } else {
-                    mp3Player.pause();
-                }
-            }
-        });
     }
 
 
@@ -127,7 +125,7 @@ public class PlayerActivity extends Activity {
             StringBuilder sb = new StringBuilder();
             for (int i : book.getFiles()) {
 
-                if(i==0){
+                if (i == 0) {
                     continue;
                 }
                 InputStream is = getResources().openRawResource(i);
@@ -145,8 +143,8 @@ public class PlayerActivity extends Activity {
             tv.setText(R.string.lbl_error_io);
         }
 
-        Point p = new DwDbHelper(this).get("scroll://"+book.getName(), Point.class);
-        if(p == null){
+        Point p = new DwDbHelper(this).get("scroll://" + book.getName(), Point.class);
+        if (p == null) {
             p = new Point();
         }
         tv.scrollTo(p.getX(), p.getY());

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <videos>
-    <entry name="《六祖壇經》精選">
+    <entry>
+        <name>《六祖壇經》精選</name>
+        <author>圣严法师</author>
         <item link="http://www.youtube.com/watch?v=6RKS07Lq2OY">01. 無相三皈依(一) </item>
         <item link="http://www.youtube.com/watch?v=p45icjzj5Ko">02. 無相三皈依(二) </item>
         <item link="http://www.youtube.com/watch?v=oWdJWjYoOpM">03. 無相三皈依之(三)</item>
@@ -28,18 +30,24 @@
         <item link="http://www.youtube.com/watch?v=BEkcrgxhEpU">25. 參請機緣之(七)</item>
 
     </entry>
-    <entry name="《法華經》講記">
+    <entry >
+        <name>《法華經》講記</name>
+        <author>圣严法师</author>
     </entry>
-    <entry name="《無量壽經》講記">
-
+    <entry>
+        <name>《無量壽經》講記</name>
+        <author>圣严法师</author>
     </entry>
-    <entry name="《楞嚴經》講要(卷一)">
-
+    <entry>
+        <name>《楞嚴經》講要</name>
+        <author>圣严法师</author>
     </entry>
-    <entry name="《維摩經》六講">
-
+    <entry>
+        <name>《維摩經》六講</name>
+        <author>圣严法师</author>
     </entry>
-    <entry name="《金剛經》講記">
-
+    <entry>
+        <name>《金剛經》講記</name>
+        <author>圣严法师</author>
     </entry>
 </videos>

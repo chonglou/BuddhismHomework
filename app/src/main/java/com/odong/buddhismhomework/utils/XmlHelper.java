@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
+import com.odong.buddhismhomework.models.Video;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -23,6 +25,42 @@ public class XmlHelper {
         this.context = context;
     }
 
+    public List<Video> getVideoList() {
+        List<Video> videos = new ArrayList<Video>();
+        try {
+            XmlResourceParser xrp = context.getResources().getXml(R.xml.videos);
+
+            Video video = null;
+            for (int et = xrp.getEventType(); et != XmlPullParser.END_DOCUMENT; et = xrp.next()) {
+                switch (et) {
+                    case XmlPullParser.START_TAG:
+                        if (xrp.getName().equals("entry")) {
+                            video = new Video();
+                        } else if (xrp.getName().equals("name")) {
+                            video.setName(readText(xrp));
+                        } else if (xrp.getName().equals("author")) {
+                            video.setAuthor(readText(xrp));
+                        } else if (xrp.getName().equals("item")) {
+                            String key = xrp.getAttributeValue(null, "link");
+                            String val = readText(xrp);
+                            video.getItems().put(key, val);
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (xrp.getName().equals("entry")) {
+                            videos.add(video);
+                        }
+                        break;
+
+                }
+            }
+        } catch (XmlPullParserException e) {
+            Log.e("XML", "PARSER", e);
+        } catch (IOException e) {
+            Log.e("XML", "IO", e);
+        }
+        return videos;
+    }
 
     public List<String> getDownloadFileList() {
         final List<String> files = new ArrayList<String>();
