@@ -46,11 +46,11 @@ public class DownloadService extends IntentService {
             CacheFile cf = new CacheFile(this, f);
             try {
                 cf.sync(redo);
+                i++;
             } catch (Exception e) {
                 Log.e("下载", "地址错误", e);
                 cf.remove();
             }
-            i++;
         }
 
         String msg = getString(R.string.lbl_refresh_result, i, files.size());

@@ -22,6 +22,17 @@
  * 左合右牛 [http://chardb.iis.sinica.edu.tw/char/45725] (http://chardb.iis.sinica.edu.tw/char/45725)
  * 同「兔」[http://chardb.iis.sinica.edu.tw/char/7490] (http://chardb.iis.sinica.edu.tw/char/7490)
 
+#### 调试设备启动
+ * android版本小于3.2 点击 设置->应用->开发
+ * android本本大于4.0小于4.2 点击 设置->开发者选项
+ * android版本大于4.2 开发者选项默认隐藏。如果需要显示，需要点击 设置->关于手机，并连续点击版本号7次，然后返回上一页才可以看到开发者选项。
+
+
+    adb connect YOUR_IP:5555
+    # 拔下设备
+    adb kill-server 
+    adb start-server
+    # 接上设备
 
 ### Gradle环境
 #### 安装 
