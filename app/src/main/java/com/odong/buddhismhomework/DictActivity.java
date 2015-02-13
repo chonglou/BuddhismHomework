@@ -25,6 +25,7 @@ public class DictActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dict);
         setTitle(R.string.title_dict);
+        getActionBar().setIcon(R.drawable.ic_dict);
 
         initDict();
 
@@ -35,11 +36,18 @@ public class DictActivity extends Activity {
 
                 TextView tv = ((TextView) findViewById(R.id.tv_dict_content));
                 try {
-                    tv.setText(starDict.lookupWord(key));
+                    if (starDict == null) {
+                        tv.setText(R.string.lbl_empty);
+                    } else {
+                        tv.setText(starDict.lookupWord(key));
+                    }
+
+
                 } catch (IOException e) {
                     Log.e("字典", "查询", e);
                     tv.setText(R.string.lbl_empty);
                 }
+
 
             }
         });

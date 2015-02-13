@@ -28,7 +28,9 @@ public class HomeworkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework);
+
         String type = getIntent().getStringExtra("type");
+        getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
         homeworkList = new XmlHelper(this).getHomeworkList(type);
 
         ((TextView) findViewById(R.id.tv_homework_content)).setMovementMethod(new ScrollingMovementMethod());

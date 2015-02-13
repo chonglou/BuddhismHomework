@@ -33,6 +33,11 @@ public class PlayerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+
+        String type = getIntent().getStringExtra("type");
+
+        getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
+
         book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
         setTitle(book.getName());
 

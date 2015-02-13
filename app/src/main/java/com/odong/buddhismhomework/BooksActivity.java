@@ -30,18 +30,18 @@ public class BooksActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
-        String type = getIntent().getStringExtra("type");
+        type = getIntent().getStringExtra("type");
         setTitle(getResources().getIdentifier("title_" + type, "string", getPackageName()));
         getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
 
         books = new XmlHelper(this).getBookList(type);
-        initListView(type);
+        initListView();
 
 
     }
 
 
-    private void initListView(final String type) {
+    private void initListView() {
 
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
         for (Book b : books) {
@@ -66,6 +66,7 @@ public class BooksActivity extends Activity {
                 Intent intent = new Intent(BooksActivity.this, PlayerActivity.class);
                 Book book = books.get(position);
                 intent.putExtra("book", new Gson().toJson(book));
+                intent.putExtra("type", type);
                 startActivity(intent);
             }
         });
@@ -96,6 +97,7 @@ public class BooksActivity extends Activity {
     }
 
     private List<Book> books;
+    private String type;
 
 
 }

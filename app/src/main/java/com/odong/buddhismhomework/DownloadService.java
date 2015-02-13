@@ -41,19 +41,24 @@ public class DownloadService extends IntentService {
         for (String ext : new String[]{"dict", "idx", "ifo"}) {
             files.add("foguangdacidian." + ext);
         }
-        int i = 0;
-        for (String f : files) {
+        int success = 0;
+        int size = files.size();
+
+        for (int i = 1; i <= size; i++) {
+            String f = files.get(i - 1);
             CacheFile cf = new CacheFile(this, f);
             try {
                 cf.sync(redo);
-                i++;
+                response(getString(R.string.lbl_refresh_success, i, size, f));
+                success++;
             } catch (Exception e) {
                 Log.e("下载", "地址错误", e);
+                response(getString(R.string.lbl_refresh_fail, i, size, f));
                 cf.remove();
             }
         }
 
-        String msg = getString(R.string.lbl_refresh_result, i, files.size());
+        String msg = getString(R.string.lbl_refresh_result, success, files.size());
 
         new DwDbHelper(this).set("sync.last", new Date());
         Log.d("后台", msg);
