@@ -33,6 +33,7 @@
     <string name="lbl_null"/>
     <string name="lbl_never">从未</string>
     <string name="lbl_hint_search">此处输入进行搜索</string>
+    <string name="lbl_empty_results">没有找到相关记录</string>
     <string name="lbl_empty">暂无内容，请同步数据。</string>
     <string name="lbl_remove_item_cache">删除该条记录的缓存</string>
     <string name="lbl_are_you_sure">你确定要进行此操作么？</string>

@@ -161,7 +161,7 @@ public class StarDict {
      */
     public String lookupWord(int idx) throws IOException {
         if (idx < 0 || idx >= idxFile.getWordCount()) {
-            return "not found";
+            return null;
         }
         WordEntry tempEntry = idxFile.getEntryList().get(idx);
 
@@ -176,7 +176,7 @@ public class StarDict {
      */
     public String lookupWord(String word) throws IOException {
         if (!available) {
-            return "the dictionary is not available";
+            return null;
         }
         int idx = (int) idxFile.findIndexForWord(word);
 

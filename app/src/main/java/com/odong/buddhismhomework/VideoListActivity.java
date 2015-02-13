@@ -59,7 +59,7 @@ public class VideoListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String vid = video.getItems().keySet().toArray(new String[1])[position];
 
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(VideoListActivity.this, Config.YOUTUBE_KEY, vid, 0, true, true);
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent(VideoListActivity.this, Config.GOOGLE_DEVELOPER_KEY, vid, 0, true, true);
 
                 try {
                     if (canResolveIntent(intent)) {

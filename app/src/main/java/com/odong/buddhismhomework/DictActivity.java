@@ -39,7 +39,12 @@ public class DictActivity extends Activity {
                     if (starDict == null) {
                         tv.setText(R.string.lbl_empty);
                     } else {
-                        tv.setText(starDict.lookupWord(key));
+
+                        String result = starDict.lookupWord(key);
+                        if (result == null) {
+                            result = getString(R.string.lbl_empty_results);
+                        }
+                        tv.setText(result);
                     }
 
 
