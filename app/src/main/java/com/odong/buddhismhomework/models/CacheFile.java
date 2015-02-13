@@ -48,7 +48,7 @@ public class CacheFile {
         URL url = new URL(
                 (BuildConfig.DEBUG ?
                         "http://192.168.1.102/tools/downloads/" :
-                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/mp3/")
+                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/downloads/")
 
                         + name);
         Log.d("下载", url.toString() + " => " + getRealName());
