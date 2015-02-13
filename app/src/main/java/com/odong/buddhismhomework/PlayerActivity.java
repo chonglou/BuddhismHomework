@@ -18,6 +18,8 @@ import android.widget.ToggleButton;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Point;
+import com.odong.buddhismhomework.utils.DwDbHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +44,13 @@ public class PlayerActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        if(book.getMp3() == null){
+            TextView tv = (TextView)findViewById(R.id.tv_player_content);
+            Point p = new Point();
+            p.setX(tv.getScrollX());
+            p.setY(tv.getScrollY());
+            new DwDbHelper(this).set("scroll://"+book.getName(), p);
+        }
         if (((ToggleButton) findViewById(R.id.btn_player)).isChecked()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setMessage(R.string.lbl_will_pause);
@@ -60,6 +69,8 @@ public class PlayerActivity extends Activity {
         }
 
     }
+
+
 
     private void initMp3View() {
         if (book.getMp3() == null) {
@@ -89,6 +100,7 @@ public class PlayerActivity extends Activity {
                 ToggleButton tb = (ToggleButton) findViewById(R.id.btn_player);
                 if (tb.isChecked()) {
                     mp3Player.start();
+                    findViewById(R.id.tv_player_content).scrollTo(0, 0);
                     durationHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -133,6 +145,11 @@ public class PlayerActivity extends Activity {
             tv.setText(R.string.lbl_error_io);
         }
 
+        Point p = new DwDbHelper(this).get("scroll://"+book.getName(), Point.class);
+        if(p == null){
+            p = new Point();
+        }
+        tv.scrollTo(p.getX(), p.getY());
 
     }
 
