@@ -39,7 +39,7 @@ public class DownloadService extends IntentService {
     private void onSync(boolean redo) {
         List<String> files = new XmlHelper(this).getDownloadFileList();
         for (String ext : new String[]{"dict", "idx", "ifo"}) {
-            files.add("foguangdacidian" + ext);
+            files.add("foguangdacidian." + ext);
         }
         int i = 0;
         for (String f : files) {
