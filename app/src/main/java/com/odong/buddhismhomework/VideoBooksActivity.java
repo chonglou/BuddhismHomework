@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Created by flamen on 15-2-12.
  */
-public class VideosActivity extends Activity {
+public class VideoBooksActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,7 @@ public class VideosActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(VideosActivity.this, ShowVideoActivity.class);
+                Intent intent = new Intent(VideoBooksActivity.this, VideoListActivity.class);
                 Video video = videos.get(position);
                 intent.putExtra("video", new Gson().toJson(video));
                 startActivity(intent);

@@ -41,7 +41,7 @@ public class XmlHelper {
                         } else if (xrp.getName().equals("author")) {
                             video.setAuthor(readText(xrp));
                         } else if (xrp.getName().equals("item")) {
-                            String key = xrp.getAttributeValue(null, "link");
+                            String key = xrp.getAttributeValue(null, "vid");
                             String val = readText(xrp);
                             video.getItems().put(key, val);
                         }

@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_videos, R.drawable.ic_videos, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, VideosActivity.class));
+                startActivity(new Intent(MainActivity.this, VideoBooksActivity.class));
             }
         }));
         icons.add(new NavIcon(R.string.title_dict, R.drawable.ic_dict, new View.OnClickListener() {

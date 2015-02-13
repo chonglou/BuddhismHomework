@@ -9,3 +9,4 @@ build
 /app/manifest-merger-release-report.txt
 *.log
 *~
+Config.java
