@@ -21,10 +21,13 @@
             android:name=".SettingsActivity"
             android:label="@string/title_settings"/>
 
-        <activity android:name=".ItemsActivity" />
+        <activity android:name=".BooksActivity" />
         <activity android:name=".PlayerActivity" />
         <activity android:name=".SittingActivity" />
         <activity android:name=".HomeworkActivity" />
+        <activity android:name=".VideosActivity"/>
+        <activity android:name=".DictActivity"/>
+
         <service android:exported="false" android:name=".DownloadService"/>
 
     </application>

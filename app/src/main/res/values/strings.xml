@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">佛教朝暮课诵</string>
+    <string name="app_name">佛教朝暮课诵工具</string>
     <string name="homework">功课列表</string>
 
 
@@ -25,7 +25,9 @@
     <string name="title_sitting">打坐</string>
     <string name="title_courses">梵呗</string>
     <string name="title_musics">佛乐</string>
-    <string name="title_books">典籍</string>
+    <string name="title_books">经论</string>
+    <string name="title_videos">视频</string>
+    <string name="title_dict">字典</string>
     <string name="title_settings">参数设置</string>
 
     <string name="lbl_null"/>

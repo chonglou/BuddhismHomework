@@ -2,7 +2,7 @@
 
 TARGET=../app/src/main/res/drawable
 
-for i in books courses launcher morning musics evening sitting
+for i in books courses launcher morning musics evening sitting videos dict
 do
 	j=ic_$i.png
 	if [ -f images/$j ]

@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_courses, R.drawable.ic_courses, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+                Intent intent = new Intent(MainActivity.this, BooksActivity.class);
                 intent.putExtra("type", "courses");
                 startActivity(intent);
             }
@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+                Intent intent = new Intent(MainActivity.this, BooksActivity.class);
                 intent.putExtra("type", "books");
                 startActivity(intent);
             }
@@ -110,9 +110,22 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_musics, R.drawable.ic_musics, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemsActivity.class);
+                Intent intent = new Intent(MainActivity.this, BooksActivity.class);
                 intent.putExtra("type", "musics");
                 startActivity(intent);
+            }
+        }));
+
+        icons.add(new NavIcon(R.string.title_videos, R.drawable.ic_videos, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, VideosActivity.class));
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_dict, R.drawable.ic_dict, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, DictActivity.class));
             }
         }));
 

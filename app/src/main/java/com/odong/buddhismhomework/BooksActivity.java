@@ -24,11 +24,11 @@ import java.util.Map;
 /**
  * Created by flamen on 15-2-8.
  */
-public class ItemsActivity extends Activity {
+public class BooksActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_items);
+        setContentView(R.layout.activity_books);
 
         String type = getIntent().getStringExtra("type");
         setTitle(getResources().getIdentifier("title_" + type, "string", getPackageName()));
@@ -63,7 +63,7 @@ public class ItemsActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ItemsActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(BooksActivity.this, PlayerActivity.class);
                 Book book = books.get(position);
                 intent.putExtra("book", new Gson().toJson(book));
                 startActivity(intent);
@@ -75,14 +75,14 @@ public class ItemsActivity extends Activity {
                 final Book book = books.get(position);
                 if (book.getMp3() != null) {
 
-                    AlertDialog.Builder adb = new AlertDialog.Builder(ItemsActivity.this);
+                    AlertDialog.Builder adb = new AlertDialog.Builder(BooksActivity.this);
                     adb.setMessage(R.string.lbl_remove_item_cache);
                     adb.setTitle(R.string.lbl_are_you_sure);
 
                     adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new CacheFile(ItemsActivity.this, book.getMp3()).remove();
+                            new CacheFile(BooksActivity.this, book.getMp3()).remove();
                         }
                     });
                     adb.setNegativeButton(android.R.string.no, null);
