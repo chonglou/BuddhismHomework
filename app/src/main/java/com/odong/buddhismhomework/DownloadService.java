@@ -40,7 +40,7 @@ public class DownloadService extends IntentService {
 
     private void onSync(boolean redo) {
         List<String> files = new XmlHelper(this).getDownloadFileList();
-
+        files.add("dicts.tar.bz2");
         int i = 0;
         try {
             for (String f : files) {
