@@ -11,8 +11,6 @@ import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.XmlHelper;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.List;
 
@@ -40,22 +38,23 @@ public class DownloadService extends IntentService {
 
     private void onSync(boolean redo) {
         List<String> files = new XmlHelper(this).getDownloadFileList();
-        files.add("dicts.tar.bz2");
+        for (String ext : new String[]{"dict", "idx", "ifo"}) {
+            files.add("foguangdacidian" + ext);
+        }
         int i = 0;
-        try {
-            for (String f : files) {
-                new CacheFile(this, f).sync(redo);
-                i++;
+        for (String f : files) {
+            CacheFile cf = new CacheFile(this, f);
+            try {
+                cf.sync(redo);
+            } catch (Exception e) {
+                Log.e("下载", "地址错误", e);
+                cf.remove();
             }
-        } catch (MalformedURLException e) {
-            Log.e("下载", "地址错误", e);
-        } catch (IOException e) {
-            Log.e("下载", "IO错误", e);
-        } catch (SecurityException e) {
-            Log.e("下载", "安全错误", e);
+            i++;
         }
 
         String msg = getString(R.string.lbl_refresh_result, i, files.size());
+
         new DwDbHelper(this).set("sync.last", new Date());
         Log.d("后台", msg);
         response(msg);

@@ -16,7 +16,6 @@ import com.odong.buddhismhomework.models.Video;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class ShowVideoActivity extends Activity {
 
     private void initList() {
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        for ( Map.Entry<String,String> e : video.getItems().entrySet()) {
+        for (Map.Entry<String, String> e : video.getItems().entrySet()) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", e.getValue());
             map.put("details", e.getKey());
@@ -55,12 +54,12 @@ public class ShowVideoActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LinkedHashMap<String,String>aaa=new LinkedHashMap<String, String>();
                 String link = video.getItems().keySet().toArray(new String[1])[position];
                 Log.d("VIDEO", link);
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
             }
         });
     }
+
     private Video video;
 }
