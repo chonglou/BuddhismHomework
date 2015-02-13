@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/tv_player_content"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:textSize="20sp" />
