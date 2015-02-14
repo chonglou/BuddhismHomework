@@ -3,6 +3,9 @@
 音频来源：[http://www.shengyen.org/content/music/music_01.aspx?MType=3](http://www.shengyen.org/content/music/music_01.aspx?MType=3), 经书来自互联网，欢迎来信添加经书和梵呗.
 
 
+扫描二维码打开play市场链接：
+
+
 ![扫描下载Android App](https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/images/play.png)
 
 
@@ -37,10 +40,10 @@
 
 
     adb connect YOUR_IP:5555
-    # 拔下设备
+    拔下设备
     adb kill-server 
     adb start-server
-    # 接上设备
+    接上设备
 
 ### Gradle环境
 #### 安装 
