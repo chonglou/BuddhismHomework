@@ -29,10 +29,6 @@
         <activity android:name=".VideoBooksActivity"/>
         <activity android:name=".VideoListActivity"/>
         <activity android:name=".DictActivity"/>
-        <activity
-            android:name="com.google.android.youtube.api.StandalonePlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            />
 
         <service android:exported="false" android:name=".DownloadService"/>
 
