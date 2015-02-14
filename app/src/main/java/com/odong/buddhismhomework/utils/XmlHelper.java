@@ -8,6 +8,7 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
+import com.odong.buddhismhomework.models.Host;
 import com.odong.buddhismhomework.models.Video;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -23,6 +24,20 @@ import java.util.List;
 public class XmlHelper {
     public XmlHelper(Context context) {
         this.context = context;
+    }
+
+    public List<Host> getHostList() {
+        final List<Host> hosts = new ArrayList<Host>();
+        read("hosts", new Callback() {
+            @Override
+            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
+                Host h = new Host();
+                h.setUrl(xrp.getAttributeValue(null, "url"));
+                h.setName(readText(xrp));
+                hosts.add(h);
+            }
+        });
+        return hosts;
     }
 
     public List<Video> getVideoList() {

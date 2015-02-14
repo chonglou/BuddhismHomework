@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.odong.buddhismhomework.BuildConfig;
+import com.odong.buddhismhomework.Config;
+import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -45,14 +48,20 @@ public class CacheFile {
             return;
         }
 
-        URL url = new URL(
-                (BuildConfig.DEBUG ?
-                        "http://192.168.1.102/tools/downloads/" :
-                        "https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/downloads/")
-
-                        + name);
-        Log.d("下载", url.toString() + " => " + getRealName());
-        DataInputStream dis = new DataInputStream(url.openStream());
+        String url;
+        if (BuildConfig.DEBUG) {
+            url = "http://"+ Config.DEVELOPMENT_HOST+"/tools/downloads/";
+        } else {
+            DwDbHelper ddh = new DwDbHelper(this.context);
+            url = ddh.get("download.node", String.class);
+            if (url == null) {
+                url = new XmlHelper(this.context).getHostList().get(0).getUrl();
+                ddh.set("download.node", url);
+            }
+        }
+        url +=name;
+        Log.d("下载", url + " => " + getRealName());
+        DataInputStream dis = new DataInputStream(new URL(url).openStream());
 
         byte[] buf = new byte[1024];
         int len;

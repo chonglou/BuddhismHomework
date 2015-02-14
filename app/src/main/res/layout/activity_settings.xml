@@ -5,11 +5,11 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
 
         <TextView
             android:id="@+id/tv_setting_sync"
@@ -23,10 +23,10 @@
 
         <ImageButton
             android:id="@+id/btn_setting_sync"
-            android:src="@android:drawable/stat_sys_download"
-            android:contentDescription="@string/lbl_empty"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/lbl_empty"
+            android:src="@android:drawable/stat_sys_download" />
 
     </LinearLayout>
 
@@ -36,16 +36,16 @@
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
 
         <TextView
-            android:text="@string/tv_replay"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/tv_replay" />
 
         <View
             android:layout_width="0dp"

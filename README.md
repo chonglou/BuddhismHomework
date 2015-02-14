@@ -1,9 +1,17 @@
-佛教朝暮课诵
+佛教朝暮课诵助手(For Android)
 --------------------
 音频来源：[http://www.shengyen.org/content/music/music_01.aspx?MType=3](http://www.shengyen.org/content/music/music_01.aspx?MType=3), 经书来自互联网，欢迎来信添加经书和梵呗.
 
+
+![扫描下载Android App](https://raw.githubusercontent.com/chonglou/BuddhismHomework/master/tools/images/play.png)
+
+
 功能特色：
- * 可根据梵呗自由组合早晚课内容
+ * 早课/晚课
+ * 打坐计时
+ * 梵呗
+ * 开示视频
+ * 禅宗七经
 
 
 
