@@ -50,7 +50,7 @@ public class CacheFile {
 
         String url;
         if (BuildConfig.DEBUG) {
-            url = "http://"+ Config.DEVELOPMENT_HOST+"/tools/downloads/";
+            url = "http://" + Config.DEVELOPMENT_HOST + "/tools/downloads/";
         } else {
             DwDbHelper ddh = new DwDbHelper(this.context);
             url = ddh.get("download.node", String.class);
@@ -59,7 +59,7 @@ public class CacheFile {
                 ddh.set("download.node", url);
             }
         }
-        url +=name;
+        url += name;
         Log.d("下载", url + " => " + getRealName());
         DataInputStream dis = new DataInputStream(new URL(url).openStream());
 

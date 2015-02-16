@@ -95,7 +95,7 @@ public class PlayerActivity extends Activity {
             findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToggleButton tb = (ToggleButton) findViewById(R.id.btn_player);
+                    ToggleButton tb = (ToggleButton) v;
                     if (tb.isChecked()) {
                         mp3Player.start();
                         findViewById(R.id.tv_player_content).scrollTo(0, 0);

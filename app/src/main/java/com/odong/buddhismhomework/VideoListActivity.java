@@ -1,10 +1,6 @@
 package com.odong.buddhismhomework;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,10 +8,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Video;
+import com.odong.buddhismhomework.utils.YoutubePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,30 +53,11 @@ public class VideoListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String vid = video.getItems().keySet().toArray(new String[1])[position];
-
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(VideoListActivity.this, Config.GOOGLE_DEVELOPER_KEY, vid, 0, true, true);
-
-                try {
-                    if (canResolveIntent(intent)) {
-                        startActivityForResult(intent, REQ_START_STANDALONE_PLAYER);
-                    } else {
-                        YouTubeInitializationResult.SERVICE_MISSING.getErrorDialog(VideoListActivity.this, REQ_RESOLVE_SERVICE_MISSING).show();
-                    }
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + vid)));
-                }
+                new YoutubePlayer(VideoListActivity.this, vid).start();
 
             }
         });
     }
-
-    private boolean canResolveIntent(Intent intent) {
-        List<ResolveInfo> resolveInfo = getPackageManager().queryIntentActivities(intent, 0);
-        return resolveInfo != null && !resolveInfo.isEmpty();
-    }
-
-    private static final int REQ_START_STANDALONE_PLAYER = 1;
-    private static final int REQ_RESOLVE_SERVICE_MISSING = 2;
 
 
     private Video video;

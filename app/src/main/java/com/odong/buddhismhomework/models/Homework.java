@@ -18,6 +18,7 @@ public class Homework implements Serializable {
     }
 
     private String name;
+    private String vid;
     private List<Integer> incantations;
 
 
@@ -33,5 +34,11 @@ public class Homework implements Serializable {
         return incantations;
     }
 
+    public String getVid() {
+        return vid;
+    }
 
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
 }

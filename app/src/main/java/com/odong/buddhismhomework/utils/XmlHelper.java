@@ -136,6 +136,7 @@ public class XmlHelper {
 
                 Homework h = new Homework();
                 h.setName(xrp.getAttributeValue(null, "name"));
+                h.setVid(xrp.getAttributeValue(null, "vid"));
                 for (String name : readText(xrp).split("\\n")) {
                     h.getIncantations().add(name2rid("raw", name));
                 }

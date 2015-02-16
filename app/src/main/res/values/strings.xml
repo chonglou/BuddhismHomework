@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">佛教朝暮课诵</string>
+    <string name="app_name">佛教朝暮课诵助手</string>
     <string name="homework">功课列表</string>
 
 
@@ -16,7 +16,7 @@
     <string name="btn_re_down">重新下载</string>
 
     <string name="tv_clocks">从现在开始打坐：</string>
-    <string name="tv_last_sync">上次：%s</string>
+    <string name="tv_last_sync">上次更新：%s</string>
     <string name="tv_replay">循环播放</string>
 
 
@@ -26,7 +26,7 @@
     <string name="title_courses">梵呗</string>
     <string name="title_musics">佛乐</string>
     <string name="title_books">经论</string>
-    <string name="title_videos">视频</string>
+    <string name="title_videos">讲座</string>
     <string name="title_dict">字典</string>
     <string name="title_settings">参数设置</string>
 

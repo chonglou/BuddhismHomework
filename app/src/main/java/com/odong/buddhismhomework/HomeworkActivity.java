@@ -12,10 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.odong.buddhismhomework.models.Homework;
 import com.odong.buddhismhomework.utils.XmlHelper;
+import com.odong.buddhismhomework.utils.YoutubePlayer;
 
 import java.io.InputStream;
 import java.util.List;
@@ -35,26 +35,23 @@ public class HomeworkActivity extends Activity {
 
         ((TextView) findViewById(R.id.tv_homework_content)).setMovementMethod(new ScrollingMovementMethod());
         initSpinner();
+        initPlayButton();
     }
 
     @Override
     public void onBackPressed() {
-        if (((ToggleButton) findViewById(R.id.btn_homework_play)).isChecked()) {
-            AlertDialog.Builder adb = new AlertDialog.Builder(this);
-            adb.setMessage(R.string.lbl_will_pause);
-            adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    HomeworkActivity.this.finish();
-                }
-            });
-            adb.setNegativeButton(android.R.string.no, null);
-            adb.setCancelable(false);
-            adb.create().show();
 
-        } else {
-            super.onBackPressed();
-        }
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setMessage(R.string.lbl_will_pause);
+        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                HomeworkActivity.this.finish();
+            }
+        });
+        adb.setNegativeButton(android.R.string.no, null);
+        adb.setCancelable(false);
+        adb.create().show();
 
     }
 
@@ -112,6 +109,19 @@ public class HomeworkActivity extends Activity {
             tv.setText(R.string.lbl_error_io);
         }
 
+    }
+
+    private void initPlayButton() {
+        findViewById(R.id.btn_homework_play).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Homework hw = (Homework) ((Spinner) findViewById(R.id.sp_homework)).getSelectedItem();
+                new YoutubePlayer(HomeworkActivity.this, hw.getVid()).start();
+
+            }
+        });
     }
 
     private List<Homework> homeworkList;

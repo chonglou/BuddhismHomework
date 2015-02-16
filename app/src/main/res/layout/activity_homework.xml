@@ -15,14 +15,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ToggleButton
+        <ImageButton
             android:id="@+id/btn_homework_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textOff=""
-            android:textOn=""
-            android:background="@drawable/play_pause" />
+            android:contentDescription="@string/lbl_empty"
+            android:src="@android:drawable/ic_media_play" />
     </LinearLayout>
 
     <TextView
