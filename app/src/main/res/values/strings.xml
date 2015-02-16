@@ -49,10 +49,11 @@
     <string name="lbl_refresh_fail">[%1$d/%2$d]：下载%3$s失败</string>
     <string name="lbl_success">操作成功</string>
     <string name="lbl_about_me">
-        <i>配套图书</i>：《<b>佛教朝暮课诵本</b>》法鼓文化出版社
-        <i>BUG报告地址</i>：<u>https://github.com/chonglou/BuddhismHomework/issues</u>
-        本软件所有经书来自与互联网，所有音频及视频资源链接均来自于<u>http://dbs.ddm.org.tw/</u>，感谢法鼓山信众教育院。
-        请仅用作学习用途，谢谢！
+        1: <i>配套图书</i>《<b>佛教朝暮课诵本</b>》法鼓文化出版社 \n
+        2: <i>BUG报告地址</i> <u>https://github.com/chonglou/BuddhismHomework/issues</u> \n
+        3: 本软件所有经书来自与互联网，所有音频及视频资源链接均来自于<b>法鼓山信众教育院</b><u>http://dbs.ddm.org.tw/</u>。\n
+        4: 感恩<b>法鼓山</b>(<u>https://www.ddm.org.tw/</u>)为推广佛教教育作出的卓越贡献。\n
+        5: 请仅用作学习用途，谢谢！
     </string>
 
 </resources>

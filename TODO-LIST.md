@@ -12,5 +12,4 @@ TODO LIST
 
  * 横屏模式下sitting计时会失效 
  * 横屏后 mp3 player与播放开关不一致
- * 竖屏时 setting 下载按钮不显示
  * 横屏后sitting控件挤到一块儿去了
