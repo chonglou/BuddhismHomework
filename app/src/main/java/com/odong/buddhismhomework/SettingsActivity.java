@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.odong.buddhismhomework.utils.DwDbHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -32,7 +33,7 @@ public class SettingsActivity extends Activity {
         Date last_sync = dh.get("sync.last", Date.class);
 
         ((TextView) findViewById(R.id.tv_setting_sync)).setText(getString(R.string.tv_last_sync,
-                last_sync == null ? getString(R.string.lbl_never) : last_sync.toString()));
+                last_sync == null ? getString(R.string.lbl_never) : new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(last_sync)));
 
     }
 

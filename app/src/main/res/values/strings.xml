@@ -16,7 +16,7 @@
     <string name="btn_re_down">重新下载</string>
 
     <string name="tv_clocks">从现在开始打坐：</string>
-    <string name="tv_last_sync">上次检查在：%s</string>
+    <string name="tv_last_sync">上次：%s</string>
     <string name="tv_replay">循环播放</string>
 
 
