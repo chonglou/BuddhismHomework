@@ -27,44 +27,58 @@ public class DownloadService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String action = intent.getStringExtra("action");
 
-
         if (action.equals("sync")) {
             boolean redo = intent.getBooleanExtra("redo", false);
-            onSync(redo);
-        }
-
-    }
+            String type = intent.getStringExtra("type");
 
 
-    private void onSync(boolean redo) {
-        List<String> files = new XmlHelper(this).getDownloadFileList();
-        for (String ext : new String[]{"dict", "idx", "ifo"}) {
-            files.add("foguangdacidian." + ext);
-        }
-        int success = 0;
-        int size = files.size();
+            if (type == null) {
+                type = "dropbox";
+            }
+            String name = new XmlHelper(this).getHostMap().get(type);
 
-        for (int i = 1; i <= size; i++) {
-            String f = files.get(i - 1);
-            CacheFile cf = new CacheFile(this, f);
-            try {
-                cf.sync(redo);
-                response(getString(R.string.lbl_refresh_success, i, size, f));
-                success++;
-            } catch (Exception e) {
-                Log.e("下载", "地址错误", e);
-                response(getString(R.string.lbl_refresh_fail, i, size, f));
-                cf.remove();
+            if (type.equals("dropbox")) {
+                onDropbox(redo);
+            } else {
+                response(getString(R.string.lbl_refresh_no_valid_host, name));
             }
         }
 
-        String msg = getString(R.string.lbl_refresh_result, success, files.size());
+    }
 
-        new DwDbHelper(this).set("sync.last", new Date());
-        Log.d("后台", msg);
-        response(msg);
+    private void onDropbox(boolean redo) {
 
     }
+
+//    private void onSync(boolean redo) {
+//        List<String> files = new XmlHelper(this).getDownloadFileList();
+//        for (String ext : new String[]{"dict", "idx", "ifo"}) {
+//            files.add("foguangdacidian." + ext);
+//        }
+//        int success = 0;
+//        int size = files.size();
+//
+//        for (int i = 1; i <= size; i++) {
+//            String f = files.get(i - 1);
+//            CacheFile cf = new CacheFile(this, f);
+//            try {
+//                cf.sync(redo);
+//                response(getString(R.string.lbl_refresh_success, i, size, f));
+//                success++;
+//            } catch (Exception e) {
+//                Log.e("下载", "地址错误", e);
+//                response(getString(R.string.lbl_refresh_fail, i, size, f));
+//                cf.remove();
+//            }
+//        }
+//
+//        String msg = getString(R.string.lbl_refresh_result, success, files.size());
+//
+//        new DwDbHelper(this).set("sync.last", new Date());
+//        Log.d("后台", msg);
+//        response(msg);
+//
+//    }
 
     private void response(final String msg) {
         Handler handler = new Handler(Looper.getMainLooper());

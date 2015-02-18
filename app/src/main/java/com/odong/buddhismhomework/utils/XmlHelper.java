@@ -8,7 +8,6 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
-import com.odong.buddhismhomework.models.Host;
 import com.odong.buddhismhomework.models.Video;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -16,7 +15,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by flamen on 15-2-12.
@@ -26,15 +27,15 @@ public class XmlHelper {
         this.context = context;
     }
 
-    public List<Host> getHostList() {
-        final List<Host> hosts = new ArrayList<Host>();
+    public Map<String, String> getHostMap() {
+
+        final Map<String, String> hosts = new HashMap<String, String>();
         read("hosts", new Callback() {
             @Override
             public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
-                Host h = new Host();
-                h.setUrl(xrp.getAttributeValue(null, "url"));
-                h.setName(readText(xrp));
-                hosts.add(h);
+                String type = xrp.getAttributeValue(null, "type");
+                String name = readText(xrp);
+                hosts.put(type, name);
             }
         });
         return hosts;
