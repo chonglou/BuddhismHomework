@@ -20,6 +20,10 @@
 
 ### 开发帮助
 
+#### 横屏/竖屏切换
+
+    Ctrl+F12
+
 #### Logo(使用 dia)
     cd tools && sh png.sh ic_launcher
 
