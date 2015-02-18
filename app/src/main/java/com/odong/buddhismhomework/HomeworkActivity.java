@@ -14,10 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.odong.buddhismhomework.models.Homework;
+import com.odong.buddhismhomework.utils.StringHelper;
 import com.odong.buddhismhomework.utils.XmlHelper;
 import com.odong.buddhismhomework.utils.YoutubePlayer;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -86,20 +86,7 @@ public class HomeworkActivity extends Activity {
 
         TextView tv = (TextView) findViewById(R.id.tv_homework_content);
         try {
-            StringBuilder sb = new StringBuilder();
-            for (int i : hw.getIncantations()) {
-
-
-                InputStream is = getResources().openRawResource(i);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = is.read(buf)) > 0) {
-                    sb.append(new String(buf, 0, len));
-                }
-                sb.append("\n\n");
-
-            }
-            tv.setText(sb.toString());
+            tv.setText(new StringHelper(this).readFile(hw.getIncantations().toArray(new Integer[1])));
             tv.scrollTo(0, 0);
         } catch (Resources.NotFoundException e) {
             Log.e("读取文件", hw.getName(), e);

@@ -20,9 +20,9 @@ import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.StringHelper;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by flamen on 15-2-8.
@@ -127,22 +127,7 @@ public class PlayerActivity extends Activity {
         }
 
         try {
-            StringBuilder sb = new StringBuilder();
-            for (int i : book.getFiles()) {
-
-                if (i == 0) {
-                    continue;
-                }
-                InputStream is = getResources().openRawResource(i);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = is.read(buf)) > 0) {
-                    sb.append(new String(buf, 0, len));
-                }
-                sb.append("\n\n");
-
-            }
-            tv.setText(sb.toString());
+            tv.setText(new StringHelper(this).readFile(book.getFiles().toArray(new Integer[1])));
         } catch (IOException e) {
             Log.e("读取文件", book.getName(), e);
             tv.setText(R.string.lbl_error_io);
