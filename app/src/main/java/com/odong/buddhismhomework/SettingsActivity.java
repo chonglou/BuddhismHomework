@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -22,9 +23,9 @@ public class SettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        initEvents();
         setTexts();
-
+        initEvents();
+        initHosts();
     }
 
     private void setTexts() {
@@ -47,10 +48,7 @@ public class SettingsActivity extends Activity {
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SettingsActivity.this, DownloadService.class);
-                        intent.putExtra("action", "sync");
-                        intent.putExtra("redo", true);
-                        startService(intent);
+                        startService(new Intent(SettingsActivity.this, DownloadService.class));
                     }
                 });
                 adb.setNegativeButton(android.R.string.no, null);
@@ -64,6 +62,23 @@ public class SettingsActivity extends Activity {
 
             }
         });
+    }
+
+    private void initHosts() {
+        RadioGroup rg = (RadioGroup) findViewById(R.id.rg_setting_hosts);
+        Integer type = new DwDbHelper(this).get("host.type", Integer.class);
+        if (type == null) {
+            type = R.id.btn_setting_home_dropbox;
+        }
+        rg.check(type);
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                new DwDbHelper(SettingsActivity.this).set("host.type", checkedId);
+            }
+        });
+
     }
 
 }

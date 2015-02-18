@@ -3,16 +3,8 @@ package com.odong.buddhismhomework.models;
 import android.content.Context;
 import android.util.Log;
 
-import com.odong.buddhismhomework.BuildConfig;
-import com.odong.buddhismhomework.Config;
-import com.odong.buddhismhomework.utils.DwDbHelper;
-import com.odong.buddhismhomework.utils.XmlHelper;
-
-import java.io.DataInputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by flamen on 15-2-8.
@@ -43,36 +35,6 @@ public class CacheFile {
         Log.d("删除文件", getRealName());
     }
 
-//    public void sync(boolean redo) throws IOException {
-//        if (!redo && exists()) {
-//            return;
-//        }
-//
-//        String url;
-//        if (BuildConfig.DEBUG) {
-//            url = "http://" + Config.DEVELOPMENT_HOST + "/tools/downloads/";
-//        } else {
-//            DwDbHelper ddh = new DwDbHelper(this.context);
-//            url = ddh.get("download.node", String.class);
-//            if (url == null) {
-//                url = new XmlHelper(this.context).getHostList().get(0).getUrl();
-//                ddh.set("download.node", url);
-//            }
-//        }
-//        url += name;
-//        Log.d("下载", url + " => " + getRealName());
-//        DataInputStream dis = new DataInputStream(new URL(url).openStream());
-//
-//        byte[] buf = new byte[1024];
-//        int len;
-//
-//        FileOutputStream fos = context.openFileOutput(getRealName(), Context.MODE_PRIVATE);
-//        while ((len = dis.read(buf)) > 0) {
-//            fos.write(buf, 0, len);
-//        }
-//        fos.flush();
-//
-//    }
 
     public String getRealName() {
         return "cache-" + name;

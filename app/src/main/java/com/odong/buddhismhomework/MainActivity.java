@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.GridView;
 
 import com.odong.buddhismhomework.models.NavIcon;
-import com.odong.buddhismhomework.utils.DwDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +43,7 @@ public class MainActivity extends Activity {
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MainActivity.this, DownloadService.class);
-                        DwDbHelper ddh = new DwDbHelper(MainActivity.this);
-                        intent.putExtra("action", "sync");
-                        intent.putExtra("type", ddh.get("host.type", String.class));
-                        startService(intent);
+                        startService(new Intent(MainActivity.this, DownloadService.class));
                     }
                 });
                 adb.setNegativeButton(android.R.string.no, null);
