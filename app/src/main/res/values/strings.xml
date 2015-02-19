@@ -47,10 +47,11 @@
     <string name="lbl_error_download">下载数据出错</string>
     <string name="lbl_download">下载资源文件会耗费流量，建议在WLAN连接下进行，确定要继续？</string>
     <string name="lbl_will_pause">返回页面将会中断, 确定？</string>
-    <string name="lbl_refresh_result">数据同步完成%1$d/%2$d个文件</string>
-    <string name="lbl_refresh_success">[%1$d/%2$d]：下载%3$s成功</string>
-    <string name="lbl_refresh_fail">[%1$d/%2$d]：下载%3$s失败</string>
+    <string name="lbl_sd_card_not_exist">SD卡不存在</string>
+    <string name="lbl_file_not_exist">文件[%s]不存在</string>
+
     <string name="lbl_unknown_host">未知下载节点</string>
+    <string name="lbl_download_error">下载出错，原因: %s</string>
     <string name="lbl_no_valid_host">下载节点当前不可用，请另选一个</string>
     <string name="lbl_success">操作成功</string>
     <string name="lbl_about_me">

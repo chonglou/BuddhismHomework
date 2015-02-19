@@ -77,42 +77,53 @@ public class PlayerActivity extends Activity {
 
 
     private void initMp3View() {
-        CacheFile cf = new CacheFile(this, book.getMp3());
-        if (book.getMp3() != null && cf.exists()) {
-
-            mp3Player = MediaPlayer.create(this,
-                    Uri.parse(getFileStreamPath(cf.getRealName()).getAbsolutePath()));
-
-            mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-            mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
-
-            mp3Seeker.setProgress(0);
-            mp3Seeker.setMax(mp3Player.getDuration());
-            mp3Seeker.setClickable(false);
-
-
-            findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ToggleButton tb = (ToggleButton) v;
-                    if (tb.isChecked()) {
-                        mp3Player.start();
-                        findViewById(R.id.tv_player_content).scrollTo(0, 0);
-                        durationHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mp3Seeker.setProgress(mp3Player.getCurrentPosition());
-                                durationHandler.postDelayed(this, 100);
-                            }
-                        }, 100);
-                    } else {
-                        mp3Player.pause();
-                    }
+        boolean ok = false;
+        if (book.getMp3() != null) {
+            try {
+                CacheFile cf = new CacheFile(this, book.getMp3());
+                if (!cf.exists()) {
+                    throw new IOException(getString(R.string.lbl_file_not_exist, book.getMp3()));
                 }
-            });
 
-        } else {
+                mp3Player = MediaPlayer.create(this,
+                        Uri.parse(cf.getRealFile().getAbsolutePath()));
+
+                mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
+
+                mp3Seeker.setProgress(0);
+                mp3Seeker.setMax(mp3Player.getDuration());
+                mp3Seeker.setClickable(false);
+
+
+                findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToggleButton tb = (ToggleButton) v;
+                        if (tb.isChecked()) {
+                            mp3Player.start();
+                            findViewById(R.id.tv_player_content).scrollTo(0, 0);
+                            durationHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mp3Seeker.setProgress(mp3Player.getCurrentPosition());
+                                    durationHandler.postDelayed(this, 100);
+                                }
+                            }, 100);
+                        } else {
+                            mp3Player.pause();
+                        }
+                    }
+                });
+                ok = true;
+            } catch (IOException e) {
+                Log.e("播放", "MP3", e);
+            }
+        }
+
+
+        if (!ok) {
             findViewById(R.id.gl_player_mp3).setVisibility(View.GONE);
         }
 

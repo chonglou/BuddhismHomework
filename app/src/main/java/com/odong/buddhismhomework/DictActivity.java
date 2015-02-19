@@ -1,7 +1,6 @@
 package com.odong.buddhismhomework;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +13,9 @@ import com.odong.buddhismhomework.dict.IfoFile;
 import com.odong.buddhismhomework.dict.StarDict;
 import com.odong.buddhismhomework.models.CacheFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -63,23 +65,30 @@ public class DictActivity extends Activity {
         try {
 
 
-            String ifo = getDictName("ifo");
-            IfoFile ifoF = new IfoFile(openFileInput(ifo), openFileOutput(ifo, Context.MODE_PRIVATE));
-            String idx = getDictName("idx");
+            File ifo = getDictName("ifo");
+            IfoFile ifoF = new IfoFile(
+                    new FileInputStream(ifo),
+                    new FileOutputStream(ifo)
+            );
+            File idx = getDictName("idx");
             IdxFile idxF = new IdxFile(
-                    openFileInput(idx),
-                    openFileOutput(idx, Context.MODE_PRIVATE),
-                    ifoF.getWordCount(), ifoF.getIdxFileSize());
-            String dict = getDictName("dict");
-            DictFile dictF = new DictFile(openFileInput(dict), openFileOutput(dict, Context.MODE_PRIVATE));
+                    new FileInputStream(idx),
+                    new FileOutputStream(idx),
+                    ifoF.getWordCount(),
+                    ifoF.getIdxFileSize());
+            File dict = getDictName("dict");
+            DictFile dictF = new DictFile(
+                    new FileInputStream(dict),
+                    new FileOutputStream(dict)
+            );
             starDict = new StarDict(ifoF, idxF, dictF);
         } catch (IOException e) {
             Log.e("字典", "加载", e);
         }
     }
 
-    private String getDictName(String ext) {
-        return new CacheFile(this, "foguangdacidian").getRealName() + "." + ext;
+    private File getDictName(String ext) throws IOException {
+        return new CacheFile(this, "foguangdacidian." + ext).getRealFile();
     }
 
     private StarDict starDict;
