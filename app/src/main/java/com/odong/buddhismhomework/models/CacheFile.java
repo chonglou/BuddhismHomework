@@ -6,12 +6,9 @@ import android.util.Log;
 
 import com.odong.buddhismhomework.R;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by flamen on 15-2-8.
@@ -37,29 +34,6 @@ public class CacheFile {
         return sb.toString();
     }
 
-    public void sync(String url, boolean redo) {
-
-        try {
-            if (!redo && exists()) {
-                return;
-            }
-            Log.d("下载", url + " => " + name);
-            DataInputStream dis = new DataInputStream(new URL(url).openStream());
-
-            byte[] buf = new byte[1024];
-            int len;
-
-            FileOutputStream fos = new FileOutputStream(getRealFile());
-            while ((len = dis.read(buf)) > 0) {
-                fos.write(buf, 0, len);
-            }
-            fos.flush();
-        } catch (IOException e) {
-            Log.e("下载", name, e);
-            remove();
-        }
-
-    }
 
     public void remove() {
         File f = getRealFile();

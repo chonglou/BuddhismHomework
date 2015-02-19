@@ -20,8 +20,11 @@
 
 ### 开发帮助
 
-#### 模拟sd卡
-    mksdcard 2G 1.sd
+#### 模拟器管理
+    android avd
+
+#### 文件管理
+    adb shell
 
 #### 横屏/竖屏切换
 

@@ -10,15 +10,23 @@ import android.widget.Toast;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DictHelper;
 import com.odong.buddhismhomework.utils.DwDbHelper;
-import com.odong.buddhismhomework.utils.DzzHelper;
+import com.odong.buddhismhomework.utils.DzjHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Created by flamen on 15-2-8.
@@ -47,15 +55,77 @@ public class DownloadService extends IntentService {
                 response(getString(R.string.lbl_unknown_host));
         }
 
-        new DictHelper(this).check();
-        new DzzHelper(this).check();
+        unzip(DictHelper.NAME, redo);
+        unzip(DzjHelper.NAME, redo);
     }
 
     private void download(String url, boolean redo) throws IOException {
         String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
-        new CacheFile(this, name).sync(url, redo);
-        response(getString(R.string.lbl_download_success, name));
+        CacheFile cf = new CacheFile(this, name);
+
+        if (!redo && cf.exists()) {
+            response(getString(R.string.lbl_already_download, name));
+            return;
+        }
+
+        try {
+            Log.d("下载", url + " => " + name);
+            DataInputStream dis = new DataInputStream(new URL(url).openStream());
+
+            byte[] buf = new byte[1024];
+            int len;
+
+            FileOutputStream fos = new FileOutputStream(cf.getRealFile());
+            while ((len = dis.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+            response(getString(R.string.lbl_download_success, name));
+            Log.e("下载完成", name);
+        } catch (IOException e) {
+            Log.e("下载", name, e);
+            cf.remove();
+        }
+
     }
+
+    public void unzip(String name, boolean redo) {
+
+        File file = new File(new CacheFile(this, name + ".zip").getRealFile().getAbsolutePath());
+        File root = new File(new CacheFile(this, name).getRealFile().getAbsolutePath());
+
+        if (!file.exists() || (!redo && root.exists())) {
+            return;
+        }
+        try {
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)));
+            ZipEntry ze;
+            while ((ze = zis.getNextEntry()) != null) {
+                File f = new File(file.getParentFile(), ze.getName());
+                if (ze.isDirectory()) {
+                    f.mkdirs();
+                    Log.d("创建目录", f.getAbsolutePath());
+                } else {
+                    byte[] buf = new byte[1024];
+                    int count;
+                    Log.d("解压缩文件", f.getAbsolutePath());
+                    FileOutputStream fos = new FileOutputStream(f);
+                    while ((count = zis.read(buf)) != -1) {
+                        fos.write(buf, 0, count);
+                    }
+                    fos.flush();
+                    fos.close();
+                }
+            }
+            Log.d("解压缩完毕", name);
+        } catch (IOException e) {
+            root.delete();
+            Log.d("解压缩", name, e);
+            response(getString(R.string.lbl_error_unzip, name));
+        }
+
+    }
+
 
     private void onDropbox(boolean redo) {
         try {

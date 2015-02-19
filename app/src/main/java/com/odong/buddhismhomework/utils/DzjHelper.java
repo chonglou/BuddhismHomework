@@ -7,10 +7,13 @@ import com.odong.buddhismhomework.models.CacheFile;
 /**
  * Created by flamen on 15-2-18.
  */
-public class DictHelper {
-    public DictHelper(Context context) {
+public class DzjHelper {
+    public DzjHelper(Context context) {
         this.context = context;
+
+
     }
+
 
     public boolean exist() {
         return new CacheFile(context, NAME).exists();
@@ -18,5 +21,5 @@ public class DictHelper {
 
 
     private Context context;
-    public final static String NAME = "dict";
+    public final static String NAME = "dzj-f";
 }
