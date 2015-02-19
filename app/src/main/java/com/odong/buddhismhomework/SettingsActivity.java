@@ -35,7 +35,7 @@ public class SettingsActivity extends Activity {
 
         ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
         ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, dh.get("sync.last", Date.class)));
-        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, dh.get("sync.last", Date.class)));
+        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, dh.get("import.last", Date.class)));
 
     }
 

@@ -39,7 +39,7 @@ public class DzjBookActivity extends Activity {
     }
 
     private void initTextView() {
-        TextView tv = (TextView) findViewById(R.id.tv_player_content);
+        TextView tv = (TextView) findViewById(R.id.tv_dzj_content);
         String content = new CacheFile(this, book.getName()).read();
         if (content == null) {
             tv.setText(R.string.lbl_empty);

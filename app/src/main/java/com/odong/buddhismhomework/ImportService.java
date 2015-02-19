@@ -49,7 +49,7 @@ public class ImportService extends IntentService {
     private String appendF(String url, int i) {
         String[] ss = url.split("/");
         ss[i] += "-f";
-        return Arrays.asList(ss).toString().replaceAll("(^\\[|\\]$)", "").replace(", ", "/");
+        return DZJ_NAME + "/" + Arrays.asList(ss).toString().replaceAll("(^\\[|\\]$)", "").replace(", ", "/");
     }
 
     private void importBooks() {
