@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -17,7 +16,6 @@ import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.XmlHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,11 +83,8 @@ public class BooksActivity extends Activity {
                     adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                new CacheFile(BooksActivity.this, book.getMp3()).remove();
-                            } catch (IOException e) {
-                                Log.e("删除", "MP3", e);
-                            }
+                            new CacheFile(BooksActivity.this, book.getMp3()).remove();
+
 
                         }
                     });

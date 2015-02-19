@@ -37,40 +37,52 @@ public class CacheFile {
         return sb.toString();
     }
 
-    public void sync(String url, boolean redo) throws IOException {
-        if (!redo && exists()) {
-            return;
+    public void sync(String url, boolean redo) {
+
+        try {
+            if (!redo && exists()) {
+                return;
+            }
+
+            url += name;
+            Log.d("下载", url + " => " + name);
+            DataInputStream dis = new DataInputStream(new URL(url).openStream());
+
+            byte[] buf = new byte[1024];
+            int len;
+
+            FileOutputStream fos = new FileOutputStream(getRealFile());
+            while ((len = dis.read(buf)) > 0) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+        } catch (IOException e) {
+            Log.e("下载", name, e);
+            remove();
         }
 
-        url += name;
-        Log.d("下载", url + " => " + name);
-        DataInputStream dis = new DataInputStream(new URL(url).openStream());
+    }
 
-        byte[] buf = new byte[1024];
-        int len;
-
-        FileOutputStream fos = new FileOutputStream(getRealFile());
-        while ((len = dis.read(buf)) > 0) {
-            fos.write(buf, 0, len);
+    public void remove() {
+        File f = getRealFile();
+        if (f != null) {
+            f.deleteOnExit();
+            Log.d("删除文件", f.getAbsolutePath());
         }
-        fos.flush();
 
     }
 
-    public void remove() throws IOException {
-        getRealFile().deleteOnExit();
-        Log.d("删除文件", getRealFile().getAbsolutePath());
-    }
-
-    public boolean exists() throws IOException {
-        return getRealFile().exists();
+    public boolean exists() {
+        File f = getRealFile();
+        return f != null && f.exists();
     }
 
 
-    public File getRealFile() throws IOException {
+    public File getRealFile() {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            throw new IOException(context.getString(R.string.lbl_sd_card_not_exist)+state);
+            Log.d("SD卡", "状态["+state+"]");
+            return null;
         }
         File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name));
         if (!dir.exists()) {

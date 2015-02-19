@@ -10,3 +10,4 @@ build
 *.log
 *~
 Config.java
+/tmp

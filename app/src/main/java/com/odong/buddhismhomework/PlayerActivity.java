@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
@@ -79,11 +80,9 @@ public class PlayerActivity extends Activity {
     private void initMp3View() {
         boolean ok = false;
         if (book.getMp3() != null) {
-            try {
-                CacheFile cf = new CacheFile(this, book.getMp3());
-                if (!cf.exists()) {
-                    throw new IOException(getString(R.string.lbl_file_not_exist, book.getMp3()));
-                }
+
+            CacheFile cf = new CacheFile(this, book.getMp3());
+            if (cf.exists()) {
 
                 mp3Player = MediaPlayer.create(this,
                         Uri.parse(cf.getRealFile().getAbsolutePath()));
@@ -117,14 +116,13 @@ public class PlayerActivity extends Activity {
                     }
                 });
                 ok = true;
-            } catch (IOException e) {
-                Log.e("播放", "MP3", e);
             }
         }
 
 
         if (!ok) {
             findViewById(R.id.gl_player_mp3).setVisibility(View.GONE);
+            Toast.makeText(this, getString(R.string.lbl_file_not_exist, book.getMp3()), Toast.LENGTH_SHORT).show();
         }
 
     }
