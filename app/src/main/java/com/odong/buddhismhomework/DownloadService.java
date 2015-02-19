@@ -1,11 +1,7 @@
 package com.odong.buddhismhomework;
 
-import android.app.IntentService;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
@@ -25,7 +21,7 @@ import java.util.Date;
 /**
  * Created by flamen on 15-2-8.
  */
-public class DownloadService extends IntentService {
+public class DownloadService extends NoticeService {
 
     public DownloadService() {
         super("DownloadService");
@@ -39,13 +35,13 @@ public class DownloadService extends IntentService {
         }
         switch (type) {
             case R.id.btn_setting_home_dropbox:
-                onDropbox();
+                onDropbox(intent);
                 break;
             case R.id.btn_setting_home_baiduyun:
                 onBaiduyun();
                 break;
             default:
-                response(getString(R.string.lbl_unknown_host));
+                toast(getString(R.string.lbl_unknown_host));
         }
 
         new DwDbHelper(this).set("sync.last", new Date());
@@ -56,7 +52,7 @@ public class DownloadService extends IntentService {
         CacheFile cf = new CacheFile(this, name);
 
         if (cf.exists()) {
-            response(getString(R.string.lbl_already_exist, name));
+            toast(getString(R.string.lbl_already_exist, name));
             return;
         }
 
@@ -72,7 +68,7 @@ public class DownloadService extends IntentService {
                 fos.write(buf, 0, len);
             }
             fos.flush();
-            response(getString(R.string.lbl_download_success, name));
+            toast(getString(R.string.lbl_download_success, name));
             Log.e("下载完成", name);
         } catch (IOException e) {
             Log.e("下载", name, e);
@@ -82,34 +78,23 @@ public class DownloadService extends IntentService {
     }
 
 
-    private void onDropbox() {
+    private void onDropbox(Intent intent) {
         try {
             Document doc = Jsoup.connect(Config.DROPBOX_URL).get();
             Elements links = doc.select("a.filename-link");
             for (Element el : links) {
                 download(Jsoup.connect(el.attr("href")).get().select("a#default_content_download_button").get(0).attr("href"));
             }
-            response(getString(R.string.lbl_download_complete, links.size()));
+            notification(intent, getString(R.string.lbl_download_complete, links.size()));
         } catch (IOException e) {
             Log.e("下载", "IO", e);
-            response(getString(R.string.lbl_download_error, e.getMessage()));
+            notification(intent, getString(R.string.lbl_download_error, e.getMessage()));
         }
 
     }
 
     private void onBaiduyun() {
-        response(getString(R.string.lbl_no_valid_host));
-    }
-
-
-    private void response(final String msg) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        toast(getString(R.string.lbl_no_valid_host));
     }
 
 

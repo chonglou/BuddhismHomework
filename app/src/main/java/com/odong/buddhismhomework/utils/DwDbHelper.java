@@ -22,7 +22,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<String> getDzjTypeList() {
         List<String> types = new ArrayList<String>();
-        Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, null, null);
+        Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, "id ASC", null);
         while (c.moveToNext()) {
             types.add(c.getString(c.getColumnIndexOrThrow("type")));
         }
@@ -31,7 +31,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<Dzj> getDzjList(String type) {
         List<Dzj> books = new ArrayList<Dzj>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"name", "title", "author"}, "type = ?", new String[]{type}, null, null, null);
+        Cursor c = getReadableDatabase().query("books", new String[]{"name", "title", "author"}, "type = ?", new String[]{type}, null, null, "id ASC");
         while (c.moveToNext()) {
             Dzj d = new Dzj();
             d.setType(type);

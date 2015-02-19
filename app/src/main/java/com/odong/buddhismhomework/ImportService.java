@@ -1,11 +1,7 @@
 package com.odong.buddhismhomework;
 
-import android.app.IntentService;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
@@ -32,7 +28,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Created by flamen on 15-2-19.
  */
-public class ImportService extends IntentService {
+public class ImportService extends NoticeService {
 
     public ImportService() {
         super("ImportService");
@@ -43,7 +39,7 @@ public class ImportService extends IntentService {
         unzip(DictHelper.NAME);
         unzip(DZJ_NAME);
 
-        importBooks();
+        importBooks(intent);
     }
 
     private String appendF(String url, int i) {
@@ -52,13 +48,13 @@ public class ImportService extends IntentService {
         return DZJ_NAME + "/" + Arrays.asList(ss).toString().replaceAll("(^\\[|\\]$)", "").replace(", ", "/");
     }
 
-    private void importBooks() {
+    private void importBooks(Intent intent) {
         CacheFile cf = new CacheFile(this, DZJ_NAME + "/index.html");
         if (!cf.exists()) {
-            response(getString(R.string.lbl_file_not_exist, DZJ_NAME));
+            notification(intent, getString(R.string.lbl_file_not_exist, DZJ_NAME));
             return;
         }
-        response(getString(R.string.lbl_begin_import));
+        toast(getString(R.string.lbl_begin_import));
         try {
             Document doc = Jsoup.parse(cf.getRealFile(), "UTF-8");
             List<Dzj> books = new ArrayList<Dzj>();
@@ -128,10 +124,10 @@ public class ImportService extends IntentService {
             ddh.set("import.last", new Date());
 
             Log.d("导入", "成功");
-            response(getString(R.string.lbl_import_complete, books.size()));
+            notification(intent, getString(R.string.lbl_import_complete, books.size()));
 
         } catch (IOException e) {
-            response(getString(R.string.lbl_error_import));
+            notification(intent, getString(R.string.lbl_error_import));
             Log.e("导入数据", cf.getName(), e);
         }
     }
@@ -142,11 +138,11 @@ public class ImportService extends IntentService {
         File root = new File(new CacheFile(this, name).getRealFile().getAbsolutePath());
 
         if (!file.exists()) {
-            response(getString(R.string.lbl_file_not_exist, name + ".zip"));
+            toast(getString(R.string.lbl_file_not_exist, name + ".zip"));
             return;
         }
         if (root.exists()) {
-            response(getString(R.string.lbl_already_exist, name));
+            toast(getString(R.string.lbl_already_exist, name));
             return;
         }
         try {
@@ -173,21 +169,11 @@ public class ImportService extends IntentService {
         } catch (IOException e) {
             root.delete();
             Log.d("解压缩", name, e);
-            response(getString(R.string.lbl_error_unzip, name));
+            toast(getString(R.string.lbl_error_unzip, name));
         }
 
     }
 
-    private void response(final String msg) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public final static String DZJ_NAME = "dzj-f";
-    public final static String DICT_NAME = "dict";
 }
