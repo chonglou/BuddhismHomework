@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -57,6 +58,7 @@ public class DownloadService extends IntentService {
 
         unzip(DictHelper.NAME, redo);
         unzip(DzjHelper.NAME, redo);
+        new DwDbHelper(this).set("sync.last", new Date());
     }
 
     private void download(String url, boolean redo) throws IOException {

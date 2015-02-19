@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 
 import java.text.SimpleDateFormat;
@@ -31,8 +32,9 @@ public class SettingsActivity extends Activity {
     private void setTexts() {
         DwDbHelper dh = new DwDbHelper(this);
         ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(dh.get("mp3.replay", Boolean.class) == Boolean.TRUE);
-        Date last_sync = dh.get("sync.last", Date.class);
 
+        ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
+        Date last_sync = dh.get("sync.last", Date.class);
         ((TextView) findViewById(R.id.tv_setting_sync)).setText(getString(R.string.tv_last_sync,
                 last_sync == null ? getString(R.string.lbl_never) : new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(last_sync)));
 
@@ -49,7 +51,7 @@ public class SettingsActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(SettingsActivity.this, DownloadService.class);
-                        intent.putExtra("redo", true);
+                        //intent.putExtra("redo", true);
                         startService(intent);
                     }
                 });
