@@ -1,0 +1,45 @@
+package com.odong.buddhismhomework.models;
+
+import java.io.Serializable;
+
+/**
+ * Created by flamen on 15-2-19.
+ */
+public class Dzj implements Serializable {
+    private String author;
+    private String name;
+    private String title;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+}

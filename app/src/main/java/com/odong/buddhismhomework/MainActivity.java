@@ -126,6 +126,12 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this, DictActivity.class));
             }
         }));
+        icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, DzjListActivity.class));
+            }
+        }));
 
 
         ((GridView) findViewById(R.id.gv_main_icons)).setAdapter(new NavIconAdapter(this, icons));

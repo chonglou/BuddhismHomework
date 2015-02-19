@@ -30,6 +30,8 @@
         <activity android:name=".VideoBooksActivity"/>
         <activity android:name=".VideoListActivity"/>
         <activity android:name=".DictActivity"/>
+        <activity android:name=".DzjBookActivity"/>
+        <activity android:name=".DzjListActivity"/>
 
         <service android:exported="false" android:name=".DownloadService"/>
 

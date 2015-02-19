@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.odong.buddhismhomework.R;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Created by flamen on 15-2-8.
@@ -22,16 +24,20 @@ public class CacheFile {
     }
 
 
-    public String read() throws IOException {
-        FileInputStream fis = new FileInputStream(getRealFile());
-        Log.d("读取缓存", getRealFile().getAbsolutePath());
-        StringBuilder sb = new StringBuilder();
-        byte[] buf = new byte[1024];
-        int n;
-        while ((n = fis.read(buf)) > 0) {
-            sb.append(new String(buf, 0, n));
+    public String read() {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(getRealFile())));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+                sb.append('\n');
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            Log.e("读取文件", name, e);
         }
-        return sb.toString();
+        return null;
     }
 
 

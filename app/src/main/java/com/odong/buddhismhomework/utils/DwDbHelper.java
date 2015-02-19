@@ -7,16 +7,55 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
+import com.odong.buddhismhomework.models.Dzj;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by flamen on 15-2-7.
  */
 public class DwDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "BuddhismHomework.db";
+
+    public List<String> getDzjTypeList() {
+        List<String> types = new ArrayList<String>();
+        Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, null, null);
+        if (c.moveToNext()) {
+            types.add(c.getString(c.getColumnIndexOrThrow("name")));
+        }
+        return types;
+    }
+
+    public List<Dzj> getDzjList(String type) {
+        List<Dzj> books = new ArrayList<Dzj>();
+        Cursor c = getReadableDatabase().query("books", new String[]{"name", "title", "author"}, "type = ?", new String[]{type}, null, null, null);
+        if (c.moveToNext()) {
+            Dzj d = new Dzj();
+            d.setType(type);
+            d.setName(c.getString(c.getColumnIndexOrThrow("name")));
+            d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));
+            d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            books.add(d);
+        }
+        return books;
+    }
+
+
+    public void resetDzj(List<Dzj> books) {
+        SQLiteDatabase db = getWritableDatabase();
+        getWritableDatabase().delete("books", null, null);
+        ContentValues cv = new ContentValues();
+        for (Dzj d : books) {
+            cv.put("type", d.getType());
+            cv.put("title", d.getTitle());
+            cv.put("author", d.getAuthor());
+            cv.put("name", d.getName());
+
+            db.insert("books", null, cv);
+        }
+    }
 
     public void set(String key, Object val) {
         SQLiteDatabase db = getWritableDatabase();
@@ -89,9 +128,20 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     private void uninstall(SQLiteDatabase db, int version) {
         switch (version) {
+            case 2:
+                for (String s : new String[]{
+                        drop_index("books_title"),
+                        drop_index("books_name"),
+                        drop_index("books_type"),
+                        drop_index("books_author"),
+                        drop_table("books")
+                }) {
+                    db.execSQL(s);
+                }
+
+                break;
             case 1:
                 for (String s : new String[]{
-                        //"homework",
                         "logs",
                         "settings"}) {
                     db.execSQL(drop_table(s));
@@ -103,9 +153,19 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
+            case 2:
+                for (String s : new String[]{
+                        "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE UNIQUE INDEX IF NOT EXISTS books_name ON books(name)",
+                        "CREATE INDEX IF NOT EXISTS books_title ON books(title)",
+                        "CREATE INDEX IF NOT EXISTS books_author ON books(author)",
+                        "CREATE INDEX IF NOT EXISTS books_type ON books(type)",
+                }) {
+                    db.execSQL(s);
+                }
+                break;
             case 1:
                 for (String s : new String[]{
-                        //"CREATE TABLE IF NOT EXISTS homework(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(32) NOT NULL, details VARCHAR(500) NOT NULL)",
                         "CREATE TABLE IF NOT EXISTS logs(id INTEGER PRIMARY KEY AUTOINCREMENT, message VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE TABLE IF NOT EXISTS settings(`key` VARCHAR(32) PRIMARY KEY, val TEXT NOT NULL)"}) {
                     db.execSQL(s);
@@ -119,6 +179,13 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private String drop_table(String name) {
         return "DROP TABLE IF EXISTS " + name;
     }
+
+    private String drop_index(String name) {
+        return "DROP INDEX IF EXISTS " + name;
+    }
+
+    public static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = "BuddhismHomework.db";
 
 
 }
