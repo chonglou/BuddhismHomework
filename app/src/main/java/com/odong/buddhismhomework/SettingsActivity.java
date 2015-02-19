@@ -48,7 +48,9 @@ public class SettingsActivity extends Activity {
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startService(new Intent(SettingsActivity.this, DownloadService.class));
+                        Intent intent = new Intent(SettingsActivity.this, DownloadService.class);
+                        intent.putExtra("redo", true);
+                        startService(intent);
                     }
                 });
                 adb.setNegativeButton(android.R.string.no, null);

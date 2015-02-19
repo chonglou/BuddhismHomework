@@ -6,4 +6,8 @@ then
 	mksdcard 2G $f
 fi
 
-/opt/android-sdk/tools/emulator64-arm -avd galaxy -netspeed full -netdelay none -wipe-data -sdcard $f
+alias em64="/opt/android-sdk/tools/emulator64-arm -avd galaxy -netspeed full -netdelay none -sdcard $f"
+
+em64
+#em64 -wipe-data 
+

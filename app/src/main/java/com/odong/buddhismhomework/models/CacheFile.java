@@ -43,8 +43,6 @@ public class CacheFile {
             if (!redo && exists()) {
                 return;
             }
-
-            url += name;
             Log.d("下载", url + " => " + name);
             DataInputStream dis = new DataInputStream(new URL(url).openStream());
 
@@ -81,7 +79,7 @@ public class CacheFile {
     public File getRealFile() {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            Log.d("SD卡", "状态["+state+"]");
+            Log.d("SD卡", "状态[" + state + "]");
             return null;
         }
         File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name));
@@ -94,5 +92,7 @@ public class CacheFile {
     private String name;
     private Context context;
 
-
+    public String getName() {
+        return name;
+    }
 }

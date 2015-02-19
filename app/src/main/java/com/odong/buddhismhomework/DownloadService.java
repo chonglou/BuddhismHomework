@@ -16,6 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 /**
  * Created by flamen on 15-2-8.
@@ -45,9 +46,8 @@ public class DownloadService extends IntentService {
         }
     }
 
-    private void download(String url, boolean redo){
-        String name = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
-        Log.d("下载", url + " => " + name);
+    private void download(String url, boolean redo) throws IOException {
+        String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
         new CacheFile(this, name).sync(url, redo);
         response(getString(R.string.lbl_download_success, name));
     }
@@ -57,9 +57,9 @@ public class DownloadService extends IntentService {
             Document doc = Jsoup.connect(Config.DROPBOX_URL).get();
             Elements links = doc.select("a.filename-link");
             for (Element el : links) {
-                download(el.attr("href"), redo);
+                download(Jsoup.connect(el.attr("href")).get().select("a#default_content_download_button").get(0).attr("href"), redo);
             }
-            response(getString(R.string.lbl_download_complete,links.size()));
+            response(getString(R.string.lbl_download_complete, links.size()));
         } catch (IOException e) {
             Log.e("下载", "IO", e);
             response(getString(R.string.lbl_download_error, e.getMessage()));

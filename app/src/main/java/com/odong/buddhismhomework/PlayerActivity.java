@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
@@ -23,6 +22,7 @@ import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.StringHelper;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -84,38 +84,52 @@ public class PlayerActivity extends Activity {
             CacheFile cf = new CacheFile(this, book.getMp3());
             if (cf.exists()) {
 
-                mp3Player = MediaPlayer.create(this,
-                        Uri.parse(cf.getRealFile().getAbsolutePath()));
-
-                mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-                mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
-
-                mp3Seeker.setProgress(0);
-                mp3Seeker.setMax(mp3Player.getDuration());
-                mp3Seeker.setClickable(false);
+                try {
+//                mp3Player = MediaPlayer.create(this,
+//                        Uri.parse(cf.getRealFile().getAbsolutePath()));
 
 
-                findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ToggleButton tb = (ToggleButton) v;
-                        if (tb.isChecked()) {
-                            mp3Player.start();
-                            findViewById(R.id.tv_player_content).scrollTo(0, 0);
-                            durationHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mp3Seeker.setProgress(mp3Player.getCurrentPosition());
-                                    durationHandler.postDelayed(this, 100);
-                                }
-                            }, 100);
-                        } else {
-                            mp3Player.pause();
+                    //int size = new FileInputStream(cf.getRealFile()).getChannel().size());
+                    //String content = new Scanner(cf.getRealFile()).useDelimiter("\\Z").next();
+                    //Log.d("文件"+cf.getName(), ""+size);
+
+                    mp3Player = new MediaPlayer();
+                    mp3Player.setDataSource(new FileInputStream(cf.getRealFile()).getFD());
+                    mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mp3Player.prepare();
+
+                    mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
+
+                    mp3Seeker.setProgress(0);
+                    mp3Seeker.setMax(mp3Player.getDuration());
+                    mp3Seeker.setClickable(false);
+
+
+                    findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ToggleButton tb = (ToggleButton) v;
+                            if (tb.isChecked()) {
+                                mp3Player.start();
+                                findViewById(R.id.tv_player_content).scrollTo(0, 0);
+                                durationHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mp3Seeker.setProgress(mp3Player.getCurrentPosition());
+                                        durationHandler.postDelayed(this, 100);
+                                    }
+                                }, 100);
+                            } else {
+                                mp3Player.pause();
+                            }
                         }
-                    }
-                });
-                ok = true;
+                    });
+                    ok = true;
+                } catch (IOException e) {
+                    Log.e("MP3", "播放", e);
+                    cf.remove();
+                    Toast.makeText(getApplicationContext(), getString(R.string.lbl_mp3_broken, cf.getName()), Toast.LENGTH_SHORT).show();
+                }
             }
         }
 

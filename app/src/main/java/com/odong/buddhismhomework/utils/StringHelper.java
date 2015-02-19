@@ -17,11 +17,13 @@ public class StringHelper {
     public String readFile(Integer... files) throws IOException {
         StringBuilder sb = new StringBuilder();
         for (int i : files) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(i)));
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-                sb.append('\n');
+            if (i > 0) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(i)));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append('\n');
+                }
             }
 
             sb.append("\n\n");

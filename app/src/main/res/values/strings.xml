@@ -49,11 +49,12 @@
     <string name="lbl_will_pause">返回页面将会中断, 确定？</string>
     <string name="lbl_sd_card_not_exist">SD卡不存在[%s]</string>
     <string name="lbl_file_not_exist">文件[%s]不存在</string>
-    <string name="lbl_download_success">下载%s成功</string>
+    <string name="lbl_download_success">下载[%s]成功</string>
     <string name="lbl_download_complete">下载完毕,共[%d]个文件</string>
     <string name="lbl_unknown_host">未知下载节点</string>
     <string name="lbl_download_error">下载出错，原因: %s</string>
     <string name="lbl_no_valid_host">下载节点当前不可用，请另选一个</string>
+    <string name="lbl_mp3_broken">文件[%s]损坏</string>
     <string name="lbl_success">操作成功</string>
     <string name="lbl_about_me">
         1: <i>配套图书</i>《<b>佛教朝暮课诵本</b>》法鼓文化出版社 \n
