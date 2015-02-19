@@ -1,5 +1,5 @@
 #!/bin/sh
-f=tmp/1.sd
+f=/tmp/1.sd
 
 if [ ! -f $f ]
 then
