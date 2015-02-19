@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
             case R.id.action_refresh:
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
                 adb.setTitle(R.string.action_refresh);
-                adb.setMessage(R.string.lbl_download);
+                adb.setMessage(R.string.dlg_download);
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

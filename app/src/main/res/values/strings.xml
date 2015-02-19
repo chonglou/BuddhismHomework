@@ -5,6 +5,7 @@
     <string name="homework">功课列表</string>
 
 
+    <string name="action_import">导入数据</string>
     <string name="action_refresh">同步数据</string>
     <string name="action_settings">参数设置</string>
     <string name="action_about_me">关于我们</string>
@@ -22,6 +23,7 @@
     <string name="tv_store_path">数据存储目录：\n%s</string>
     <string name="tv_replay">循环播放</string>
     <string name="tv_hosts">下载节点</string>
+    <string name="tv_last_import">上次导入:\n%s</string>
 
 
     <string name="title_morning">早课</string>
@@ -47,14 +49,20 @@
     <string name="lbl_error_not_exists">数据不存在</string>
     <string name="lbl_error_io">读取数据出错。</string>
     <string name="lbl_error_download">下载数据出错</string>
+    <string name="lbl_error_import">导入数据出错</string>
     <string name="lbl_error_unzip">解压缩[%s.zip]出错</string>
-    <string name="lbl_download">下载资源文件会耗费流量，建议在WLAN连接下进行，确定要继续？</string>
-    <string name="lbl_will_pause">返回页面将会中断, 确定？</string>
 
+    <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
+    <string name="dlg_download">下载资源文件会耗费流量，建议在WLAN连接下进行，确定要继续？</string>
+    <string name="dlg_import">导入数据会耗费时间比较长，请耐心等待，确定要继续？</string>
+
+
+    <string name="lbl_begin_import">开始导入数据, 请稍候</string>
     <string name="lbl_sd_card_not_exist">SD卡不存在[%s]</string>
     <string name="lbl_file_not_exist">文件[%s]不存在</string>
     <string name="lbl_download_success">下载[%s]成功</string>
     <string name="lbl_download_complete">下载完毕,共[%d]个文件</string>
+    <string name="lbl_import_complete">导入完毕,共[%d]个文件</string>
     <string name="lbl_unknown_host">未知下载节点</string>
     <string name="lbl_download_error">下载出错，原因: %s</string>
     <string name="lbl_no_valid_host">下载节点当前不可用，请另选一个</string>

@@ -33,6 +33,7 @@ public class DzjListActivity extends Activity {
         String type = getIntent().getStringExtra("type");
         if (type == null) {
             initTypesView();
+            setTitle(R.string.title_dzj);
         } else {
             initBooksView(type);
             setTitle(type);
@@ -82,7 +83,7 @@ public class DzjListActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(DzjListActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(DzjListActivity.this, DzjBookActivity.class);
                 intent.putExtra("book", new Gson().toJson(books.get(position)));
                 startActivity(intent);
             }

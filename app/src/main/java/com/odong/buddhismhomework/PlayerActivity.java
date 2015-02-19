@@ -59,7 +59,7 @@ public class PlayerActivity extends Activity {
         }
         if (((ToggleButton) findViewById(R.id.btn_player)).isChecked()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
-            adb.setMessage(R.string.lbl_will_pause);
+            adb.setMessage(R.string.dlg_will_pause);
             adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

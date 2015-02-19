@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Dzj;
@@ -22,8 +23,8 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<String> getDzjTypeList() {
         List<String> types = new ArrayList<String>();
         Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, null, null);
-        if (c.moveToNext()) {
-            types.add(c.getString(c.getColumnIndexOrThrow("name")));
+        while (c.moveToNext()) {
+            types.add(c.getString(c.getColumnIndexOrThrow("type")));
         }
         return types;
     }
@@ -31,7 +32,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Dzj> getDzjList(String type) {
         List<Dzj> books = new ArrayList<Dzj>();
         Cursor c = getReadableDatabase().query("books", new String[]{"name", "title", "author"}, "type = ?", new String[]{type}, null, null, null);
-        if (c.moveToNext()) {
+        while (c.moveToNext()) {
             Dzj d = new Dzj();
             d.setType(type);
             d.setName(c.getString(c.getColumnIndexOrThrow("name")));
@@ -45,6 +46,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public void resetDzj(List<Dzj> books) {
         SQLiteDatabase db = getWritableDatabase();
+        Log.d("数据库", "清空books");
         getWritableDatabase().delete("books", null, null);
         ContentValues cv = new ContentValues();
         for (Dzj d : books) {
@@ -156,7 +158,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
             case 2:
                 for (String s : new String[]{
                         "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
-                        "CREATE UNIQUE INDEX IF NOT EXISTS books_name ON books(name)",
+                        "CREATE INDEX IF NOT EXISTS books_name ON books(name)",
                         "CREATE INDEX IF NOT EXISTS books_title ON books(title)",
                         "CREATE INDEX IF NOT EXISTS books_author ON books(author)",
                         "CREATE INDEX IF NOT EXISTS books_type ON books(type)",

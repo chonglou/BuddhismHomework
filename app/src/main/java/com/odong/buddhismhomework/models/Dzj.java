@@ -6,6 +6,16 @@ import java.io.Serializable;
  * Created by flamen on 15-2-19.
  */
 public class Dzj implements Serializable {
+    @Override
+    public String toString() {
+        return "Dzj{" +
+                "author='" + author + '\'' +
+                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
+
     private String author;
     private String name;
     private String title;

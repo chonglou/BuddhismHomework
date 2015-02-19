@@ -34,10 +34,13 @@ public class SettingsActivity extends Activity {
         ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(dh.get("mp3.replay", Boolean.class) == Boolean.TRUE);
 
         ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
-        Date last_sync = dh.get("sync.last", Date.class);
-        ((TextView) findViewById(R.id.tv_setting_sync)).setText(getString(R.string.tv_last_sync,
-                last_sync == null ? getString(R.string.lbl_never) : new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(last_sync)));
+        ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, dh.get("sync.last", Date.class)));
+        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, dh.get("sync.last", Date.class)));
 
+    }
+
+    private String date2string(int rid, Date date) {
+        return getString(rid, date == null ? getString(R.string.lbl_never) : new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date));
     }
 
     private void initEvents() {
@@ -46,7 +49,7 @@ public class SettingsActivity extends Activity {
             public void onClick(View v) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
                 adb.setTitle(R.string.action_refresh);
-                adb.setMessage(R.string.lbl_download);
+                adb.setMessage(R.string.dlg_download);
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -61,6 +64,24 @@ public class SettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new DwDbHelper(SettingsActivity.this).set("mp3.replay", ((Switch) v).isChecked());
+
+            }
+        });
+
+        findViewById(R.id.btn_setting_import).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
+                adb.setTitle(R.string.action_import);
+                adb.setMessage(R.string.dlg_import);
+                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startService(new Intent(SettingsActivity.this, ImportService.class));
+                    }
+                });
+                adb.setNegativeButton(android.R.string.no, null);
+                adb.create().show();
 
             }
         });
