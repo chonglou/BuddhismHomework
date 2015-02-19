@@ -30,6 +30,12 @@
 
     Ctrl+F12
 
+#### 截屏
+
+* 电源键+音量(-)同时按下
+* 图片在目录: /storage/emulated/0/Pictures/Screenshots下
+* lftp下载: mirror Pictures/Screenshots
+
 #### Logo(使用 dia)
     cd tools && sh png.sh ic_launcher
 
