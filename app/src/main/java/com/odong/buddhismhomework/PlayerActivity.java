@@ -81,7 +81,7 @@ public class PlayerActivity extends Activity {
         boolean ok = false;
         if (book.getMp3() != null) {
 
-            CacheFile cf = new CacheFile(this, book.getMp3());
+            final CacheFile cf = new CacheFile(this, book.getMp3());
             if (cf.exists()) {
 
                 try {
@@ -127,16 +127,27 @@ public class PlayerActivity extends Activity {
                     ok = true;
                 } catch (IOException e) {
                     Log.e("MP3", "播放", e);
-                    cf.remove();
-                    Toast.makeText(getApplicationContext(), getString(R.string.lbl_mp3_broken, cf.getName()), Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                    adb.setMessage(getString(R.string.lbl_file_broken, cf.getName()));
+                    adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cf.remove();
+                            PlayerActivity.this.finish();
+                        }
+                    });
+                    adb.setNegativeButton(android.R.string.no, null);
+                    adb.setCancelable(false);
+                    adb.create().show();
                 }
+            } else {
+                Toast.makeText(this, getString(R.string.lbl_file_not_exist, book.getMp3()), Toast.LENGTH_SHORT).show();
             }
         }
 
 
         if (!ok) {
             findViewById(R.id.gl_player_mp3).setVisibility(View.GONE);
-            Toast.makeText(this, getString(R.string.lbl_file_not_exist, book.getMp3()), Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -64,7 +64,7 @@ public class CacheFile {
     public void remove() {
         File f = getRealFile();
         if (f != null) {
-            f.deleteOnExit();
+            f.delete();
             Log.d("删除文件", f.getAbsolutePath());
         }
 

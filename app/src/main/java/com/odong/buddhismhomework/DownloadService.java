@@ -8,7 +8,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.utils.DictHelper;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DzzHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,6 +46,9 @@ public class DownloadService extends IntentService {
             default:
                 response(getString(R.string.lbl_unknown_host));
         }
+
+        new DictHelper(this).check();
+        new DzzHelper(this).check();
     }
 
     private void download(String url, boolean redo) throws IOException {
