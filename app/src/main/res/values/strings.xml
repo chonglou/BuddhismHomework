@@ -18,8 +18,8 @@
     <string name="btn_baiduyun">百度网盘(大陆用户)</string>
 
     <string name="tv_clocks">从现在开始打坐：</string>
-    <string name="tv_last_sync">上次更新：%s</string>
-    <string name="tv_store_path">数据存储目录: %s</string>
+    <string name="tv_last_sync">上次更新：\n%s</string>
+    <string name="tv_store_path">数据存储目录：\n%s</string>
     <string name="tv_replay">循环播放</string>
     <string name="tv_hosts">下载节点</string>
 
