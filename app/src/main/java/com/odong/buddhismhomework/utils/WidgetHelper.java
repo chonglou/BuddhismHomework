@@ -82,7 +82,7 @@ public class WidgetHelper {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(context, SearchActivity.class);
                 intent.putExtra("type", "dzj");
-                intent.putExtra("keyword", keyword.getText().toString());
+                intent.putExtra("keyword", keyword.getText().toString().trim());
                 context.startActivity(intent);
             }
         });

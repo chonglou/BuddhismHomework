@@ -3,6 +3,12 @@ package com.odong.buddhismhomework;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
+
+import java.util.List;
+
 /**
  * Created by flamen on 15-2-20.
  */
@@ -16,13 +22,16 @@ public class SearchActivity extends Activity {
         String type = getIntent().getStringExtra("type");
         setTitle(getString(R.string.lbl_search_result, keyword));
 
-        if ("dzj".equals(type)) {
-            initDzjList();
+        if (!keyword.isEmpty()) {
+            if ("dzj".equals(type)) {
+                initDzjList(keyword);
+            }
         }
-
     }
 
-    private void initDzjList() {
-
+    private void initDzjList(String keyword) {
+        DwDbHelper ddh = new DwDbHelper(this);
+        List<Dzj> books = ddh.searchDzj(keyword);
+        new WidgetHelper(this).initDzjBookList(books, null);
     }
 }
