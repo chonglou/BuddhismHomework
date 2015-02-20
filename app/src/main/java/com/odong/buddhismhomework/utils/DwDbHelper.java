@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Dzj;
 
 import java.sql.Timestamp;
@@ -92,30 +91,30 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public void set(String key, Object val) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("val", new Gson().toJson(val));
-        if (get(key, val.getClass()) == null) {
-            cv.put("`key`", key);
-            db.insert("settings", null, cv);
-        } else {
-            db.update("settings", cv, "`key` = ?", new String[]{key});
-        }
-    }
-
-
-    public <T> T get(String key, Class<T> clazz) {
-        Cursor c = getReadableDatabase().query("settings", new String[]{"val"}, "`key` = ?", new String[]{key}, null, null, null, "1");
-        T obj = null;
-        if (c.moveToFirst()) {
-            String val = c.getString(c.getColumnIndexOrThrow("val"));
-            obj = new Gson().fromJson(val, clazz);
-        }
-        c.close();
-        return obj;
-
-    }
+//    public void set(String key, Object val) {
+//        SQLiteDatabase db = getWritableDatabase();
+//        ContentValues cv = new ContentValues();
+//        cv.put("val", new Gson().toJson(val));
+//        if (get(key, val.getClass()) == null) {
+//            cv.put("`key`", key);
+//            db.insert("settings", null, cv);
+//        } else {
+//            db.update("settings", cv, "`key` = ?", new String[]{key});
+//        }
+//    }
+//
+//
+//    public <T> T get(String key, Class<T> clazz) {
+//        Cursor c = getReadableDatabase().query("settings", new String[]{"val"}, "`key` = ?", new String[]{key}, null, null, null, "1");
+//        T obj = null;
+//        if (c.moveToFirst()) {
+//            String val = c.getString(c.getColumnIndexOrThrow("val"));
+//            obj = new Gson().fromJson(val, clazz);
+//        }
+//        c.close();
+//        return obj;
+//
+//    }
 
     public interface LogCallback {
         void call(String message, Date created);

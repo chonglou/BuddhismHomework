@@ -1,21 +1,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_favorites"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_favorites"
         android:title="@string/action_favorites"
         android:icon="@android:drawable/ic_menu_recent_history"
         android:orderInCategory="80"
         android:showAsAction="ifRoom" />
-    <item android:id="@+id/action_refresh"
+    <item
+        android:id="@+id/action_refresh"
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:orderInCategory="90"
         android:showAsAction="ifRoom" />
-    <item android:id="@+id/action_settings"
+    <item
+        android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
         android:showAsAction="ifRoom" />
-    <item android:id="@+id/action_about_me"
+    <item
+        android:id="@+id/action_about_me"
         android:title="@string/action_about_me"
         android:icon="@drawable/ic_action_help"
         android:orderInCategory="200"

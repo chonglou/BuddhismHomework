@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Point;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.StringHelper;
 
 import java.io.FileInputStream;
@@ -55,9 +55,9 @@ public class PlayerActivity extends Activity {
             Point p = new Point();
             p.setX(tv.getScrollX());
             p.setY(tv.getScrollY());
-            DwDbHelper ddh = new DwDbHelper(this);
-            ddh.set("scroll://book/" + book.getName(), p);
-            ddh.close();
+
+            new KvHelper(this).set("scroll://book/" + book.getName(), p);
+
         }
         if (((ToggleButton) findViewById(R.id.btn_player)).isChecked()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -93,11 +93,10 @@ public class PlayerActivity extends Activity {
                     mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mp3Player.prepare();
 
-                    DwDbHelper ddh = new DwDbHelper(this);
-                    Boolean loop = ddh.get("mp3.replay", Boolean.class);
-                    ddh.close();
 
-                    if (loop == Boolean.TRUE) {
+                    boolean loop = new KvHelper(this).get("mp3.replay", Boolean.class, false);
+
+                    if (loop) {
                         mp3Player.setLooping(true);
                     } else {
                         mp3Player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -178,14 +177,9 @@ public class PlayerActivity extends Activity {
             tv.setText(R.string.lbl_error_io);
         }
 
-        DwDbHelper ddh = new DwDbHelper(this);
-        Point p = ddh.get("scroll://book/" + book.getName(), Point.class);
-        ddh.close();
-        if (p == null) {
-            p = new Point();
-        }
-        tv.scrollTo(p.getX(), p.getY());
 
+        Point p = new KvHelper(this).get("scroll://book/" + book.getName(), Point.class, new Point());
+        tv.scrollTo(p.getX(), p.getY());
     }
 
 

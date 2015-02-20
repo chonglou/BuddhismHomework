@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,11 +30,9 @@ public class DownloadService extends NoticeService {
     @Override
     protected void onHandleIntent(Intent intent) {
         toast(getString(R.string.lbl_begin_download));
-        DwDbHelper ddh = new DwDbHelper(this);
-        Integer type = ddh.get("host.type", Integer.class);
-        if (type == null) {
-            type = R.id.btn_setting_home_dropbox;
-        }
+        KvHelper kh = new KvHelper(this);
+        Integer type = kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox);
+
         switch (type) {
             case R.id.btn_setting_home_dropbox:
                 onDropbox(intent);
@@ -46,8 +44,8 @@ public class DownloadService extends NoticeService {
                 toast(getString(R.string.lbl_unknown_host));
         }
 
-        ddh.set("sync.last", new Date());
-        ddh.close();
+        kh.set("sync.last", new Date());
+
     }
 
     private void download(String url) throws IOException {

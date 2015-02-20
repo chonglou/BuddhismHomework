@@ -15,6 +15,7 @@ import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
@@ -32,7 +33,7 @@ public class DzjBookActivity extends Activity {
 
         ((TextView) findViewById(R.id.tv_dzj_content)).setMovementMethod(new ScrollingMovementMethod());
         initTextView();
-
+        new WidgetHelper(this).initTextViewFont(R.id.tv_dzj_content);
     }
 
 
@@ -48,9 +49,7 @@ public class DzjBookActivity extends Activity {
         Point p = new Point();
         p.setX(tv.getScrollX());
         p.setY(tv.getScrollY());
-        DwDbHelper ddh = new DwDbHelper(this);
-        ddh.set("scroll://dzj/" + book.getName(), p);
-        ddh.close();
+        new KvHelper(this).set("scroll://dzj/" + book.getName(), p);
         super.onBackPressed();
     }
 
@@ -95,12 +94,8 @@ public class DzjBookActivity extends Activity {
             tv.setText(content);
         }
 
-        DwDbHelper ddh = new DwDbHelper(this);
-        Point p = ddh.get("scroll://dzj/" + book.getName(), Point.class);
-        ddh.close();
-        if (p == null) {
-            p = new Point();
-        }
+
+        Point p = new KvHelper(this).get("scroll://dzj/" + book.getName(), Point.class, new Point());
         tv.scrollTo(p.getX(), p.getY());
     }
 

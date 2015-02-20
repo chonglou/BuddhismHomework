@@ -11,7 +11,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,14 +30,13 @@ public class SettingsActivity extends Activity {
     }
 
     private void setTexts() {
-        DwDbHelper ddh = new DwDbHelper(this);
-        ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(ddh.get("mp3.replay", Boolean.class) == Boolean.TRUE);
+        KvHelper ddh = new KvHelper(this);
+        ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(ddh.get("mp3.replay", Boolean.class, false));
 
         ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
-        ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, ddh.get("sync.last", Date.class)));
-        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, ddh.get("import.last", Date.class)));
+        ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, ddh.get("sync.last", Date.class, null)));
+        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, ddh.get("import.last", Date.class, null)));
 
-        ddh.close();
     }
 
     private String date2string(int rid, Date date) {
@@ -64,10 +63,7 @@ public class SettingsActivity extends Activity {
         findViewById(R.id.btn_settings_replay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DwDbHelper ddh = new DwDbHelper(SettingsActivity.this);
-                ddh.set("mp3.replay", ((Switch) v).isChecked());
-                ddh.close();
-
+                new KvHelper(SettingsActivity.this).set("mp3.replay", ((Switch) v).isChecked());
             }
         });
 
@@ -92,20 +88,15 @@ public class SettingsActivity extends Activity {
 
     private void initHosts() {
         RadioGroup rg = (RadioGroup) findViewById(R.id.rg_setting_hosts);
-        DwDbHelper ddh = new DwDbHelper(this);
-        Integer type = ddh.get("host.type", Integer.class);
-        ddh.close();
-        if (type == null) {
-            type = R.id.btn_setting_home_dropbox;
-        }
+
+        int type = new KvHelper(this).get("host.type", Integer.class, R.id.btn_setting_home_dropbox);
+
         rg.check(type);
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                DwDbHelper ddh = new DwDbHelper(SettingsActivity.this);
-                ddh.set("host.type", checkedId);
-                ddh.close();
+                new KvHelper(SettingsActivity.this).set("host.type", checkedId);
             }
         });
 

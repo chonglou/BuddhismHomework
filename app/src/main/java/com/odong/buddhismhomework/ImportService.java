@@ -6,6 +6,7 @@ import android.util.Log;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -121,8 +122,8 @@ public class ImportService extends NoticeService {
 
             DwDbHelper ddh = new DwDbHelper(this);
             ddh.resetDzj(books);
-            ddh.set("import.last", new Date());
             ddh.close();
+            new KvHelper(this).set("import.last", new Date());
 
             Log.d("导入", "成功");
             notification(intent, getString(R.string.lbl_import_complete, books.size()));

@@ -36,24 +36,26 @@ public class WidgetHelper {
         boolean run(SimpleAdapter adapter, int position, List<Map<String, String>> items);
     }
 
+    public void initTextViewFont(int rid){
+        Float size = new KvHelper(context).get("book.font.size", Float.class, null);
+        if(size != null){
+            ((TextView)context.findViewById(rid)).setTextSize(size);
+        }
+    }
+
     public void zoomTextView(int rid, boolean out) {
         TextView tv = ((TextView) context.findViewById(rid));
-        DwDbHelper ddh = new DwDbHelper(context);
+        KvHelper kh = new KvHelper(context);
 
-        Float i = ddh.get("book.font.size", Float.class);
-        if(i == null){
-            i = tv.getTextSize();
-        }
+        float i = kh.get("book.font.size", Float.class, tv.getTextSize());
         float j = 1f;
         float k = out ? (i + j) : (i - j);
+
         Log.d("字体大小", "" + i + "\t" + k);
 
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, k);
-        //tv.setTextSize(k);
+        tv.setTextSize(k);
+        kh.set("book.font.size", k);
 
-        ddh.set("book.font.size",  k);
-
-        ddh.close();
     }
 
     public void initDzjBookList(final List<Dzj> books, final BookListCallback callback) {
