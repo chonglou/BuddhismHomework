@@ -58,6 +58,7 @@
     <string name="dlg_import">导入数据会耗费时间比较长，请耐心等待，确定要继续？</string>
 
 
+    <string name="lbl_search_result">搜索[%s]的结果</string>
     <string name="lbl_begin_import">开始导入数据, 请稍候</string>
     <string name="lbl_sd_card_not_exist">SD卡不存在[%s]</string>
     <string name="lbl_file_not_exist">文件[%s]不存在</string>

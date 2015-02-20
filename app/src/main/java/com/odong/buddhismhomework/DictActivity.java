@@ -7,13 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.odong.buddhismhomework.dict.StarDict;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.utils.StarDict;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by flamen on 15-2-12.
@@ -35,7 +34,6 @@ public class DictActivity extends Activity {
 
                 TextView tv = ((TextView) findViewById(R.id.tv_dict_content));
 
-
                 if (key.isEmpty()) {
                     tv.setText(R.string.lbl_error_please_input);
                     return;
@@ -46,11 +44,24 @@ public class DictActivity extends Activity {
                     return;
                 }
                 StringBuilder sb = new StringBuilder();
+                sb.append(getString(R.string.lbl_search_result, key));
+                sb.append("\n");
+
                 for (StarDict sd : dictList) {
+                    String val;
+                    try {
+                        val = sd.search(key);
+                        if(val == null){
+                            val = getString(R.string.lbl_empty_results);
+                        }
+                    } catch (IOException e) {
+                        val = e.getMessage();
+                        Log.d("搜索", key, e);
+                    }
                     sb.append("\n【");
                     sb.append(sd.toString());
                     sb.append("】\n");
-                    sb.append(sd.search(key));
+                    sb.append(val);
                     sb.append("\n");
                 }
                 tv.setText(sb.toString());
@@ -59,11 +70,10 @@ public class DictActivity extends Activity {
         });
     }
 
-    private void initDictList(){
+    private void initDictList() {
         try {
             dictList = StarDict.load(new CacheFile(this, ImportService.DICT_NAME).getRealFile());
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             dictList = new ArrayList<>();
             Log.e("加载字典", "出错", e);
         }
