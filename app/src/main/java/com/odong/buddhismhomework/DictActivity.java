@@ -2,6 +2,7 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -24,8 +25,9 @@ public class DictActivity extends Activity {
         setContentView(R.layout.activity_dict);
         setTitle(R.string.title_dict);
         getActionBar().setIcon(R.drawable.ic_dict);
-
+        ((TextView) findViewById(R.id.tv_dict_content)).setMovementMethod(new ScrollingMovementMethod());
         initDictList();
+
 
         findViewById(R.id.btn_dict_search).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,7 @@ public class DictActivity extends Activity {
                         if (val == null) {
                             val = getString(R.string.lbl_empty_results);
                         }
+
                     } catch (IOException e) {
                         val = e.getMessage();
                         Log.d("搜索", key, e);
@@ -65,6 +68,7 @@ public class DictActivity extends Activity {
                     sb.append("\n");
                 }
                 tv.setText(sb.toString());
+                tv.scrollTo(0, 0);
 
             }
         });

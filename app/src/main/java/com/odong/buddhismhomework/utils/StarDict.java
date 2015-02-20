@@ -1,5 +1,7 @@
 package com.odong.buddhismhomework.utils;
 
+import org.jsoup.Jsoup;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * http://www.stardict.org/StarDictFileFormat
  * Created by flamen on 15-2-19.
  */
 public class StarDict {
@@ -34,7 +37,13 @@ public class StarDict {
     public String search(String keyword) throws IOException {
         Entry entry = searchInIndex(keyword);
         if (entry != null) {
-            return searchInDict(entry);
+            String result = searchInDict(entry);
+            if(result != null){
+                if("g".equals(info.type) || "h".equals(info.type)){
+                    return Jsoup.parse(result).text();
+                }
+                return result;
+            }
         }
         return null;
     }
@@ -55,6 +64,7 @@ public class StarDict {
         DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(dict)));
         dis.skip(entry.offset);
         byte[] bt = new byte[entry.size];
+        dis.read(bt, 0, entry.size);
         dis.close();
         return new String(bt, "UTF-8");
     }
@@ -78,7 +88,6 @@ public class StarDict {
 
             if (word.toLowerCase().equals(keyword.toLowerCase())) {
                 entry = new Entry();
-                entry.word = word;
                 entry.offset = readInt32(bt, end);
                 end += 4;
                 entry.size = readInt32(bt, end);
@@ -104,6 +113,9 @@ public class StarDict {
                 info.size = intValue(line);
             } else if (line.startsWith("wordcount=")) {
                 info.count = intValue(line);
+            }
+            else if(line.startsWith("sametypesequence")){
+                info.type = stringValue(line);
             }
         }
         br.close();
@@ -136,15 +148,10 @@ public class StarDict {
         private String version;
         private int count;
         private int size;
-    }
-
-    private class Word {
-        private String word;
-        private Integer index;
+        private String type;
     }
 
     private class Entry {
-        private String word;
         private int size;
         private int offset;
     }
