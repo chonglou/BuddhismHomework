@@ -1,5 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_favorites"
+        android:title="@string/action_favorites"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:orderInCategory="80"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_refresh"
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_action_refresh"

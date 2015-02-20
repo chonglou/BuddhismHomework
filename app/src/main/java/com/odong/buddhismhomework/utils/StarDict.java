@@ -38,8 +38,8 @@ public class StarDict {
         Entry entry = searchInIndex(keyword);
         if (entry != null) {
             String result = searchInDict(entry);
-            if(result != null){
-                if("g".equals(info.type) || "h".equals(info.type)){
+            if (result != null) {
+                if ("g".equals(info.type) || "h".equals(info.type)) {
                     return Jsoup.parse(result).text();
                 }
                 return result;
@@ -113,8 +113,7 @@ public class StarDict {
                 info.size = intValue(line);
             } else if (line.startsWith("wordcount=")) {
                 info.count = intValue(line);
-            }
-            else if(line.startsWith("sametypesequence")){
+            } else if (line.startsWith("sametypesequence")) {
                 info.type = stringValue(line);
             }
         }

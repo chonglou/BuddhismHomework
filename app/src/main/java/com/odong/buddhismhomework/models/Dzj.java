@@ -20,6 +20,24 @@ public class Dzj implements Serializable {
     private String name;
     private String title;
     private String type;
+    private boolean fav;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isFav() {
+        return fav;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
+    }
 
     public String getType() {
         return type;

@@ -1,9 +1,16 @@
 package com.odong.buddhismhomework;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.CacheFile;
@@ -26,6 +33,14 @@ public class DzjBookActivity extends Activity {
 
         ((TextView) findViewById(R.id.tv_dzj_content)).setMovementMethod(new ScrollingMovementMethod());
         initTextView();
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dzj, menu);
+        return true;
     }
 
     @Override
@@ -38,6 +53,32 @@ public class DzjBookActivity extends Activity {
         ddh.set("scroll://dzj/" + book.getName(), p);
         ddh.close();
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add_to_favorites:
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setTitle(R.string.action_add_to_favorites);
+                adb.setMessage(R.string.lbl_are_you_sure);
+                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DwDbHelper ddh = new DwDbHelper(DzjBookActivity.this);
+                        ddh.setDzjFav(book.getId(), true);
+                        ddh.close();
+                        Toast.makeText(DzjBookActivity.this, getString(R.string.lbl_success), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                adb.setNegativeButton(android.R.string.no, null);
+                adb.create().show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     private void initTextView() {

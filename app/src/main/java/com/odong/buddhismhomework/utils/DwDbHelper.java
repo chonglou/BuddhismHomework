@@ -20,6 +20,13 @@ import java.util.List;
  */
 public class DwDbHelper extends SQLiteOpenHelper {
 
+    public void setDzjFav(int id, boolean fav) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("fav", fav ? 1 : 0);
+        db.update("books", cv, "id = ?", new String[]{Integer.toString(id)});
+    }
+
     public List<String> getDzjTypeList() {
         List<String> types = new ArrayList<String>();
         Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, "id ASC", null);
@@ -32,13 +39,15 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<Dzj> getDzjList(String type) {
         List<Dzj> books = new ArrayList<Dzj>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"name", "title", "author"}, "type = ?", new String[]{type}, null, null, "id ASC");
+        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav"}, "type = ?", new String[]{type}, null, null, "id ASC");
         while (c.moveToNext()) {
             Dzj d = new Dzj();
             d.setType(type);
+            d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
             d.setName(c.getString(c.getColumnIndexOrThrow("name")));
             d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));
             d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            d.setFav(c.getInt(c.getColumnIndexOrThrow("fav")) == 1);
             books.add(d);
         }
         c.close();
@@ -161,6 +170,9 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
+            case 3:
+                db.execSQL("ALTER TABLE books ADD COLUMN fav INTEGER(1) NOT NULL DEFAULT 0");
+                break;
             case 2:
                 for (String s : new String[]{
                         "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
@@ -192,7 +204,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return "DROP INDEX IF EXISTS " + name;
     }
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "BuddhismHomework.db";
 
 
