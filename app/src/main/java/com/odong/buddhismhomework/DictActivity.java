@@ -2,12 +2,17 @@ package com.odong.buddhismhomework;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.odong.buddhismhomework.utils.DictHelper;
+import com.odong.buddhismhomework.dict.StarDict;
+import com.odong.buddhismhomework.models.CacheFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,7 +26,7 @@ public class DictActivity extends Activity {
         setTitle(R.string.title_dict);
         getActionBar().setIcon(R.drawable.ic_dict);
 
-        dictHelper = new DictHelper(this);
+        initDictList();
 
         findViewById(R.id.btn_dict_search).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,17 +40,17 @@ public class DictActivity extends Activity {
                     tv.setText(R.string.lbl_error_please_input);
                     return;
                 }
-                Map<String, String> map = dictHelper.search(key);
-                if (map.isEmpty()) {
-                    tv.setText(R.string.lbl_empty_results);
+
+                if (dictList.isEmpty()) {
+                    tv.setText(R.string.lbl_empty);
                     return;
                 }
                 StringBuilder sb = new StringBuilder();
-                for (Map.Entry<String, String> e : map.entrySet()) {
+                for (StarDict sd : dictList) {
                     sb.append("\n【");
-                    sb.append(e.getKey());
+                    sb.append(sd.toString());
                     sb.append("】\n");
-                    sb.append(e.getValue());
+                    sb.append(sd.search(key));
                     sb.append("\n");
                 }
                 tv.setText(sb.toString());
@@ -54,6 +59,16 @@ public class DictActivity extends Activity {
         });
     }
 
-    private DictHelper dictHelper;
+    private void initDictList(){
+        try {
+            dictList = StarDict.load(new CacheFile(this, ImportService.DICT_NAME).getRealFile());
+        }
+        catch (IOException e){
+            dictList = new ArrayList<>();
+            Log.e("加载字典", "出错", e);
+        }
+    }
+
+    private List<StarDict> dictList;
 
 }

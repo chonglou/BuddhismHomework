@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
-import com.odong.buddhismhomework.utils.DictHelper;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 
 import org.jsoup.Jsoup;
@@ -36,7 +35,7 @@ public class ImportService extends NoticeService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        unzip(DictHelper.NAME);
+        unzip(DICT_NAME);
         unzip(DZJ_NAME);
 
         importBooks(intent);
@@ -176,4 +175,5 @@ public class ImportService extends NoticeService {
 
 
     public final static String DZJ_NAME = "dzj-f";
+    public final static String DICT_NAME = "dict";
 }
