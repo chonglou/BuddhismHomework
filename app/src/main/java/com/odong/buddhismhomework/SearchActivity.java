@@ -11,9 +11,18 @@ public class SearchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
-        getActionBar().setIcon(R.drawable.ic_dzj);
-        setTitle(R.string.action_favorites);
+        getActionBar().setIcon(android.R.drawable.ic_menu_search);
+        String keyword = getIntent().getStringExtra("keyword");
+        String type = getIntent().getStringExtra("type");
+        setTitle(getString(R.string.lbl_search_result, keyword));
 
-        initList();
+        if ("dzj".equals(type)) {
+            initDzjList();
+        }
+
+    }
+
+    private void initDzjList() {
+
     }
 }
