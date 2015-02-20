@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -34,8 +36,24 @@ public class WidgetHelper {
         boolean run(SimpleAdapter adapter, int position, List<Map<String, String>> items);
     }
 
-    public void setZoomIn(int rid){
-        ((TextView)context.findViewById(rid)).setTextSize();
+    public void zoomTextView(int rid, boolean out) {
+        TextView tv = ((TextView) context.findViewById(rid));
+        DwDbHelper ddh = new DwDbHelper(context);
+
+        Float i = ddh.get("book.font.size", Float.class);
+        if(i == null){
+            i = tv.getTextSize();
+        }
+        float j = 1f;
+        float k = out ? (i + j) : (i - j);
+        Log.d("字体大小", "" + i + "\t" + k);
+
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, k);
+        //tv.setTextSize(k);
+
+        ddh.set("book.font.size",  k);
+
+        ddh.close();
     }
 
     public void initDzjBookList(final List<Dzj> books, final BookListCallback callback) {

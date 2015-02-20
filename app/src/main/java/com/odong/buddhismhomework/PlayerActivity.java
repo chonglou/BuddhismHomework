@@ -97,14 +97,13 @@ public class PlayerActivity extends Activity {
                     Boolean loop = ddh.get("mp3.replay", Boolean.class);
                     ddh.close();
 
-                    if(loop == Boolean.TRUE){
+                    if (loop == Boolean.TRUE) {
                         mp3Player.setLooping(true);
-                    }
-                    else {
+                    } else {
                         mp3Player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                ((ToggleButton)findViewById(R.id.btn_player)).setChecked(false);
+                                ((ToggleButton) findViewById(R.id.btn_player)).setChecked(false);
                             }
                         });
                     }

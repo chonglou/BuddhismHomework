@@ -23,7 +23,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Dzj> searchDzj(String keyword) {
         keyword = "%" + keyword + "%";
         List<Dzj> books = new ArrayList<Dzj>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "100");
+        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
         while (c.moveToNext()) {
             Dzj d = createDzj(c);
             books.add(d);

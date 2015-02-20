@@ -15,6 +15,7 @@ import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
  * Created by flamen on 15-2-19.
@@ -57,6 +58,12 @@ public class DzjBookActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_zoom_in:
+                new WidgetHelper(this).zoomTextView(R.id.tv_dzj_content, false);
+                break;
+            case R.id.action_zoom_out:
+                new WidgetHelper(this).zoomTextView(R.id.tv_dzj_content, true);
+                break;
             case R.id.action_add_to_favorites:
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
                 adb.setTitle(R.string.action_add_to_favorites);
