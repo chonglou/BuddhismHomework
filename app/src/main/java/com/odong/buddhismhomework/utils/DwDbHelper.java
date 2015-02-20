@@ -20,6 +20,18 @@ import java.util.List;
  */
 public class DwDbHelper extends SQLiteOpenHelper {
 
+    public List<Dzj> getFavDzjList() {
+        List<Dzj> books = new ArrayList<Dzj>();
+        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
+        while (c.moveToNext()) {
+            Dzj d = createDzj(c);
+            d.setFav(true);
+            books.add(d);
+        }
+        c.close();
+        return books;
+    }
+
     public void setDzjFav(int id, boolean fav) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -41,12 +53,9 @@ public class DwDbHelper extends SQLiteOpenHelper {
         List<Dzj> books = new ArrayList<Dzj>();
         Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav"}, "type = ?", new String[]{type}, null, null, "id ASC");
         while (c.moveToNext()) {
-            Dzj d = new Dzj();
+
+            Dzj d = createDzj(c);
             d.setType(type);
-            d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
-            d.setName(c.getString(c.getColumnIndexOrThrow("name")));
-            d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));
-            d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
             d.setFav(c.getInt(c.getColumnIndexOrThrow("fav")) == 1);
             books.add(d);
         }
@@ -141,6 +150,16 @@ public class DwDbHelper extends SQLiteOpenHelper {
         for (int i = oldVersion; i > newVersion; i--) {
             uninstall(db, i);
         }
+    }
+
+
+    private Dzj createDzj(Cursor c) {
+        Dzj d = new Dzj();
+        d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
+        d.setName(c.getString(c.getColumnIndexOrThrow("name")));
+        d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));
+        d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+        return d;
     }
 
     private void uninstall(SQLiteDatabase db, int version) {

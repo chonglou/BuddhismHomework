@@ -36,6 +36,9 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_favorites:
+                startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+                break;
             case R.id.action_refresh:
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
                 adb.setTitle(R.string.action_refresh);
