@@ -87,18 +87,28 @@ public class PlayerActivity extends Activity {
             if (cf.exists()) {
 
                 try {
-//                mp3Player = MediaPlayer.create(this,
-//                        Uri.parse(cf.getRealFile().getAbsolutePath()));
-
-
-                    //int size = new FileInputStream(cf.getRealFile()).getChannel().size());
-                    //String content = new Scanner(cf.getRealFile()).useDelimiter("\\Z").next();
-                    //Log.d("文件"+cf.getName(), ""+size);
 
                     mp3Player = new MediaPlayer();
                     mp3Player.setDataSource(new FileInputStream(cf.getRealFile()).getFD());
                     mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mp3Player.prepare();
+
+                    DwDbHelper ddh = new DwDbHelper(this);
+                    Boolean loop = ddh.get("mp3.replay", Boolean.class);
+                    ddh.close();
+
+                    if(loop == Boolean.TRUE){
+                        mp3Player.setLooping(true);
+                    }
+                    else {
+                        mp3Player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                ((ToggleButton)findViewById(R.id.btn_player)).setChecked(false);
+                            }
+                        });
+                    }
+
 
                     mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
 

@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.DzjBookActivity;
@@ -31,6 +32,10 @@ public class WidgetHelper {
 
     public interface BookListCallback {
         boolean run(SimpleAdapter adapter, int position, List<Map<String, String>> items);
+    }
+
+    public void setZoomIn(int rid){
+        ((TextView)context.findViewById(rid)).setTextSize();
     }
 
     public void initDzjBookList(final List<Dzj> books, final BookListCallback callback) {
