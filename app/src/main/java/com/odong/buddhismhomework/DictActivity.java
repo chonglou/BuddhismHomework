@@ -51,7 +51,7 @@ public class DictActivity extends Activity {
                     String val;
                     try {
                         val = sd.search(key);
-                        if(val == null){
+                        if (val == null) {
                             val = getString(R.string.lbl_empty_results);
                         }
                     } catch (IOException e) {

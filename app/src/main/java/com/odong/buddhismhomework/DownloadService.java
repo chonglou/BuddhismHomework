@@ -29,7 +29,9 @@ public class DownloadService extends NoticeService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Integer type = new DwDbHelper(this).get("host.type", Integer.class);
+        toast(getString(R.string.lbl_begin_download));
+        DwDbHelper ddh = new DwDbHelper(this);
+        Integer type = ddh.get("host.type", Integer.class);
         if (type == null) {
             type = R.id.btn_setting_home_dropbox;
         }
@@ -44,7 +46,8 @@ public class DownloadService extends NoticeService {
                 toast(getString(R.string.lbl_unknown_host));
         }
 
-        new DwDbHelper(this).set("sync.last", new Date());
+        ddh.set("sync.last", new Date());
+        ddh.close();
     }
 
     private void download(String url) throws IOException {

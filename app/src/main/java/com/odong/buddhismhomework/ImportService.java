@@ -35,6 +35,7 @@ public class ImportService extends NoticeService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        toast(getString(R.string.lbl_begin_import));
         unzip(DICT_NAME);
         unzip(DZJ_NAME);
 
@@ -53,7 +54,7 @@ public class ImportService extends NoticeService {
             notification(intent, getString(R.string.lbl_file_not_exist, DZJ_NAME));
             return;
         }
-        toast(getString(R.string.lbl_begin_import));
+
         try {
             Document doc = Jsoup.parse(cf.getRealFile(), "UTF-8");
             List<Dzj> books = new ArrayList<Dzj>();
@@ -121,6 +122,7 @@ public class ImportService extends NoticeService {
             DwDbHelper ddh = new DwDbHelper(this);
             ddh.resetDzj(books);
             ddh.set("import.last", new Date());
+            ddh.close();
 
             Log.d("导入", "成功");
             notification(intent, getString(R.string.lbl_import_complete, books.size()));

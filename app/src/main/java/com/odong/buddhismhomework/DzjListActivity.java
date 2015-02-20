@@ -41,7 +41,9 @@ public class DzjListActivity extends Activity {
     }
 
     private void initTypesView() {
-        final List<String> types = new DwDbHelper(this).getDzjTypeList();
+        DwDbHelper ddh = new DwDbHelper(this);
+        final List<String> types = ddh.getDzjTypeList();
+        ddh.close();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
@@ -63,7 +65,9 @@ public class DzjListActivity extends Activity {
 
     private void initBooksView(String type) {
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        final List<Dzj> books = new DwDbHelper(this).getDzjList(type);
+        DwDbHelper ddh = new DwDbHelper(this);
+        final List<Dzj> books = ddh.getDzjList(type);
+        ddh.close();
         for (Dzj d : books) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", d.getTitle());

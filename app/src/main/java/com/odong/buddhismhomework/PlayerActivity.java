@@ -55,7 +55,9 @@ public class PlayerActivity extends Activity {
             Point p = new Point();
             p.setX(tv.getScrollX());
             p.setY(tv.getScrollY());
-            new DwDbHelper(this).set("scroll://" + book.getName(), p);
+            DwDbHelper ddh = new DwDbHelper(this);
+            ddh.set("scroll://book/" + book.getName(), p);
+            ddh.close();
         }
         if (((ToggleButton) findViewById(R.id.btn_player)).isChecked()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -167,7 +169,9 @@ public class PlayerActivity extends Activity {
             tv.setText(R.string.lbl_error_io);
         }
 
-        Point p = new DwDbHelper(this).get("scroll://" + book.getName(), Point.class);
+        DwDbHelper ddh = new DwDbHelper(this);
+        Point p = ddh.get("scroll://book/" + book.getName(), Point.class);
+        ddh.close();
         if (p == null) {
             p = new Point();
         }

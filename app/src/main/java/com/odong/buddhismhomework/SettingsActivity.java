@@ -30,13 +30,14 @@ public class SettingsActivity extends Activity {
     }
 
     private void setTexts() {
-        DwDbHelper dh = new DwDbHelper(this);
-        ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(dh.get("mp3.replay", Boolean.class) == Boolean.TRUE);
+        DwDbHelper ddh = new DwDbHelper(this);
+        ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(ddh.get("mp3.replay", Boolean.class) == Boolean.TRUE);
 
         ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
-        ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, dh.get("sync.last", Date.class)));
-        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, dh.get("import.last", Date.class)));
+        ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, ddh.get("sync.last", Date.class)));
+        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, ddh.get("import.last", Date.class)));
 
+        ddh.close();
     }
 
     private String date2string(int rid, Date date) {
@@ -63,7 +64,9 @@ public class SettingsActivity extends Activity {
         findViewById(R.id.btn_settings_replay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DwDbHelper(SettingsActivity.this).set("mp3.replay", ((Switch) v).isChecked());
+                DwDbHelper ddh = new DwDbHelper(SettingsActivity.this);
+                ddh.set("mp3.replay", ((Switch) v).isChecked());
+                ddh.close();
 
             }
         });
@@ -89,7 +92,9 @@ public class SettingsActivity extends Activity {
 
     private void initHosts() {
         RadioGroup rg = (RadioGroup) findViewById(R.id.rg_setting_hosts);
-        Integer type = new DwDbHelper(this).get("host.type", Integer.class);
+        DwDbHelper ddh = new DwDbHelper(this);
+        Integer type = ddh.get("host.type", Integer.class);
+        ddh.close();
         if (type == null) {
             type = R.id.btn_setting_home_dropbox;
         }
@@ -98,7 +103,9 @@ public class SettingsActivity extends Activity {
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                new DwDbHelper(SettingsActivity.this).set("host.type", checkedId);
+                DwDbHelper ddh = new DwDbHelper(SettingsActivity.this);
+                ddh.set("host.type", checkedId);
+                ddh.close();
             }
         });
 

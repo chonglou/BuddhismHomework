@@ -33,7 +33,7 @@ public class StarDict {
 
     public String search(String keyword) throws IOException {
         Entry entry = searchInIndex(keyword);
-        if(entry != null){
+        if (entry != null) {
             return searchInDict(entry);
         }
         return null;

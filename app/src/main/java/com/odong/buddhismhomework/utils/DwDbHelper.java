@@ -26,6 +26,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             types.add(c.getString(c.getColumnIndexOrThrow("type")));
         }
+        c.close();
         return types;
     }
 
@@ -40,6 +41,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
             d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
             books.add(d);
         }
+        c.close();
         return books;
     }
 
@@ -57,6 +59,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
             db.insert("books", null, cv);
         }
+
     }
 
     public void set(String key, Object val) {
@@ -74,11 +77,13 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public <T> T get(String key, Class<T> clazz) {
         Cursor c = getReadableDatabase().query("settings", new String[]{"val"}, "`key` = ?", new String[]{key}, null, null, null, "1");
+        T obj = null;
         if (c.moveToFirst()) {
             String val = c.getString(c.getColumnIndexOrThrow("val"));
-            return new Gson().fromJson(val, clazz);
+            obj = new Gson().fromJson(val, clazz);
         }
-        return null;
+        c.close();
+        return obj;
 
     }
 
@@ -95,6 +100,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             callback.call(c.getString(c.getColumnIndexOrThrow("id")), Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow("created"))));
         }
+        c.close();
     }
 
     public void addLog(String message) {

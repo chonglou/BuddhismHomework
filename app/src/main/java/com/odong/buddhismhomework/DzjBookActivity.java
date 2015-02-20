@@ -34,7 +34,9 @@ public class DzjBookActivity extends Activity {
         Point p = new Point();
         p.setX(tv.getScrollX());
         p.setY(tv.getScrollY());
-        new DwDbHelper(this).set("scroll://dzj/" + book.getName(), p);
+        DwDbHelper ddh = new DwDbHelper(this);
+        ddh.set("scroll://dzj/" + book.getName(), p);
+        ddh.close();
         super.onBackPressed();
     }
 
@@ -47,7 +49,9 @@ public class DzjBookActivity extends Activity {
             tv.setText(content);
         }
 
-        Point p = new DwDbHelper(this).get("scroll://dzj/" + book.getName(), Point.class);
+        DwDbHelper ddh = new DwDbHelper(this);
+        Point p = ddh.get("scroll://dzj/" + book.getName(), Point.class);
+        ddh.close();
         if (p == null) {
             p = new Point();
         }
