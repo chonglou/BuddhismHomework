@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.back.ImportService;
 import com.odong.buddhismhomework.utils.StarDict;
 
 import java.io.IOException;

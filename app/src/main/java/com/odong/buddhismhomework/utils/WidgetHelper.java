@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -14,9 +13,9 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.odong.buddhismhomework.DzjBookActivity;
+import com.odong.buddhismhomework.pages.DzjBookActivity;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.SearchActivity;
+import com.odong.buddhismhomework.pages.SearchActivity;
 import com.odong.buddhismhomework.models.Dzj;
 
 import java.util.ArrayList;

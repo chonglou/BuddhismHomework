@@ -1,8 +1,9 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;

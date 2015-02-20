@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,7 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.NavIcon;
+import com.odong.buddhismhomework.back.DownloadService;
+import com.odong.buddhismhomework.widgets.NavIconAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

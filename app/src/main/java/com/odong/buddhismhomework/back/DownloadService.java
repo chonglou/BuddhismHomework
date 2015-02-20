@@ -1,8 +1,10 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.back;
 
 import android.content.Intent;
 import android.util.Log;
 
+import com.odong.buddhismhomework.Config;
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.KvHelper;
 

@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".pages.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,23 +22,23 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".pages.SettingsActivity"
             android:label="@string/title_settings"/>
 
-        <activity android:name=".BooksActivity" />
-        <activity android:name=".PlayerActivity" />
-        <activity android:name=".SittingActivity" />
-        <activity android:name=".HomeworkActivity" />
-        <activity android:name=".VideoBooksActivity"/>
-        <activity android:name=".VideoListActivity"/>
-        <activity android:name=".DictActivity"/>
-        <activity android:name=".DzjBookActivity"/>
-        <activity android:name=".DzjListActivity"/>
-        <activity android:name=".FavoritesActivity"/>
-        <activity android:name=".SearchActivity"/>
+        <activity android:name=".pages.BooksActivity" />
+        <activity android:name=".pages.PlayerActivity" />
+        <activity android:name=".pages.SittingActivity" />
+        <activity android:name=".pages.HomeworkActivity" />
+        <activity android:name=".pages.VideoBooksActivity"/>
+        <activity android:name=".pages.VideoListActivity"/>
+        <activity android:name=".pages.DictActivity"/>
+        <activity android:name=".pages.DzjBookActivity"/>
+        <activity android:name=".pages.DzjListActivity"/>
+        <activity android:name=".pages.FavoritesActivity"/>
+        <activity android:name=".pages.SearchActivity"/>
 
-        <service android:exported="false" android:name=".DownloadService"/>
-        <service android:exported="false" android:name=".ImportService"/>
+        <service android:exported="false" android:name=".back.DownloadService"/>
+        <service android:exported="false" android:name=".back.ImportService"/>
 
     </application>
 

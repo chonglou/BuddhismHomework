@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.widgets;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.NavIcon;
 
 import java.util.List;

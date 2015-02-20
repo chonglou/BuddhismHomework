@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.back;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
+
+import com.odong.buddhismhomework.R;
 
 /**
  * Created by flamen on 15-2-19.

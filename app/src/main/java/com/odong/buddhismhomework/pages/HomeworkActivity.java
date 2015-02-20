@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Homework;
 import com.odong.buddhismhomework.utils.StringHelper;
 import com.odong.buddhismhomework.utils.XmlHelper;

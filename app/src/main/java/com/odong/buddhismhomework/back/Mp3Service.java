@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework;
+package com.odong.buddhismhomework.back;
 
 import android.app.IntentService;
 import android.content.Intent;
