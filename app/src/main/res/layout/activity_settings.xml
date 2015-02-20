@@ -17,31 +17,35 @@
             android:paddingBottom="20dp"
             android:paddingTop="20dp">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_setting_morning"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_weight="1" />
 
-                <TextView
-                    android:id="@+id/tv_setting_store"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/tv_setting_sync"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-
-            <ImageButton
-                android:id="@+id/btn_setting_sync"
+            <Switch
+                android:id="@+id/btn_setting_morning"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/lbl_empty"
-                android:src="@android:drawable/stat_sys_download" />
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/tv_setting_evening"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Switch
+                android:id="@+id/btn_setting_evening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 
@@ -57,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/tv_replay" />
-
 
             <Switch
                 android:id="@+id/btn_settings_replay"
@@ -95,6 +98,40 @@
                     android:layout_height="wrap_content"
                     android:text="@string/btn_baiduyun" />
             </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_setting_store"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_setting_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/btn_setting_sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/lbl_empty"
+                android:src="@android:drawable/stat_sys_download" />
 
         </LinearLayout>
 

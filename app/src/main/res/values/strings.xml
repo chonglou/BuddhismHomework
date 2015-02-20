@@ -23,10 +23,12 @@
     <string name="btn_dropbox">Dropbox(海外用户)</string>
     <string name="btn_baiduyun">百度网盘(大陆用户)</string>
 
+    <string name="tv_setting_morning">早课时间(每天%1$02d:%2$02d)</string>
+    <string name="tv_setting_evening">晚课时间(每天%1$02d:%2$02d)</string>
     <string name="tv_clocks">从现在开始打坐：</string>
     <string name="tv_last_sync">上次更新：\n%s</string>
     <string name="tv_store_path">数据存储目录：\n%s</string>
-    <string name="tv_replay">循环播放</string>
+    <string name="tv_replay">MP3循环播放</string>
     <string name="tv_hosts">下载节点</string>
     <string name="tv_last_import">上次导入:\n%s</string>
 
@@ -42,7 +44,7 @@
     <string name="title_dzj">大藏经</string>
     <string name="title_settings">参数设置</string>
 
-    <string name="lbl_null"/>
+    <string name="lbl_null">无</string>
     <string name="lbl_never">从未</string>
     <string name="lbl_hint_search">此处输入进行搜索</string>
     <string name="lbl_empty_results">没有找到相关记录</string>

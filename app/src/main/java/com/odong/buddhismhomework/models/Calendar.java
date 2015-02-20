@@ -6,9 +6,19 @@ import java.io.Serializable;
  * Created by flamen on 15-2-7.
  */
 public class Calendar implements Serializable {
+    @Override
+    public String toString() {
+        return "Calendar{" +
+                "hour=" + hour +
+                ", minute=" + minute +
+                ", enable=" + enable +
+                '}';
+    }
+
     private int hour;
     private int minute;
     private int length;
+    private boolean enable;
     private boolean mon;
     private boolean tues;
     private boolean wed;
@@ -16,6 +26,14 @@ public class Calendar implements Serializable {
     private boolean fri;
     private boolean sat;
     private boolean sun;
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     public int getHour() {
         return hour;

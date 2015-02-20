@@ -31,6 +31,7 @@ public class WidgetHelper {
         this.context = context;
     }
 
+
     public interface BookListCallback {
         boolean run(SimpleAdapter adapter, int position, List<Map<String, String>> items);
     }
