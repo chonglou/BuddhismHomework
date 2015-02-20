@@ -69,7 +69,7 @@ public class DownloadService extends NoticeService {
             }
             fos.flush();
             toast(getString(R.string.lbl_download_success, name));
-            Log.e("下载完成", name);
+            Log.d("下载完成", name);
         } catch (IOException e) {
             Log.e("下载", name, e);
             cf.remove();

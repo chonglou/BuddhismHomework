@@ -20,7 +20,7 @@ public abstract class NoticeService extends IntentService {
 
     protected void notification(Intent intent, String msg) {
 
-        PendingIntent pd = PendingIntent.getActivity(this, 0, intent,0);
+        PendingIntent pd = PendingIntent.getActivity(this, 0, intent, 0);
         Notification.Builder nf = new Notification.Builder(this)
                 .setContentText(msg)
                 .setContentTitle(getString(R.string.app_name))

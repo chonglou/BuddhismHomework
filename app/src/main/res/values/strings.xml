@@ -42,6 +42,7 @@
     <string name="lbl_hint_search">此处输入进行搜索</string>
     <string name="lbl_empty_results">没有找到相关记录</string>
     <string name="lbl_empty">暂无内容，请同步数据。</string>
+    <string name="lbl_error_please_input">请输入数据</string>
     <string name="lbl_remove_item_cache">删除该条记录的缓存</string>
     <string name="lbl_are_you_sure">你确定要进行此操作么？</string>
     <string name="lbl_every_day">每天</string>
