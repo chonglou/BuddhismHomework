@@ -37,7 +37,7 @@ public class DzjBookActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dzj, menu);
+        getMenuInflater().inflate(R.menu.menu_dzj_book, menu);
         return true;
     }
 

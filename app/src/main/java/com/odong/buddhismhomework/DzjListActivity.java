@@ -1,14 +1,19 @@
 package com.odong.buddhismhomework;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.models.Dzj;
@@ -40,6 +45,37 @@ public class DzjListActivity extends Activity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dzj_list, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add_to_favorites:
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setTitle(R.string.action_add_to_favorites);
+                adb.setMessage(R.string.lbl_are_you_sure);
+                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(DzjListActivity.this, SearchActivity.class);
+                        intent.putExtra("type", "dzj");
+                        intent.putExtra("keyword", );
+                        startActivity(intent);
+                    }
+                });
+                adb.setNegativeButton(android.R.string.no, null);
+                adb.create().show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
     private void initTypesView() {
         DwDbHelper ddh = new DwDbHelper(this);
         final List<String> types = ddh.getDzjTypeList();

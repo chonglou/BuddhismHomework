@@ -35,6 +35,7 @@
         <activity android:name=".DzjBookActivity"/>
         <activity android:name=".DzjListActivity"/>
         <activity android:name=".FavoritesActivity"/>
+        <activity android:name=".SearchActivity"/>
 
         <service android:exported="false" android:name=".DownloadService"/>
         <service android:exported="false" android:name=".ImportService"/>

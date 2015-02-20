@@ -5,10 +5,13 @@
     <string name="homework">功课列表</string>
 
 
+    <string name="action_zoom_in">缩小</string>
+    <string name="action_zoom_out">放大</string>
     <string name="action_add_to_favorites">添加到收藏夹</string>
     <string name="action_favorites">收藏夹</string>
     <string name="action_import">导入数据</string>
     <string name="action_refresh">同步数据</string>
+    <string name="action_search">搜索</string>
     <string name="action_settings">参数设置</string>
     <string name="action_about_me">关于我们</string>
 
