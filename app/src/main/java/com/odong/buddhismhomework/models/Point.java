@@ -7,6 +7,15 @@ public class Point {
 
     private int x;
     private int y;
+    private int offset;
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
     public int getX() {
         return x;

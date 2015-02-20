@@ -27,7 +27,7 @@ public class KvHelper {
             return new Gson().fromJson(val, clazz);
         }
 
-        if(def != null){
+        if (def != null) {
             set(key, def);
         }
         return def;

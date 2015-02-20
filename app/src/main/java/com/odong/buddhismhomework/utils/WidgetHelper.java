@@ -13,10 +13,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.odong.buddhismhomework.pages.DzjBookActivity;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.pages.SearchActivity;
 import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.pages.DzjBookActivity;
+import com.odong.buddhismhomework.pages.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +35,10 @@ public class WidgetHelper {
         boolean run(SimpleAdapter adapter, int position, List<Map<String, String>> items);
     }
 
-    public void initTextViewFont(int rid){
+    public void initTextViewFont(int rid) {
         Float size = new KvHelper(context).get("book.font.size", Float.class, null);
-        if(size != null){
-            ((TextView)context.findViewById(rid)).setTextSize(size);
+        if (size != null) {
+            ((TextView) context.findViewById(rid)).setTextSize(size);
         }
     }
 

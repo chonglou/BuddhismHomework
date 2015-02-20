@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.back.ImportService;
+import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.StarDict;
 
 import java.io.IOException;
@@ -28,6 +28,7 @@ public class DictActivity extends Activity {
         setTitle(R.string.title_dict);
         getActionBar().setIcon(R.drawable.ic_dict);
         ((TextView) findViewById(R.id.tv_dict_content)).setMovementMethod(new ScrollingMovementMethod());
+
         initDictList();
 
 
@@ -47,6 +48,8 @@ public class DictActivity extends Activity {
                     tv.setText(R.string.lbl_empty);
                     return;
                 }
+
+
                 StringBuilder sb = new StringBuilder();
                 sb.append(getString(R.string.lbl_search_result, key));
                 sb.append("\n");
@@ -75,6 +78,7 @@ public class DictActivity extends Activity {
             }
         });
     }
+
 
     private void initDictList() {
         try {
