@@ -61,26 +61,7 @@ public class DictHelper {
         }
     }
 
-    private String bookName(String dict) {
-        CacheFile cf = new CacheFile(context, NAME + "/" + dict + "/" + dict + ".ifo");
 
-        String line;
-        String name = null;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(cf.getRealFile())));
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("bookname=")) {
-                    name = line.split("=")[1];
-                    break;
-                }
-            }
-            br.close();
-
-        } catch (IOException e) {
-            Log.e("加载字典", dict, e);
-        }
-        return name;
-    }
 
 
     private Context context;
