@@ -25,6 +25,9 @@ import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.pages.DzjBookActivity;
 import com.odong.buddhismhomework.pages.SearchActivity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +39,24 @@ import java.util.Map;
 public class WidgetHelper {
     public WidgetHelper(Context context) {
         this.context = context;
+    }
+
+    public String readFile(Integer... files) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        for (int i : files) {
+            if (i > 0) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(i)));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                }
+                br.close();
+            }
+
+            sb.append("\n\n");
+        }
+        return sb.toString();
     }
 
     public void toast(final String msg, boolean back) {

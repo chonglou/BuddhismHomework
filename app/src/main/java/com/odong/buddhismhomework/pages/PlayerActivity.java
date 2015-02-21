@@ -20,7 +20,6 @@ import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.KvHelper;
-import com.odong.buddhismhomework.utils.StringHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.io.FileInputStream;
@@ -173,7 +172,8 @@ public class PlayerActivity extends Activity {
         }
 
         try {
-            tv.setText(new StringHelper(this).readFile(book.getFiles().toArray(new Integer[1])));
+            tv.setText(new WidgetHelper(this).readFile(book.getFiles().toArray(new Integer[1])));
+
         } catch (IOException e) {
             Log.e("读取文件", book.getName(), e);
             tv.setText(R.string.lbl_error_io);
