@@ -41,6 +41,7 @@ public class WidgetHelper {
         this.context = context;
     }
 
+
     public String readFile(Integer... files) throws IOException {
         StringBuilder sb = new StringBuilder();
         for (int i : files) {

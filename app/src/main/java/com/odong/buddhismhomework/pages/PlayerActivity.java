@@ -44,6 +44,7 @@ public class PlayerActivity extends Activity {
 
 
         ((TextView) findViewById(R.id.tv_player_content)).setMovementMethod(new ScrollingMovementMethod());
+
         initTextView();
         initMp3View();
     }

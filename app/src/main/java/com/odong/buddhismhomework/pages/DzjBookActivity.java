@@ -22,6 +22,8 @@ import com.odong.buddhismhomework.utils.WidgetHelper;
  * Created by flamen on 15-2-19.
  */
 public class DzjBookActivity extends Activity {
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +34,12 @@ public class DzjBookActivity extends Activity {
         setTitle(book.getTitle());
 
         ((TextView) findViewById(R.id.tv_dzj_content)).setMovementMethod(new ScrollingMovementMethod());
+
+
+        WidgetHelper wh = new WidgetHelper(this);
+        wh.initTextViewFont(R.id.tv_dzj_content);
         initTextView();
-        new WidgetHelper(this).initTextViewFont(R.id.tv_dzj_content);
+
     }
 
 
