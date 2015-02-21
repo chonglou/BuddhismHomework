@@ -8,7 +8,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
@@ -74,7 +73,7 @@ public class DzjBookActivity extends Activity {
                         DwDbHelper ddh = new DwDbHelper(DzjBookActivity.this);
                         ddh.setDzjFav(book.getId(), true);
                         ddh.close();
-                        Toast.makeText(DzjBookActivity.this, getString(R.string.lbl_success), Toast.LENGTH_SHORT).show();
+                        new WidgetHelper(DzjBookActivity.this).toast(getString(R.string.lbl_success), false);
                     }
                 });
                 adb.setNegativeButton(android.R.string.no, null);

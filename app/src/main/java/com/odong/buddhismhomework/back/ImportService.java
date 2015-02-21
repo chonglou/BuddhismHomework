@@ -1,5 +1,6 @@
 package com.odong.buddhismhomework.back;
 
+import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +31,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Created by flamen on 15-2-19.
  */
-public class ImportService extends NoticeService {
+public class ImportService extends IntentService {
 
     public ImportService() {
         super("ImportService");
@@ -37,7 +39,7 @@ public class ImportService extends NoticeService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        toast(getString(R.string.lbl_begin_import));
+        new WidgetHelper(this).toast(getString(R.string.lbl_begin_import), true);
         unzip(DICT_NAME);
         unzip(DZJ_NAME);
 
@@ -51,9 +53,10 @@ public class ImportService extends NoticeService {
     }
 
     private void importBooks(Intent intent) {
+        WidgetHelper wh = new WidgetHelper(this);
         CacheFile cf = new CacheFile(this, DZJ_NAME + "/index.html");
         if (!cf.exists()) {
-            notification(intent, getString(R.string.lbl_file_not_exist, DZJ_NAME));
+            wh.notification(intent, getString(R.string.lbl_file_not_exist, DZJ_NAME));
             return;
         }
 
@@ -127,25 +130,25 @@ public class ImportService extends NoticeService {
             new KvHelper(this).set("import.last", new Date());
 
             Log.d("导入", "成功");
-            notification(intent, getString(R.string.lbl_import_complete, books.size()));
+            wh.notification(intent, getString(R.string.lbl_import_complete, books.size()));
 
         } catch (IOException e) {
-            notification(intent, getString(R.string.lbl_error_import));
+            wh.notification(intent, getString(R.string.lbl_error_import));
             Log.e("导入数据", cf.getName(), e);
         }
     }
 
     private void unzip(String name) {
-
+        WidgetHelper wh = new WidgetHelper(this);
         File file = new File(new CacheFile(this, name + ".zip").getRealFile().getAbsolutePath());
         File root = new File(new CacheFile(this, name).getRealFile().getAbsolutePath());
 
         if (!file.exists()) {
-            toast(getString(R.string.lbl_file_not_exist, name + ".zip"));
+            wh.toast(getString(R.string.lbl_file_not_exist, name + ".zip"), true);
             return;
         }
         if (root.exists()) {
-            toast(getString(R.string.lbl_already_exist, name));
+            wh.toast(getString(R.string.lbl_already_exist, name), true);
             return;
         }
         try {
@@ -172,7 +175,7 @@ public class ImportService extends NoticeService {
         } catch (IOException e) {
             root.delete();
             Log.d("解压缩", name, e);
-            toast(getString(R.string.lbl_error_unzip, name));
+            wh.toast(getString(R.string.lbl_error_unzip, name), true);
         }
 
     }

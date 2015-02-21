@@ -1,5 +1,6 @@
 package com.odong.buddhismhomework.back;
 
+import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
@@ -7,6 +8,7 @@ import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.KvHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +25,7 @@ import java.util.Date;
 /**
  * Created by flamen on 15-2-8.
  */
-public class DownloadService extends NoticeService {
+public class DownloadService extends IntentService {
 
     public DownloadService() {
         super("DownloadService");
@@ -31,7 +33,8 @@ public class DownloadService extends NoticeService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        toast(getString(R.string.lbl_begin_download));
+        WidgetHelper wh = new WidgetHelper(this);
+        wh.toast(getString(R.string.lbl_begin_download), true);
         KvHelper kh = new KvHelper(this);
         Integer type = kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox);
 
@@ -43,7 +46,7 @@ public class DownloadService extends NoticeService {
                 onBaiduyun();
                 break;
             default:
-                toast(getString(R.string.lbl_unknown_host));
+                wh.toast(getString(R.string.lbl_unknown_host), true);
         }
 
         kh.set("sync.last", new Date());
@@ -53,9 +56,9 @@ public class DownloadService extends NoticeService {
     private void download(String url) throws IOException {
         String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
         CacheFile cf = new CacheFile(this, name);
-
+        WidgetHelper wh = new WidgetHelper(this);
         if (cf.exists()) {
-            toast(getString(R.string.lbl_already_exist, name));
+            wh.toast(getString(R.string.lbl_already_exist, name), true);
             return;
         }
 
@@ -71,7 +74,7 @@ public class DownloadService extends NoticeService {
                 fos.write(buf, 0, len);
             }
             fos.flush();
-            toast(getString(R.string.lbl_download_success, name));
+            wh.toast(getString(R.string.lbl_download_success, name), true);
             Log.d("下载完成", name);
         } catch (IOException e) {
             Log.e("下载", name, e);
@@ -82,22 +85,24 @@ public class DownloadService extends NoticeService {
 
 
     private void onDropbox(Intent intent) {
+        WidgetHelper wh = new WidgetHelper(this);
         try {
             Document doc = Jsoup.connect(Config.DROPBOX_URL).get();
             Elements links = doc.select("a.filename-link");
             for (Element el : links) {
                 download(Jsoup.connect(el.attr("href")).get().select("a#default_content_download_button").get(0).attr("href"));
             }
-            notification(intent, getString(R.string.lbl_download_complete, links.size()));
+            wh.notification(intent, getString(R.string.lbl_download_complete, links.size()));
         } catch (IOException e) {
             Log.e("下载", "IO", e);
-            notification(intent, getString(R.string.lbl_download_error, e.getMessage()));
+            wh.notification(intent, getString(R.string.lbl_download_error, e.getMessage()));
         }
 
     }
 
     private void onBaiduyun() {
-        toast(getString(R.string.lbl_no_valid_host));
+        WidgetHelper wh = new WidgetHelper(this);
+        wh.toast(getString(R.string.lbl_no_valid_host), true);
     }
 
 

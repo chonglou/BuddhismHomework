@@ -2,8 +2,14 @@ package com.odong.buddhismhomework.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
@@ -27,16 +34,44 @@ import java.util.Map;
  * Created by flamen on 15-2-20.
  */
 public class WidgetHelper {
-    public WidgetHelper(Activity context) {
+    public WidgetHelper(Context context) {
         this.context = context;
     }
 
+    public void toast(final String msg, boolean back) {
+        if (back) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void notification(Intent intent, String msg) {
+        PendingIntent pd = PendingIntent.getActivity(context, 0, intent, 0);
+        Notification.Builder nf = new Notification.Builder(context)
+                .setContentText(msg)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentIntent(pd)
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL);
+
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(0, nf.build());
+    }
 
     public interface BookListCallback {
         boolean run(SimpleAdapter adapter, int position, List<Map<String, String>> items);
     }
 
     public void initTextViewFont(int rid) {
+        Activity context = (Activity) this.context;
         Float size = new KvHelper(context).get("book.font.size", Float.class, null);
         if (size != null) {
             ((TextView) context.findViewById(rid)).setTextSize(size);
@@ -44,6 +79,7 @@ public class WidgetHelper {
     }
 
     public void zoomTextView(int rid, boolean out) {
+        Activity context = (Activity) this.context;
         TextView tv = ((TextView) context.findViewById(rid));
         KvHelper kh = new KvHelper(context);
 
@@ -59,6 +95,8 @@ public class WidgetHelper {
     }
 
     public void initDzjBookList(final List<Dzj> books, final BookListCallback callback) {
+        Activity context = (Activity) this.context;
+
         final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
         for (Dzj d : books) {
             Map<String, String> map = new HashMap<String, String>();
@@ -79,6 +117,7 @@ public class WidgetHelper {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Activity context = (Activity) WidgetHelper.this.context;
                 Intent intent = new Intent(context, DzjBookActivity.class);
                 intent.putExtra("book", new Gson().toJson(books.get(position)));
                 context.startActivity(intent);
@@ -115,5 +154,5 @@ public class WidgetHelper {
         adb.create().show();
     }
 
-    private Activity context;
+    private Context context;
 }

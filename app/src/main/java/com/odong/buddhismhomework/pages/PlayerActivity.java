@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
@@ -22,6 +21,7 @@ import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.StringHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -152,7 +152,8 @@ public class PlayerActivity extends Activity {
                     adb.create().show();
                 }
             } else {
-                Toast.makeText(this, getString(R.string.lbl_file_not_exist, book.getMp3()), Toast.LENGTH_SHORT).show();
+                new WidgetHelper(PlayerActivity.this).toast(getString(R.string.lbl_file_not_exist, book.getMp3()), false);
+
             }
         }
 
