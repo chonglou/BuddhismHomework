@@ -44,6 +44,7 @@
     <string name="title_dzj">大藏经</string>
     <string name="title_settings">参数设置</string>
 
+    <string name="lbl_alarm_homework">该做功课啦！！！</string>
     <string name="lbl_null">无</string>
     <string name="lbl_never">从未</string>
     <string name="lbl_hint_search">此处输入进行搜索</string>

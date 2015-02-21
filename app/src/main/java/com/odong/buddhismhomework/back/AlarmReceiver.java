@@ -17,7 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         PendingIntent pd = PendingIntent.getActivity(context, 0, intent, 0);
         Notification.Builder nf = new Notification.Builder(context)
-                .setContentText("闹钟")
+                .setContentText(context.getString(R.string.lbl_alarm_homework))
                 .setContentTitle(context.getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentIntent(pd)
