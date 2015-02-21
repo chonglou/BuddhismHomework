@@ -1,6 +1,12 @@
 package com.odong.buddhismhomework.utils;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+
+import com.odong.buddhismhomework.back.AlarmReceiver;
+import com.odong.buddhismhomework.models.Calendar;
 
 /**
  * Created by flamen on 15-2-20.
@@ -11,8 +17,30 @@ public class AlarmHelper {
     }
 
     public void resetAlarms() {
+        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
         KvHelper kv = new KvHelper(context);
-        //Calendar cm = kv.get("")
+        for (String k : new String[]{"homework.evening.cal", "homework.morning.cal"}) {
+            Calendar ca = kv.get(k, Calendar.class, new Calendar());
+            PendingIntent pi = getIntent(k);
+            if (ca.isEnable()) {
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                cal.set(java.util.Calendar.HOUR_OF_DAY, ca.getHour());
+                cal.set(java.util.Calendar.MINUTE, ca.getMinute());
+                alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        cal.getTimeInMillis(),
+                        AlarmManager.INTERVAL_DAY,
+                        pi);
+            } else {
+                alarm.cancel(pi);
+            }
+        }
+    }
+
+    private PendingIntent getIntent(String name) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("name", name);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     private Context context;
