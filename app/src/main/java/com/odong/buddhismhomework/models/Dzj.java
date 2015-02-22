@@ -6,6 +6,10 @@ import java.io.Serializable;
  * Created by flamen on 15-2-19.
  */
 public class Dzj implements Serializable {
+    public String getScrollId() {
+        return "scroll://dzj/" + id;
+    }
+
     @Override
     public String toString() {
         return "Dzj{" +

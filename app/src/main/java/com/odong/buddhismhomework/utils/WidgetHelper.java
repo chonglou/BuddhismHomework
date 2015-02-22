@@ -28,7 +28,6 @@ import com.odong.buddhismhomework.pages.reading.ShowActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,22 +42,6 @@ public class WidgetHelper {
         this.context = context;
     }
 
-
-    public String readFile(InputStream fis, long offset, int size) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-        br.skip(offset);
-        for (int i = 0; i < size; i++) {
-            String line = br.readLine();
-            if (line == null) {
-                break;
-            }
-            sb.append(line);
-            sb.append("\n");
-        }
-        br.close();
-        return sb.toString();
-    }
 
     public String readFile(Integer... files) throws IOException {
         StringBuilder sb = new StringBuilder();

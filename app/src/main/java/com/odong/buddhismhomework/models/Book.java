@@ -12,6 +12,9 @@ public class Book implements Serializable {
         files = new ArrayList<Integer>();
     }
 
+    public String getScrollId() {
+        return "scroll://book/" + name;
+    }
 
     @Override
     public String toString() {

@@ -63,6 +63,8 @@
     <string name="lbl_error_download">下载数据出错</string>
     <string name="lbl_error_import">导入数据出错</string>
     <string name="lbl_error_unzip">解压缩[%s.zip]出错</string>
+    <string name="lbl_error_first_page">已经是第一页</string>
+    <string name="lbl_error_last_page">已经是最后一页</string>
 
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
     <string name="dlg_download">下载资源文件会耗费流量，建议在WLAN连接下进行，确定要继续？</string>

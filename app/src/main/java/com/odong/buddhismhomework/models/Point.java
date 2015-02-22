@@ -7,8 +7,25 @@ public class Point {
 
     private int x;
     private int y;
+    private boolean last;
+    private boolean first;
     private int page;
-    private long offset;
+
+    public boolean isLast() {
+        return last;
+    }
+
+    public void setLast(boolean last) {
+        this.last = last;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
+
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
 
     public int getPage() {
         return page;
@@ -16,14 +33,6 @@ public class Point {
 
     public void setPage(int page) {
         this.page = page;
-    }
-
-    public long getOffset() {
-        return offset;
-    }
-
-    public void setOffset(long offset) {
-        this.offset = offset;
     }
 
     public int getX() {
