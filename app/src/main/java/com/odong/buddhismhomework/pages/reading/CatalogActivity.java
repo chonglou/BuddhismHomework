@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework.pages;
+package com.odong.buddhismhomework.pages.reading;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by flamen on 15-2-19.
  */
-public class DzjListActivity extends Activity {
+public class CatalogActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +50,7 @@ public class DzjListActivity extends Activity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_search:
-                new WidgetHelper(DzjListActivity.this).showSearchDialog();
+                new WidgetHelper(CatalogActivity.this).showSearchDialog();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -74,7 +74,7 @@ public class DzjListActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(DzjListActivity.this, DzjListActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, CatalogActivity.class);
                 intent.putExtra("type", types.get(position));
                 startActivity(intent);
             }

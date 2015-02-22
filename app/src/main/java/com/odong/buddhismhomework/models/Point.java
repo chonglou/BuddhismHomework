@@ -7,13 +7,22 @@ public class Point {
 
     private int x;
     private int y;
-    private int offset;
+    private int page;
+    private long offset;
 
-    public int getOffset() {
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public long getOffset() {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset(long offset) {
         this.offset = offset;
     }
 

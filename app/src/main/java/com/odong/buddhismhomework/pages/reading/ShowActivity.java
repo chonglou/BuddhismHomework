@@ -1,8 +1,9 @@
-package com.odong.buddhismhomework.pages;
+package com.odong.buddhismhomework.pages.reading;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
@@ -11,41 +12,42 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.back.IndexService;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Index;
 import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
 /**
  * Created by flamen on 15-2-19.
  */
-public class DzjBookActivity extends Activity {
+public class ShowActivity extends Activity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dzj);
+        setContentView(R.layout.activity_book);
         getActionBar().setIcon(R.drawable.ic_dzj);
 
         book = new Gson().fromJson(getIntent().getStringExtra("book"), Dzj.class);
         setTitle(book.getTitle());
 
-        ((TextView) findViewById(R.id.tv_dzj_content)).setMovementMethod(new ScrollingMovementMethod());
-
-
-        WidgetHelper wh = new WidgetHelper(this);
-        wh.initTextViewFont(R.id.tv_dzj_content);
         initTextView();
+        initIndex();
 
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dzj_book, menu);
+        getMenuInflater().inflate(R.menu.menu_book, menu);
         return true;
     }
 
@@ -76,10 +78,10 @@ public class DzjBookActivity extends Activity {
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DwDbHelper ddh = new DwDbHelper(DzjBookActivity.this);
+                        DwDbHelper ddh = new DwDbHelper(ShowActivity.this);
                         ddh.setDzjFav(book.getId(), true);
                         ddh.close();
-                        new WidgetHelper(DzjBookActivity.this).toast(getString(R.string.lbl_success), false);
+                        new WidgetHelper(ShowActivity.this).toast(getString(R.string.lbl_success), false);
                     }
                 });
                 adb.setNegativeButton(android.R.string.no, null);
@@ -92,17 +94,34 @@ public class DzjBookActivity extends Activity {
     }
 
     private void initTextView() {
+        KvHelper kh = new KvHelper(this);
+        WidgetHelper wh = new WidgetHelper(this);
+
+        Point p = kh.get("scroll://dzj/" + book.getName(), Point.class, new Point());
         TextView tv = (TextView) findViewById(R.id.tv_dzj_content);
-        String content = new CacheFile(this, book.getName()).read();
-        if (content == null) {
+        tv.setMovementMethod(new ScrollingMovementMethod());
+
+
+        try {
+            tv.setText(wh.readFile(new FileInputStream(new CacheFile(this, book.getName()).getRealFile()), p.getOffset(), IndexService.LINES));
+        } catch (IOException e) {
             tv.setText(R.string.lbl_empty);
-        } else {
-            tv.setText(content);
         }
 
-
-        Point p = new KvHelper(this).get("scroll://dzj/" + book.getName(), Point.class, new Point());
         tv.scrollTo(p.getX(), p.getY());
+        wh.initTextViewFont(R.id.tv_dzj_content);
+
+
+    }
+
+    private void initIndex() {
+        Index index = new KvHelper(this).get(IndexService.type2name("dzj", book.getName()), Index.class, null);
+        if (index == null) {
+            Intent intent = new Intent(ShowActivity.this, IndexService.class);
+            intent.putExtra("type", "dzj");
+            intent.putExtra("file", book.getName());
+            startService(intent);
+        }
     }
 
     private Dzj book;

@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework.pages;
+package com.odong.buddhismhomework.pages.audio;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * Created by flamen on 15-2-8.
  */
-public class BooksActivity extends Activity {
+public class SectionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +64,7 @@ public class BooksActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(BooksActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(SectionActivity.this, PlayerActivity.class);
                 Book book = books.get(position);
                 intent.putExtra("book", new Gson().toJson(book));
                 intent.putExtra("type", type);
@@ -77,14 +77,14 @@ public class BooksActivity extends Activity {
                 final Book book = books.get(position);
                 if (book.getMp3() != null) {
 
-                    AlertDialog.Builder adb = new AlertDialog.Builder(BooksActivity.this);
+                    AlertDialog.Builder adb = new AlertDialog.Builder(SectionActivity.this);
                     adb.setMessage(R.string.lbl_remove_item_cache);
                     adb.setTitle(R.string.lbl_are_you_sure);
 
                     adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new CacheFile(BooksActivity.this, book.getMp3()).remove();
+                            new CacheFile(SectionActivity.this, book.getMp3()).remove();
 
 
                         }

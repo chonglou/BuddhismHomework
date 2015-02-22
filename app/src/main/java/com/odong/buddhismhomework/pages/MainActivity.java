@@ -13,6 +13,9 @@ import android.widget.GridView;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.back.DownloadService;
 import com.odong.buddhismhomework.models.NavIcon;
+import com.odong.buddhismhomework.pages.audio.SectionActivity;
+import com.odong.buddhismhomework.pages.reading.CatalogActivity;
+import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
 import com.odong.buddhismhomework.widgets.NavIconAdapter;
 
 import java.util.ArrayList;
@@ -98,7 +101,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_courses, R.drawable.ic_courses, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BooksActivity.class);
+                Intent intent = new Intent(MainActivity.this, SectionActivity.class);
                 intent.putExtra("type", "courses");
                 startActivity(intent);
             }
@@ -106,7 +109,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BooksActivity.class);
+                Intent intent = new Intent(MainActivity.this, SectionActivity.class);
                 intent.putExtra("type", "books");
                 startActivity(intent);
             }
@@ -114,7 +117,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_musics, R.drawable.ic_musics, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BooksActivity.class);
+                Intent intent = new Intent(MainActivity.this, SectionActivity.class);
                 intent.putExtra("type", "musics");
                 startActivity(intent);
             }
@@ -123,7 +126,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_videos, R.drawable.ic_videos, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, VideoBooksActivity.class));
+                startActivity(new Intent(MainActivity.this, VideoActivity.class));
             }
         }));
         icons.add(new NavIcon(R.string.title_dict, R.drawable.ic_dict, new View.OnClickListener() {
@@ -135,7 +138,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, DzjListActivity.class));
+                startActivity(new Intent(MainActivity.this, CatalogActivity.class));
             }
         }));
 

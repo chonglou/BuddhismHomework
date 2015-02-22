@@ -7,6 +7,18 @@
         android:orderInCategory="80"
         android:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_page_previous"
+        android:title="@string/action_page_previous"
+        android:icon="@android:drawable/ic_media_previous"
+        android:orderInCategory="80"
+        android:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_page_next"
+        android:title="@string/action_page_next"
+        android:icon="@android:drawable/ic_media_next"
+        android:orderInCategory="80"
+        android:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_zoom_out"
         android:title="@string/action_zoom_out"
         android:icon="@drawable/ic_zoom_out"

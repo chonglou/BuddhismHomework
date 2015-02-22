@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework.pages;
+package com.odong.buddhismhomework.pages.audio;
 
 import android.app.Activity;
 import android.app.AlertDialog;

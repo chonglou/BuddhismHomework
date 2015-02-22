@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -22,11 +23,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Dzj;
-import com.odong.buddhismhomework.pages.DzjBookActivity;
-import com.odong.buddhismhomework.pages.SearchActivity;
+import com.odong.buddhismhomework.pages.reading.SearchActivity;
+import com.odong.buddhismhomework.pages.reading.ShowActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,21 @@ public class WidgetHelper {
         this.context = context;
     }
 
+    public String readFile(InputStream fis, long offset, int size) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+        br.skip(offset);
+        for (int i = 0; i < size; i++) {
+            String line = br.readLine();
+            if (line == null) {
+                break;
+            }
+            sb.append(line);
+            sb.append("\n");
+        }
+        br.close();
+        return sb.toString();
+    }
 
     public String readFile(Integer... files) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -94,10 +111,8 @@ public class WidgetHelper {
 
     public void initTextViewFont(int rid) {
         Activity context = (Activity) this.context;
-        Float size = new KvHelper(context).get("book.font.size", Float.class, null);
-        if (size != null) {
-            ((TextView) context.findViewById(rid)).setTextSize(size);
-        }
+        float size = new KvHelper(context).get("book.font.size", Float.class, 20.0f);
+        ((TextView) context.findViewById(rid)).setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
     public void zoomTextView(int rid, boolean out) {
@@ -140,7 +155,7 @@ public class WidgetHelper {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Activity context = (Activity) WidgetHelper.this.context;
-                Intent intent = new Intent(context, DzjBookActivity.class);
+                Intent intent = new Intent(context, ShowActivity.class);
                 intent.putExtra("book", new Gson().toJson(books.get(position)));
                 context.startActivity(intent);
             }

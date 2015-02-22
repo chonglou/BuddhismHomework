@@ -26,20 +26,21 @@
             android:name=".pages.SettingsActivity"
             android:label="@string/title_settings"/>
 
-        <activity android:name=".pages.BooksActivity" />
-        <activity android:name=".pages.PlayerActivity" />
+        <activity android:name=".pages.audio.SectionActivity" />
+        <activity android:name=".pages.audio.PlayerActivity" />
         <activity android:name=".pages.SittingActivity" />
         <activity android:name=".pages.HomeworkActivity" />
-        <activity android:name=".pages.VideoBooksActivity"/>
-        <activity android:name=".pages.VideoListActivity"/>
+        <activity android:name=".pages.VideoActivity"/>
+        <activity android:name=".pages.video.SectionActivity"/>
         <activity android:name=".pages.DictActivity"/>
-        <activity android:name=".pages.DzjBookActivity"/>
-        <activity android:name=".pages.DzjListActivity"/>
-        <activity android:name=".pages.FavoritesActivity"/>
-        <activity android:name=".pages.SearchActivity"/>
+        <activity android:name=".pages.reading.ShowActivity"/>
+        <activity android:name=".pages.reading.CatalogActivity"/>
+        <activity android:name=".pages.reading.FavoritesActivity"/>
+        <activity android:name=".pages.reading.SearchActivity"/>
 
         <service android:exported="false" android:name=".back.DownloadService"/>
         <service android:exported="false" android:name=".back.ImportService"/>
+        <service android:exported="false" android:name=".back.IndexService"/>
 
         <receiver android:name=".back.BootReceiver" android:enabled="true">
             <intent-filter>
