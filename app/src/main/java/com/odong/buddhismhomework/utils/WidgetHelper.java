@@ -43,6 +43,7 @@ public class WidgetHelper {
         this.context = context;
     }
 
+
     public String readFile(InputStream fis, long offset, int size) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(fis));
@@ -156,7 +157,8 @@ public class WidgetHelper {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Activity context = (Activity) WidgetHelper.this.context;
                 Intent intent = new Intent(context, ShowActivity.class);
-                intent.putExtra("book", new Gson().toJson(books.get(position)));
+                intent.putExtra("file", new Gson().toJson(books.get(position)));
+                intent.putExtra("type", "dzj");
                 context.startActivity(intent);
             }
         });

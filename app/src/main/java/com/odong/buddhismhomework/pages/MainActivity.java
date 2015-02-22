@@ -109,8 +109,8 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SectionActivity.class);
-                intent.putExtra("type", "books");
+                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                intent.putExtra("type", "book");
                 startActivity(intent);
             }
         }));
@@ -138,7 +138,9 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CatalogActivity.class));
+                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                intent.putExtra("type", "dzj");
+                startActivity(intent);
             }
         }));
 
