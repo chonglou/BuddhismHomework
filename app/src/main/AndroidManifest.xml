@@ -27,7 +27,9 @@
             android:label="@string/title_settings" />
 
         <activity android:name=".pages.audio.SectionActivity" />
-        <activity android:name=".pages.audio.PlayerActivity" />
+        <activity
+            android:name=".pages.audio.PlayerActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".pages.SittingActivity"
             android:screenOrientation="portrait" />
