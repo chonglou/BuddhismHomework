@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.models.Point;
+import com.odong.buddhismhomework.models.Pager;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -53,7 +53,7 @@ public class PlayerActivity extends Activity {
     public void onBackPressed() {
         if (book.getMp3() == null) {
             TextView tv = (TextView) findViewById(R.id.tv_player_content);
-            Point p = new Point();
+            Pager p = new Pager();
             p.setX(tv.getScrollX());
             p.setY(tv.getScrollY());
 
@@ -181,7 +181,7 @@ public class PlayerActivity extends Activity {
         }
 
 
-        Point p = new KvHelper(this).get("scroll://book/" + book.getName(), Point.class, new Point());
+        Pager p = new KvHelper(this).get("scroll://book/" + book.getName(), Pager.class, new Pager());
         tv.scrollTo(p.getX(), p.getY());
     }
 
