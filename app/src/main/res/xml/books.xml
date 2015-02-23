@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <books>
     <entry
-        name="金刚般若波罗蜜经"
-        author="姚秦三藏法师鸠摩罗什译">
+        name="金剛般若波羅蜜經"
+        author="姚秦天竺三藏鳩摩羅什譯">
         jingangboreboluomijing
     </entry>
     <entry
-        name="般若波罗密多心经"
-        author="唐三藏法师玄奘译">
+        name="般若波羅蜜多心經"
+        author="唐三藏法師玄奘譯">
         boreboluomiduoxinjing
     </entry>
     <entry
-        name="大方广圆觉陀罗尼经"
-        author="唐佛陀多罗译">
-        dafangguangyuanjuetuoluonijing
+        name="大方廣圓覺修多羅了義經"
+        author="大唐、罽賓三藏佛陀多羅譯">
+        dafangguangyuanjuexiuduoluoliaoyijing
     </entry>
     <entry
-        name="大佛顶首楞严经"
-        author="唐天竺沙门般剌密帝译">
-        dafodingshoulengyanjing
+        name="楞伽阿跋多羅寶經"
+        author="宋天竺三藏求那跋陀羅譯">
+        lengqieabaduoluobaojing
     </entry>
     <entry
-        name="大乘入楞伽经"
-        author="唐代于阗国实叉难陀译">
-        dashengrulengqiejing
+        name="大佛頂如來密因修證了義諸菩薩萬行首楞嚴經"
+        author="大唐神龍元年龍集乙巳五月己卯朔二十三日辛丑中天竺沙門般剌蜜帝於廣州制止道場譯出">
+        dafodingrulaimiyinxiuzhengliaoyizhupusawanxingshoulengyanjing
     </entry>
     <entry
-        name="维摩诘所说经"
-        author="后秦鸠摩罗什译">
+        name="維摩詰所說經"
+        author="姚秦三藏鳩摩羅什譯">
         weimojiesuoshuojing
     </entry>
     <entry
-        name="六祖大师法宝坛经"
-        author="元宗宝编">
+        name="六祖大師法寶壇經"
+        author="風旛報恩光孝禪寺住持嗣祖比丘宗寶編">
         liuzudashifabaotanjing
     </entry>
     <entry
-        name="妙法莲华经"
-        author="后秦龟兹国三藏法师鸠摩罗什奉诏译">
+        name="妙法蓮華經"
+        author="後秦龜茲國三藏法師鳩摩羅什奉詔譯">
         miaofalianhuajing
+    </entry>
+    <entry
+        name="大方廣佛華嚴經"
+        author="于闐國三藏實叉難陀奉制譯">
+        dafangguangfohuayanjing
     </entry>
 </books>

@@ -106,14 +106,14 @@ public class ShowActivity extends Activity {
                 if (pager.isLast()) {
                     wh.toast(getString(R.string.lbl_error_last_page), false);
                 } else {
-                    goPage(pager.getCur() - 1);
+                    goPage(pager.getCur() + 1);
                 }
                 break;
             case R.id.action_page_previous:
                 if (pager.isFirst()) {
                     wh.toast(getString(R.string.lbl_error_first_page), false);
                 } else {
-                    goPage(pager.getCur() + 1);
+                    goPage(pager.getCur() - 1);
                 }
                 break;
             case R.id.action_page_goto:
