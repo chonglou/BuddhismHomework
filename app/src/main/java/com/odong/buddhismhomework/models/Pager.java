@@ -9,8 +9,8 @@ public class Pager {
         return len > 0;
     }
 
-    public int getSize(){
-        return (len/LINES)-1;
+    public int getSize() {
+        return (len / LINES) - 1;
     }
 
     public boolean isFirst() {

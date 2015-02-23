@@ -215,6 +215,15 @@ public class ShowActivity extends Activity {
         }
         tv.scrollTo(pager.getX(), pager.getY());
 
+        KvHelper kh = new KvHelper(this);
+        switch (type) {
+            case "book":
+                kh.set(((Book) book).getScrollId(), pager);
+                break;
+            case "dzj":
+                kh.set(((Dzj) book).getScrollId(), pager);
+                break;
+        }
     }
 
 

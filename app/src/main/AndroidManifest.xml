@@ -4,8 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
 
     <application
@@ -24,30 +24,36 @@
 
         <activity
             android:name=".pages.SettingsActivity"
-            android:label="@string/title_settings"/>
+            android:label="@string/title_settings" />
 
         <activity android:name=".pages.audio.SectionActivity" />
         <activity android:name=".pages.audio.PlayerActivity" />
-        <activity android:name=".pages.SittingActivity" />
+        <activity
+            android:name=".pages.SittingActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".pages.HomeworkActivity" />
-        <activity android:name=".pages.VideoActivity"/>
-        <activity android:name=".pages.video.SectionActivity"/>
-        <activity android:name=".pages.DictActivity"/>
-        <activity android:name=".pages.reading.ShowActivity"/>
-        <activity android:name=".pages.reading.CatalogActivity"/>
-        <activity android:name=".pages.reading.FavoritesActivity"/>
-        <activity android:name=".pages.reading.SearchActivity"/>
+        <activity android:name=".pages.VideoActivity" />
+        <activity android:name=".pages.DictActivity" />
+        <activity android:name=".pages.reading.ShowActivity" />
+        <activity android:name=".pages.reading.CatalogActivity" />
+        <activity android:name=".pages.reading.FavoritesActivity" />
+        <activity android:name=".pages.reading.SearchActivity" />
 
-        <service android:exported="false" android:name=".back.DownloadService"/>
-        <service android:exported="false" android:name=".back.ImportService"/>
-        <service android:exported="false" android:name=".back.IndexService"/>
+        <service
+            android:name=".back.DownloadService"
+            android:exported="false" />
+        <service
+            android:name=".back.ImportService"
+            android:exported="false" />
 
-        <receiver android:name=".back.BootReceiver" android:enabled="true">
+        <receiver
+            android:name=".back.BootReceiver"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".back.AlarmReceiver"/>
+        <receiver android:name=".back.AlarmReceiver" />
     </application>
 
 
