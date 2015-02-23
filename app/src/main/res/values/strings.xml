@@ -5,6 +5,7 @@
     <string name="homework">功课列表</string>
 
 
+    <string name="action_page_goto">跳转</string>
     <string name="action_page_next">下一页</string>
     <string name="action_page_previous">上一页</string>
     <string name="action_zoom_in">缩小</string>
@@ -46,11 +47,13 @@
     <string name="title_dzj">大藏经</string>
     <string name="title_settings">参数设置</string>
 
+    <string name="lbl_goto_page">跳转(共%d页)</string>
     <string name="lbl_cur_page">第%1$d/%2$d页</string>
     <string name="lbl_alarm_homework">该做功课啦！！！</string>
     <string name="lbl_null">无</string>
     <string name="lbl_never">从未</string>
-    <string name="lbl_hint_search">此处输入进行搜索</string>
+    <string name="lbl_hint_search">点击此处输入进行搜索</string>
+    <string name="lbl_hint_goto">点击此处输入页码进行跳转</string>
     <string name="lbl_empty_results">没有找到相关记录</string>
     <string name="lbl_empty">暂无内容，请同步数据。</string>
     <string name="lbl_error_please_input">请输入数据</string>
@@ -66,6 +69,7 @@
     <string name="lbl_error_unzip">解压缩[%s.zip]出错</string>
     <string name="lbl_error_first_page">已经是第一页</string>
     <string name="lbl_error_last_page">已经是最后一页</string>
+    <string name="lbl_error_page_not_valid">页码不正确</string>
 
 
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>

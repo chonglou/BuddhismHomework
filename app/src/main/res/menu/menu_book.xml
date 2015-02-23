@@ -19,6 +19,12 @@
         android:orderInCategory="80"
         android:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_page_goto"
+        android:title="@string/action_page_goto"
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="80"
+        android:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_zoom_out"
         android:title="@string/action_zoom_out"
         android:icon="@drawable/ic_zoom_out"

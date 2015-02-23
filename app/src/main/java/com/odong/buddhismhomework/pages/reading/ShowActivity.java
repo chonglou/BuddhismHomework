@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -97,13 +99,49 @@ public class ShowActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final WidgetHelper wh = new WidgetHelper(ShowActivity.this);
         int id = item.getItemId();
         switch (id) {
             case R.id.action_page_next:
-                doPage(true);
+                if (pager.isLast()) {
+                    wh.toast(getString(R.string.lbl_error_last_page), false);
+                } else {
+                    goPage(pager.getCur() - 1);
+                }
                 break;
             case R.id.action_page_previous:
-                doPage(false);
+                if (pager.isFirst()) {
+                    wh.toast(getString(R.string.lbl_error_first_page), false);
+                } else {
+                    goPage(pager.getCur() + 1);
+                }
+                break;
+            case R.id.action_page_goto:
+                AlertDialog.Builder adbG = new AlertDialog.Builder(ShowActivity.this);
+                adbG.setTitle(getString(R.string.lbl_goto_page, pager.getSize()));
+
+                final EditText pg = new EditText(ShowActivity.this);
+                pg.setInputType(InputType.TYPE_CLASS_NUMBER);
+                pg.setHint(R.string.lbl_hint_goto);
+                adbG.setView(pg);
+                adbG.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        try {
+                            int p = Integer.parseInt(pg.getText().toString().trim());
+                            if (p < 1 || p > pager.getSize()) {
+                                wh.toast(getString(R.string.lbl_error_page_not_valid), false);
+                                return;
+                            }
+                            goPage(p - 1);
+                        } catch (NumberFormatException e) {
+                            wh.toast(getString(R.string.lbl_error_page_not_valid), false);
+                        }
+                    }
+                });
+                adbG.setNegativeButton(android.R.string.no, null);
+                adbG.create().show();
                 break;
             case R.id.action_zoom_in:
                 new WidgetHelper(this).zoomTextView(R.id.tv_book_content, false);
@@ -112,20 +150,20 @@ public class ShowActivity extends Activity {
                 new WidgetHelper(this).zoomTextView(R.id.tv_book_content, true);
                 break;
             case R.id.action_add_to_favorites:
-                AlertDialog.Builder adb = new AlertDialog.Builder(this);
-                adb.setTitle(R.string.action_add_to_favorites);
-                adb.setMessage(R.string.lbl_are_you_sure);
-                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                AlertDialog.Builder adbF = new AlertDialog.Builder(this);
+                adbF.setTitle(R.string.action_add_to_favorites);
+                adbF.setMessage(R.string.lbl_are_you_sure);
+                adbF.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DwDbHelper ddh = new DwDbHelper(ShowActivity.this);
                         ddh.setDzjFav(((Dzj) book).getId(), true);
                         ddh.close();
-                        new WidgetHelper(ShowActivity.this).toast(getString(R.string.lbl_success), false);
+                        wh.toast(getString(R.string.lbl_success), false);
                     }
                 });
-                adb.setNegativeButton(android.R.string.no, null);
-                adb.create().show();
+                adbF.setNegativeButton(android.R.string.no, null);
+                adbF.create().show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -133,32 +171,18 @@ public class ShowActivity extends Activity {
         return true;
     }
 
-    private void doPage(boolean next) {
+
+    private void goPage(int page) {
         WidgetHelper wh = new WidgetHelper(this);
-        int p;
-        if (next) {
-            if (pager.isLast()) {
-                wh.toast(getString(R.string.lbl_error_last_page), false);
-                return;
-            }
-            p = pager.getCur() + 1;
-        } else {
-            if (pager.isFirst()) {
-                wh.toast(getString(R.string.lbl_error_first_page), false);
-                return;
-            }
-            p = pager.getCur() - 1;
-        }
         try {
-            read(p, true);
+            read(page, true);
             pager.setX(0);
             pager.setY(0);
             Log.d("翻页", "" + pager.getCur());
             wh.toast(getString(R.string.lbl_cur_page, pager.getCur() + 1, pager.getSize()), false);
         } catch (IOException e) {
-            Log.e("翻页", "previous", e);
+            Log.e("翻页", "异常", e);
         }
-
     }
 
     private void read(int page, boolean top) throws IOException {
