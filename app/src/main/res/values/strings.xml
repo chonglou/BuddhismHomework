@@ -70,7 +70,7 @@
 
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
     <string name="dlg_download">下载资源文件会耗费流量，建议在WLAN连接下进行，请耐心等待，确定要继续？</string>
-    <string name="dlg_import">导入数据会耗费时间比较长(7\-10分钟)，请耐心等待，确定要继续？</string>
+    <string name="dlg_import">导入数据会耗费时间比较长(7到10分钟)，请耐心等待，确定要继续？</string>
 
 
     <string name="lbl_search_result">搜索[%s]的结果</string>
