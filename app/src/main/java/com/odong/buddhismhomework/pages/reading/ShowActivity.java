@@ -154,7 +154,7 @@ public class ShowActivity extends Activity {
             pager.setX(0);
             pager.setY(0);
             Log.d("翻页", "" + pager.getCur());
-            wh.toast(getString(R.string.lbl_cur_page, pager.getCur() + 1), false);
+            wh.toast(getString(R.string.lbl_cur_page, pager.getCur() + 1, pager.getSize()), false);
         } catch (IOException e) {
             Log.e("翻页", "previous", e);
         }

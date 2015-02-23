@@ -10,7 +10,7 @@ public class Pager {
     }
 
     public int getSize() {
-        return (len / LINES) - 1;
+        return len / LINES;
     }
 
     public boolean isFirst() {
@@ -18,7 +18,7 @@ public class Pager {
     }
 
     public boolean isLast() {
-        return cur >= getSize();
+        return cur >= getSize() - 1;
     }
 
     private int x;
