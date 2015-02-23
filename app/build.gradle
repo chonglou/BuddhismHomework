@@ -8,8 +8,8 @@ android {
         applicationId "com.odong.buddhismhomework"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 11
-        versionName "v1.10"
+        versionCode 12
+        versionName "v1.11"
     }
     buildTypes {
         release {
