@@ -9,13 +9,13 @@
     <item
         android:id="@+id/action_page_previous"
         android:title="@string/action_page_previous"
-        android:icon="@android:drawable/ic_media_previous"
+        android:icon="@drawable/ic_previous"
         android:orderInCategory="80"
         android:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_page_next"
         android:title="@string/action_page_next"
-        android:icon="@android:drawable/ic_media_next"
+        android:icon="@drawable/ic_next"
         android:orderInCategory="80"
         android:showAsAction="ifRoom" />
     <item
