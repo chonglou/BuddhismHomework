@@ -2,7 +2,9 @@ package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
 
@@ -17,6 +19,32 @@ public class WebActivity extends Activity {
         setTitle(R.string.title_ddc);
         getActionBar().setIcon(R.drawable.ic_ddc);
 
-        ((WebView) findViewById(R.id.wv_content)).loadUrl(getIntent().getStringExtra("url"));
+        initWebView(getIntent().getBooleanExtra("js", true));
+
+    }
+
+    private void initWebView(boolean js) {
+        WebView wv = (WebView) findViewById(R.id.wv_content);
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        wv.getSettings().setJavaScriptEnabled(js);
+        wv.getSettings().setDomStorageEnabled(true);
+        wv.loadUrl(getIntent().getStringExtra("url"));
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        WebView wv = (WebView) findViewById(R.id.wv_content);
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()) {
+            wv.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

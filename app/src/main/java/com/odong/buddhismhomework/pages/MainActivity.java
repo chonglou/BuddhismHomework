@@ -148,6 +148,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WebActivity.class);
                 intent.putExtra("url", "http://ddc.shengyen.org/mobile/");
+                //intent.putExtra("js", false);
+                //intent.putExtra("url", "http://www.google.com");
                 startActivity(intent);
             }
         }));
