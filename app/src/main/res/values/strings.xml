@@ -45,6 +45,7 @@
     <string name="title_videos">讲座</string>
     <string name="title_dict">字典</string>
     <string name="title_dzj">大藏经</string>
+    <string name="title_ddc">法鼓全集</string>
     <string name="title_settings">参数设置</string>
 
     <string name="lbl_goto_page">跳转(共%d页)</string>

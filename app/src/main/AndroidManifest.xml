@@ -36,6 +36,7 @@
         <activity android:name=".pages.HomeworkActivity" />
         <activity android:name=".pages.VideoActivity" />
         <activity android:name=".pages.DictActivity" />
+        <activity android:name=".pages.WebActivity" />
         <activity android:name=".pages.reading.ShowActivity" />
         <activity android:name=".pages.reading.CatalogActivity" />
         <activity android:name=".pages.reading.FavoritesActivity" />

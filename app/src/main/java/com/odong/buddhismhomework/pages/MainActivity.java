@@ -143,6 +143,14 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         }));
+        icons.add(new NavIcon(R.string.title_ddc, R.drawable.ic_ddc, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WebActivity.class);
+                intent.putExtra("url", "http://ddc.shengyen.org/mobile/");
+                startActivity(intent);
+            }
+        }));
 
 
         ((GridView) findViewById(R.id.gv_main_icons)).setAdapter(new NavIconAdapter(this, icons));
