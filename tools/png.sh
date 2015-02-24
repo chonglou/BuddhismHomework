@@ -2,7 +2,7 @@
 
 TARGET=../app/src/main/res/drawable
 
-for i in books courses launcher morning musics evening sitting videos dict dzj zoom_in zoom_out action_favorite previous next ddc home
+for i in books courses launcher morning musics evening sitting videos dict dzj zoom_in zoom_out action_favorite previous next ddc home help
 do
 	j=ic_$i.png
 	if [ -f images/$j ]

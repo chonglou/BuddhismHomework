@@ -148,9 +148,16 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WebActivity.class);
                 intent.putExtra("url", "http://ddc.shengyen.org/mobile/");
-                //intent.putExtra("js", false);
-                //intent.putExtra("url", "http://www.google.com");
                 startActivity(intent);
+            }
+        }));
+        icons.add(new NavIcon(R.string.title_help, R.drawable.ic_help, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder adbAboutMe = new AlertDialog.Builder(MainActivity.this);
+                adbAboutMe.setMessage(R.string.lbl_help).setTitle(R.string.action_help);
+                adbAboutMe.setPositiveButton(android.R.string.ok, null);
+                adbAboutMe.create().show();
             }
         }));
 

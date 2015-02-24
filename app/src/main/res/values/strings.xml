@@ -18,6 +18,7 @@
     <string name="action_settings">参数设置</string>
     <string name="action_about_me">关于我们</string>
     <string name="action_home">返回主页</string>
+    <string name="action_help">帮助文档</string>
 
     <string name="btn_play">播放</string>
     <string name="btn_pause">暂停</string>
@@ -48,6 +49,7 @@
     <string name="title_dzj">大藏经</string>
     <string name="title_ddc">法鼓全集</string>
     <string name="title_settings">参数设置</string>
+    <string name="title_help">使用帮助</string>
 
     <string name="lbl_goto_page">跳转(共%d页)</string>
     <string name="lbl_cur_page">第%1$d/%2$d页</string>
@@ -99,6 +101,13 @@
         3: 本软件所有经书来自与互联网，所有音频及视频资源链接均来自于<b>法鼓山信众教育院</b><u>http://dbs.ddm.org.tw/</u>。\n
         4: 感恩<b>法鼓山</b>(<u>https://www.ddm.org.tw/</u>)为推广佛教教育作出的卓越贡献。\n
         5: 请仅用作学习用途，谢谢！
+    </string>
+    <string name="lbl_help">
+        由于APP大小所限，许多第三方的资源并未直接包含，如果您需要使用全部功能（如梵呗、字典查询、大藏经等功能），还需要进行如下操作： \n
+        1： 打开“参数设置”页，点击下载按钮，可以下载数据包，耗时比较长（取决于您当前网速）。\n
+        2： 数据包下载后，如需使用“，还需要打开“参数设置”页，点击导入按钮，耗时约7到15分钟(取决于设备性能)。\n
+        注意：请耐心等待，任务完成后在顶部消息栏会有提醒。\n
+        友情提示，请仅用于学习交流用户，请勿用于任何商业用途！！！\n
     </string>
 
 </resources>
