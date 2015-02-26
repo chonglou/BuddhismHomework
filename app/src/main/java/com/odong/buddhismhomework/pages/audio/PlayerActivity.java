@@ -60,7 +60,7 @@ public class PlayerActivity extends Activity {
             new KvHelper(this).set("scroll://book/" + book.getName(), p);
 
         }
-        if (mp3Player.isPlaying()) {
+        if (mp3Player!=null && mp3Player.isPlaying()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setMessage(R.string.dlg_will_pause);
             adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

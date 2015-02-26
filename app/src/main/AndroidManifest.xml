@@ -43,20 +43,20 @@
         <activity android:name=".pages.reading.SearchActivity" />
 
         <service
-            android:name=".back.DownloadService"
+            android:name=".services.DownloadService"
             android:exported="false" />
         <service
-            android:name=".back.ImportService"
+            android:name=".services.ImportService"
             android:exported="false" />
 
         <receiver
-            android:name=".back.BootReceiver"
+            android:name=".receivers.BootReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".back.AlarmReceiver" />
+        <receiver android:name=".receivers.AlarmReceiver" />
     </application>
 
 
