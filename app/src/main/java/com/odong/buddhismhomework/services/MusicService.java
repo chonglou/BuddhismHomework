@@ -39,7 +39,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.pause();
     }
 
-    public void play() {
+    public void play(){
         player.start();
     }
 

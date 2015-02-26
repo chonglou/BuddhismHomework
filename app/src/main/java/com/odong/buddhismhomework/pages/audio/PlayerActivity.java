@@ -2,14 +2,11 @@ package com.odong.buddhismhomework.pages.audio;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothClass;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,30 +44,12 @@ public class PlayerActivity extends Activity {
 
         book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
         setTitle(book.getName());
-        receiver = new MusicIntentReceiver();
 
 
         ((TextView) findViewById(R.id.tv_player_content)).setMovementMethod(new ScrollingMovementMethod());
 
         initTextView();
         initMp3View();
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        registerReceiver(receiver, filter);
-
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(receiver);
-        super.onPause();
     }
 
     @Override
@@ -199,50 +178,26 @@ public class PlayerActivity extends Activity {
         }
     };
 
-
-    private MusicService musicService;
-    private Intent musicIntent;
-    private boolean isPaused = false;
-    private MusicIntentReceiver receiver;
-
     public class MusicIntentReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean pause = false;
-            if (!new KvHelper(context).get("mp3.earphone", Boolean.class, false)) {
-                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-                    int state = intent.getIntExtra("state", -1);
-                    switch (state) {
-                        case 0:
-                            Log.d("Player", "耳机拔出");
-                            pause = true;
-                            break;
-                        case 1:
-                            Log.d("Player", "耳机接入");
-                            break;
-                        default:
-                            Log.d("Player", "I have no idea what the headset state is");
-                    }
-                } else if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
-                    Log.d("Player", "Bluetooth low level device disconnect requested");
-                    BluetoothDevice btDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if (btDevice.getBluetoothClass().getMajorDeviceClass() == BluetoothClass.Device.Major.AUDIO_VIDEO) {
-                        Log.d("Player", "拔出蓝牙耳机");
-                        pause = true;
-                    }
+            if (intent.getAction().equals(
+                    android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+                if (!new KvHelper(context).get("mp3.earphone", Boolean.class, false)) {
+                    Log.d("MP3", "播放暂停");
+                    //context.stopService(new Intent(context, MusicService.class));
+                    //stopService()
+                    //musicService.pause();
+                    PlayerActivity.this.musicService.pause();
                 }
-            }
-            if (pause) {
-                if (musicService != null && musicService.isPlaying()) {
-                    musicService.pause();
-                    isPaused = true;
-                }
-            }
 
+            }
         }
-
     }
 
+    private MusicService musicService;
+    private Intent musicIntent;
+    private boolean isPaused = false;
 
 }
