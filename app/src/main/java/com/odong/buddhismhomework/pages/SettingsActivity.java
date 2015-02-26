@@ -13,10 +13,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.models.Calendar;
 import com.odong.buddhismhomework.services.DownloadService;
 import com.odong.buddhismhomework.services.ImportService;
+import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Calendar;
 import com.odong.buddhismhomework.utils.AlarmHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 
@@ -39,7 +39,6 @@ public class SettingsActivity extends Activity {
     private void setTexts() {
         KvHelper kv = new KvHelper(this);
         ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(kv.get("mp3.replay", Boolean.class, false));
-        ((Switch) findViewById(R.id.btn_settings_earphone)).setChecked(kv.get("mp3.earphone", Boolean.class, false));
 
         ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
         ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, kv.get("sync.last", Date.class, null)));

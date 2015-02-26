@@ -33,8 +33,8 @@
     <string name="tv_clocks">从现在开始打坐：</string>
     <string name="tv_last_sync">上次更新：\n%s</string>
     <string name="tv_store_path">数据存储目录：\n%s</string>
-    <string name="tv_replay">循环播放音乐</string>
-    <string name="tv_unplug_earphone">拔出耳机时继续播放</string>
+    <string name="tv_replay">音频循环播放</string>
+    <string name="tv_unplug_earphone">拔出耳机继续播放</string>
     <string name="tv_hosts">下载节点</string>
     <string name="tv_last_import">上次导入:\n%s</string>
 

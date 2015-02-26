@@ -2,14 +2,11 @@ package com.odong.buddhismhomework.pages.audio;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +17,12 @@ import android.widget.ToggleButton;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
+import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Pager;
-import com.odong.buddhismhomework.services.MusicService;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -52,16 +50,6 @@ public class PlayerActivity extends Activity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (musicIntent == null) {
-            musicIntent = new Intent(this, MusicService.class);
-            bindService(musicIntent, musicConnection, Context.BIND_AUTO_CREATE);
-            startService(musicIntent);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if (book.getMp3() == null) {
             TextView tv = (TextView) findViewById(R.id.tv_player_content);
@@ -72,62 +60,115 @@ public class PlayerActivity extends Activity {
             new KvHelper(this).set("scroll://book/" + book.getName(), p);
 
         }
+        if (mp3Player.isPlaying()) {
+            AlertDialog.Builder adb = new AlertDialog.Builder(this);
+            adb.setMessage(R.string.dlg_will_pause);
+            adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mp3Player.stop();
+                    release();
+                    PlayerActivity.this.finish();
+                }
+            });
+            adb.setNegativeButton(android.R.string.no, null);
+            adb.setCancelable(false);
+            adb.create().show();
 
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setMessage(R.string.dlg_will_pause);
-        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                PlayerActivity.this.finish();
-            }
-        });
-        adb.setNegativeButton(android.R.string.no, null);
-        adb.setCancelable(false);
-        adb.create().show();
-
+        } else {
+            release();
+            super.onBackPressed();
+        }
 
     }
 
-    @Override
-    protected void onDestroy() {
-        unbindService(musicConnection);
-        stopService(musicIntent);
-        musicService = null;
-        super.onDestroy();
+    private void release(){
+        mp3Player.release();
+        mp3Player = null;
     }
+
 
     private void initMp3View() {
+        boolean ok = false;
+        if (book.getMp3() != null) {
 
-        findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToggleButton tb = (ToggleButton) v;
-                if (tb.isChecked()) {
-                    musicService.setSong(book.getMp3());
-                    musicService.playSong();
+            final CacheFile cf = new CacheFile(this, book.getMp3());
+            if (cf.exists()) {
 
-                    final SeekBar seeker = (SeekBar) findViewById(R.id.sb_player);
-                    seeker.setProgress(0);
-                    seeker.setClickable(false);
+                try {
 
-                    findViewById(R.id.tv_player_content).scrollTo(0, 0);
-                    durationHandler.postDelayed(new Runnable() {
+                    mp3Player = new MediaPlayer();
+                    mp3Player.setDataSource(new FileInputStream(cf.getRealFile()).getFD());
+                    mp3Player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mp3Player.prepare();
+
+
+                    boolean loop = new KvHelper(this).get("mp3.replay", Boolean.class, false);
+
+                    if (loop) {
+                        mp3Player.setLooping(true);
+                    } else {
+                        mp3Player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                ((ToggleButton) findViewById(R.id.btn_player)).setChecked(false);
+                            }
+                        });
+                    }
+
+
+                    mp3Seeker = (SeekBar) findViewById(R.id.sb_player);
+
+                    mp3Seeker.setProgress(0);
+                    mp3Seeker.setMax(mp3Player.getDuration());
+                    mp3Seeker.setClickable(false);
+
+
+                    findViewById(R.id.btn_player).setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void run() {
-                            if (musicService != null) {
-                                SeekBar seeker = ((SeekBar) findViewById(R.id.sb_player));
-                                seeker.setProgress(musicService.getCurrentPosition());
-                                seeker.setMax(musicService.getDuration());
-                                durationHandler.postDelayed(this, 100);
+                        public void onClick(View v) {
+                            ToggleButton tb = (ToggleButton) v;
+                            if (tb.isChecked()) {
+                                mp3Player.start();
+                                findViewById(R.id.tv_player_content).scrollTo(0, 0);
+                                durationHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mp3Seeker.setProgress(mp3Player.getCurrentPosition());
+                                        durationHandler.postDelayed(this, 100);
+                                    }
+                                }, 100);
+                            } else {
+                                mp3Player.pause();
                             }
                         }
-                    }, 100);
-                } else {
-                    musicService.pauseSong();
+                    });
+                    ok = true;
+                } catch (IOException e) {
+                    Log.e("MP3", "播放", e);
+                    AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                    adb.setMessage(getString(R.string.lbl_file_broken, cf.getName()));
+                    adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cf.remove();
+                            PlayerActivity.this.finish();
+                        }
+                    });
+                    adb.setNegativeButton(android.R.string.no, null);
+                    adb.setCancelable(false);
+                    adb.create().show();
                 }
-            }
-        });
+            } else {
+                new WidgetHelper(PlayerActivity.this).toast(getString(R.string.lbl_file_not_exist, book.getMp3()), false);
 
+            }
+        }
+
+
+        if (!ok) {
+            findViewById(R.id.gl_player_mp3).setVisibility(View.GONE);
+        }
 
     }
 
@@ -153,24 +194,8 @@ public class PlayerActivity extends Activity {
     }
 
 
+    private SeekBar mp3Seeker;
+    private MediaPlayer mp3Player;
     private Book book;
     private Handler durationHandler = new Handler();
-
-    private ServiceConnection musicConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
-            musicService = binder.getService();
-            musicService.setSong(book.getMp3());
-            musicBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            musicBound = false;
-        }
-    };
-    private MusicService musicService;
-    private Intent musicIntent;
-    private boolean musicBound = false;
 }
