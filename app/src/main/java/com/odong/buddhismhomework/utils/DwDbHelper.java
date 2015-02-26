@@ -7,12 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.internal.LinkedHashTreeMap;
 import com.odong.buddhismhomework.models.Dzj;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 public class DwDbHelper extends SQLiteOpenHelper {
 
     public Map<String, String> listDdc() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new LinkedHashTreeMap<>();
         Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title"}, null, null, null, null, "created DESC");
 
         while (c.moveToNext()) {

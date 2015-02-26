@@ -115,7 +115,7 @@ public class WidgetHelper {
 
     }
 
-    public void initDzjBookList(final List<Dzj> books, final BookListCallback callback) {
+    public void initDzjBookList(int lvId, final List<Dzj> books, final BookListCallback callback) {
         Activity context = (Activity) this.context;
 
         final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
@@ -131,7 +131,7 @@ public class WidgetHelper {
                 new String[]{"title", "details"},
                 new int[]{android.R.id.text1, android.R.id.text2});
 
-        ListView lv = (ListView) context.findViewById(R.id.lv_items);
+        ListView lv = (ListView) context.findViewById(lvId);
         lv.setAdapter(adapter);
 
 
