@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -57,24 +58,33 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Dzj> searchDzj(String keyword) {
         keyword = "%" + keyword + "%";
         List<Dzj> books = new ArrayList<Dzj>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
-        while (c.moveToNext()) {
-            Dzj d = createDzj(c);
-            books.add(d);
+        try {
+            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
+            while (c.moveToNext()) {
+                Dzj d = createDzj(c);
+                books.add(d);
+            }
+            c.close();
+        
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.d("数据库", "锁定", e);
         }
-        c.close();
         return books;
     }
 
     public List<Dzj> getFavDzjList() {
         List<Dzj> books = new ArrayList<Dzj>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
-        while (c.moveToNext()) {
-            Dzj d = createDzj(c);
-            d.setFav(true);
-            books.add(d);
+        try {
+            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
+            while (c.moveToNext()) {
+                Dzj d = createDzj(c);
+                d.setFav(true);
+                books.add(d);
+            }
+            c.close();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.d("数据库", "锁定", e);
         }
-        c.close();
         return books;
     }
 
@@ -87,11 +97,15 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<String> getDzjTypeList() {
         List<String> types = new ArrayList<String>();
-        Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, "id ASC", null);
-        while (c.moveToNext()) {
-            types.add(c.getString(c.getColumnIndexOrThrow("type")));
+        try {
+            Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, "id ASC", null);
+            while (c.moveToNext()) {
+                types.add(c.getString(c.getColumnIndexOrThrow("type")));
+            }
+            c.close();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.d("数据库", "锁定", e);
         }
-        c.close();
         return types;
     }
 
@@ -123,6 +137,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
             db.insert("books", null, cv);
         }
+        db.close();
 
     }
 
