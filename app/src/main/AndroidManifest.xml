@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
 
     <application
@@ -47,6 +48,9 @@
             android:exported="false" />
         <service
             android:name=".services.ImportService"
+            android:exported="false" />
+        <service
+            android:name=".services.MusicService"
             android:exported="false" />
 
         <receiver

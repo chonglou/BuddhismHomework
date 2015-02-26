@@ -5,8 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.odong.buddhismhomework.receivers.AlarmReceiver;
 import com.odong.buddhismhomework.models.Calendar;
+import com.odong.buddhismhomework.receivers.AlarmReceiver;
 
 /**
  * Created by flamen on 15-2-20.
