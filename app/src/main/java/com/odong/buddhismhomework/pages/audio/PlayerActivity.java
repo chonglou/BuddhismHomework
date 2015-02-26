@@ -60,13 +60,13 @@ public class PlayerActivity extends Activity {
             new KvHelper(this).set("scroll://book/" + book.getName(), p);
 
         }
-        if (mp3Player!=null && mp3Player.isPlaying()) {
+        if (mp3Player != null && mp3Player.isPlaying()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setMessage(R.string.dlg_will_pause);
             adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mp3Player.stop();
+                    releasePlayer();
                     PlayerActivity.this.finish();
                 }
             });
@@ -75,9 +75,18 @@ public class PlayerActivity extends Activity {
             adb.create().show();
 
         } else {
+            releasePlayer();
             super.onBackPressed();
         }
 
+    }
+
+    private void releasePlayer() {
+        if (mp3Player != null) {
+            mp3Player.stop();
+            mp3Player.release();
+            mp3Player = null;
+        }
     }
 
 
@@ -127,7 +136,9 @@ public class PlayerActivity extends Activity {
                                 durationHandler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mp3Seeker.setProgress(mp3Player.getCurrentPosition());
+                                        if (mp3Player != null) {
+                                            mp3Seeker.setProgress(mp3Player.getCurrentPosition());
+                                        }
                                         durationHandler.postDelayed(this, 100);
                                     }
                                 }, 100);
