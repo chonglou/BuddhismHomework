@@ -60,11 +60,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".pages.audio.PlayerActivity$MusicIntentReceiver">
-            <intent-filter>
-                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".receivers.AlarmReceiver" />
     </application>
 
