@@ -1,4 +1,4 @@
-package com.odong.buddhismhomework.receivers;
+package com.odong.buddhismhomework.back;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

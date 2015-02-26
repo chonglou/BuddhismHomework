@@ -43,25 +43,20 @@
         <activity android:name=".pages.reading.SearchActivity" />
 
         <service
-            android:name=".services.DownloadService"
+            android:name=".back.DownloadService"
             android:exported="false" />
         <service
-            android:name=".services.ImportService"
+            android:name=".back.ImportService"
             android:exported="false" />
 
         <receiver
-            android:name=".receivers.BootReceiver"
+            android:name=".back.BootReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.MusicIntentReceiver">
-            <intent-filter>
-                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".receivers.AlarmReceiver" />
+        <receiver android:name=".back.AlarmReceiver" />
     </application>
 
 

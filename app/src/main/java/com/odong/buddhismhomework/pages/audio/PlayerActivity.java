@@ -67,7 +67,6 @@ public class PlayerActivity extends Activity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mp3Player.stop();
-                    release();
                     PlayerActivity.this.finish();
                 }
             });
@@ -76,15 +75,9 @@ public class PlayerActivity extends Activity {
             adb.create().show();
 
         } else {
-            release();
             super.onBackPressed();
         }
 
-    }
-
-    private void release(){
-        mp3Player.release();
-        mp3Player = null;
     }
 
 

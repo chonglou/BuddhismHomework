@@ -13,8 +13,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.services.DownloadService;
-import com.odong.buddhismhomework.services.ImportService;
+import com.odong.buddhismhomework.back.DownloadService;
+import com.odong.buddhismhomework.back.ImportService;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Calendar;
 import com.odong.buddhismhomework.utils.AlarmHelper;
@@ -148,13 +148,6 @@ public class SettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new KvHelper(SettingsActivity.this).set("mp3.replay", ((Switch) v).isChecked());
-            }
-        });
-
-        findViewById(R.id.btn_settings_earphone).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new KvHelper(SettingsActivity.this).set("mp3.earphone", ((Switch) v).isChecked());
             }
         });
 
