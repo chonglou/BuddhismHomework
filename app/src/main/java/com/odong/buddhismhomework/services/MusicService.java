@@ -9,8 +9,10 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.KvHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         return player.isPlaying();
     }
 
@@ -33,27 +35,41 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return player.getCurrentPosition();
     }
 
-    public void pauseSong() {
+    public void pause() {
         player.pause();
     }
 
-    public void playSong() {
+    public void play(){
+        player.start();
+    }
+
+    public void play(String song) {
         player.reset();
 
-        try {
-            player.setDataSource(new FileInputStream(new CacheFile(this, song).getRealFile()).getFD());
-        } catch (IOException e) {
-            Log.e("Music Service", "Data Source", e);
+        CacheFile cf = new CacheFile(this, song);
+        WidgetHelper wh = new WidgetHelper(this);
+        if (cf.exists()) {
+            try {
+
+                player.setDataSource(new FileInputStream(cf.getRealFile()).getFD());
+
+            } catch (IOException e) {
+                cf.remove();
+                wh.toast(getString(R.string.lbl_error_io), true);
+                Log.e("Music Service", "Data Source", e);
+            }
+            player.prepareAsync();
+        } else {
+            wh.toast(getString(R.string.lbl_error_not_exists), true);
         }
-        player.prepareAsync();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         player = new MediaPlayer();
-        player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setOnPreparedListener(this);
         player.setOnErrorListener(this);
         player.setOnCompletionListener(this);
@@ -95,7 +111,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     private MediaPlayer player;
-    private String song;
     private int duration;
     private final IBinder musicBinder = new MusicBinder();
 
@@ -103,7 +118,4 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return duration;
     }
 
-    public void setSong(String song) {
-        this.song = song;
-    }
 }
