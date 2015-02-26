@@ -22,7 +22,7 @@ public class FavoritesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
-        getActionBar().setIcon(R.drawable.ic_dzj);
+        getActionBar().setIcon(R.drawable.ic_action_favorite);
         setTitle(R.string.action_favorites);
 
         initList();

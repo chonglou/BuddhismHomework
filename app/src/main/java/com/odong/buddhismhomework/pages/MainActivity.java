@@ -2,7 +2,6 @@ package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
-import com.odong.buddhismhomework.services.DownloadService;
 import com.odong.buddhismhomework.widgets.NavIconAdapter;
 
 import java.util.ArrayList;
@@ -44,19 +42,6 @@ public class MainActivity extends Activity {
         switch (id) {
             case R.id.action_favorites:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
-                break;
-            case R.id.action_refresh:
-                AlertDialog.Builder adb = new AlertDialog.Builder(this);
-                adb.setTitle(R.string.action_refresh);
-                adb.setMessage(R.string.dlg_download);
-                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startService(new Intent(MainActivity.this, DownloadService.class));
-                    }
-                });
-                adb.setNegativeButton(android.R.string.no, null);
-                adb.create().show();
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -148,6 +133,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WebActivity.class);
                 intent.putExtra("url", "http://ddc.shengyen.org/mobile/");
+                intent.putExtra("icon", R.drawable.ic_ddc);
+                intent.putExtra("title", R.string.title_ddc);
                 startActivity(intent);
             }
         }));

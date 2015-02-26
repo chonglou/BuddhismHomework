@@ -12,12 +12,47 @@ import com.odong.buddhismhomework.models.Dzj;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by flamen on 15-2-7.
  */
 public class DwDbHelper extends SQLiteOpenHelper {
+
+    public Map<String, String> listDdc() {
+        Map<String, String> map = new HashMap<>();
+        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title"}, null, null, null, null, "created DESC");
+
+        while (c.moveToNext()) {
+            String url = c.getString(c.getColumnIndexOrThrow("url"));
+            String title = c.getString(c.getColumnIndexOrThrow("title"));
+            map.put(url, title);
+        }
+        c.close();
+        return map;
+    }
+
+    public void addDdc(String url, String title) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("title", title);
+        Cursor c = db.rawQuery("SELECT COUNT(*) FROM ddc WHERE url=?", new String[]{url});
+        c.moveToFirst();
+        int size = c.getInt(0);
+        c.close();
+        if (size == 0) {
+            cv.put("url", url);
+            db.insert("ddc", null, cv);
+        } else {
+            db.update("ddc", cv, "url = ?", new String[]{url});
+        }
+    }
+
+    public void delDdc(String url) {
+        getWritableDatabase().delete("ddc", "url=?", new String[]{url});
+    }
 
     public List<Dzj> searchDzj(String keyword) {
         keyword = "%" + keyword + "%";
@@ -175,6 +210,10 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     private void uninstall(SQLiteDatabase db, int version) {
         switch (version) {
+            case 4:
+                drop_index("ddc_url");
+                drop_table("ddc");
+                break;
             case 2:
                 for (String s : new String[]{
                         drop_index("books_title"),
@@ -200,6 +239,14 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
+            case 4:
+                for (String s : new String[]{
+                        "CREATE TABLE IF NOT EXISTS ddc(title VARCHAR(255) NOT NULL, url VARCHAR(255)  PRIMARY KEY, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE INDEX IF NOT EXISTS ddc_url ON ddc(url)",
+                }) {
+                    db.execSQL(s);
+                }
+                break;
             case 3:
                 db.execSQL("ALTER TABLE books ADD COLUMN fav INTEGER(1) NOT NULL DEFAULT 0");
                 break;
@@ -234,7 +281,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return "DROP INDEX IF EXISTS " + name;
     }
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "BuddhismHomework.db";
 
 
