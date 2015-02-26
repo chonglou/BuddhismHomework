@@ -14,7 +14,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -119,7 +118,6 @@ public class PlayerActivity extends Activity {
                                 SeekBar seeker = ((SeekBar) findViewById(R.id.sb_player));
                                 seeker.setProgress(musicService.getCurrentPosition());
                                 seeker.setMax(musicService.getDuration());
-                                ((ToggleButton)findViewById(R.id.btn_player)).setChecked(musicService.isPlaying());
                                 durationHandler.postDelayed(this, 100);
                             }
                         }
@@ -164,14 +162,15 @@ public class PlayerActivity extends Activity {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicService = binder.getService();
             musicService.setSong(book.getMp3());
+            musicBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //
+            musicBound = false;
         }
     };
     private MusicService musicService;
     private Intent musicIntent;
-
+    private boolean musicBound = false;
 }

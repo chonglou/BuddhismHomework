@@ -25,9 +25,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public boolean isPlaying(){
-        return player.isPlaying();
-    }
 
     public int getCurrentPosition() {
         return player.getCurrentPosition();
