@@ -65,7 +65,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
                 books.add(d);
             }
             c.close();
-        
+
         } catch (SQLiteDatabaseLockedException e) {
             Log.d("数据库", "锁定", e);
         }
