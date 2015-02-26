@@ -2,7 +2,6 @@ package com.odong.buddhismhomework.pages.audio;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +14,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -71,23 +71,20 @@ public class PlayerActivity extends Activity {
             p.setY(tv.getScrollY());
 
             new KvHelper(this).set("scroll://book/" + book.getName(), p);
+
         }
 
-        if (musicService.isPlaying()) {
-            AlertDialog.Builder adb = new AlertDialog.Builder(this);
-            adb.setMessage(R.string.dlg_will_pause);
-            adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PlayerActivity.this.finish();
-                }
-            });
-            adb.setNegativeButton(android.R.string.no, null);
-            adb.setCancelable(false);
-            adb.create().show();
-            return;
-        }
-        super.onBackPressed();
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setMessage(R.string.dlg_will_pause);
+        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PlayerActivity.this.finish();
+            }
+        });
+        adb.setNegativeButton(android.R.string.no, null);
+        adb.setCancelable(false);
+        adb.create().show();
 
 
     }
@@ -107,32 +104,28 @@ public class PlayerActivity extends Activity {
             public void onClick(View v) {
                 ToggleButton tb = (ToggleButton) v;
                 if (tb.isChecked()) {
-                    if (isPaused) {
-                        musicService.play();
-                    } else {
-                        musicService.play(book.getMp3());
+                    musicService.setSong(book.getMp3());
+                    musicService.playSong();
 
-                        final SeekBar seeker = (SeekBar) findViewById(R.id.sb_player);
-                        seeker.setProgress(0);
-                        seeker.setClickable(false);
+                    final SeekBar seeker = (SeekBar) findViewById(R.id.sb_player);
+                    seeker.setProgress(0);
+                    seeker.setClickable(false);
 
-                        findViewById(R.id.tv_player_content).scrollTo(0, 0);
-                        durationHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (musicService != null) {
-                                    SeekBar seeker = ((SeekBar) findViewById(R.id.sb_player));
-                                    seeker.setProgress(musicService.getCurrentPosition());
-                                    seeker.setMax(musicService.getDuration());
-                                    ((ToggleButton) findViewById(R.id.btn_player)).setChecked(musicService.isPlaying());
-                                    durationHandler.postDelayed(this, 100);
-                                }
+                    findViewById(R.id.tv_player_content).scrollTo(0, 0);
+                    durationHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (musicService != null) {
+                                SeekBar seeker = ((SeekBar) findViewById(R.id.sb_player));
+                                seeker.setProgress(musicService.getCurrentPosition());
+                                seeker.setMax(musicService.getDuration());
+                                ((ToggleButton)findViewById(R.id.btn_player)).setChecked(musicService.isPlaying());
+                                durationHandler.postDelayed(this, 100);
                             }
-                        }, 100);
-                    }
+                        }
+                    }, 100);
                 } else {
-                    musicService.pause();
-                    isPaused = true;
+                    musicService.pauseSong();
                 }
             }
         });
@@ -170,6 +163,7 @@ public class PlayerActivity extends Activity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicService = binder.getService();
+            musicService.setSong(book.getMp3());
         }
 
         @Override
@@ -177,27 +171,7 @@ public class PlayerActivity extends Activity {
             //
         }
     };
-
-    public class MusicIntentReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(
-                    android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
-                if (!new KvHelper(context).get("mp3.earphone", Boolean.class, false)) {
-                    Log.d("MP3", "播放暂停");
-                    //context.stopService(new Intent(context, MusicService.class));
-                    //stopService()
-                    //musicService.pause();
-                    PlayerActivity.this.musicService.pause();
-                }
-
-            }
-        }
-    }
-
     private MusicService musicService;
     private Intent musicIntent;
-    private boolean isPaused = false;
 
 }
