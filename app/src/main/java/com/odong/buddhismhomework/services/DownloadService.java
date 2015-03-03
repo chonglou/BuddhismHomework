@@ -76,7 +76,7 @@ public class DownloadService extends IntentService {
             fos.flush();
             wh.toast(getString(R.string.lbl_download_success, name), true);
             Log.d("下载完成", name);
-        } catch (IOException e) {
+        } catch (IOException | StringIndexOutOfBoundsException e) {
             Log.e("下载", name, e);
             cf.remove();
         }
@@ -90,7 +90,7 @@ public class DownloadService extends IntentService {
             Document doc = Jsoup.connect(Config.DROPBOX_URL).get();
             Elements links = doc.select("a.filename-link");
             for (Element el : links) {
-                download(Jsoup.connect(el.attr("href")).get().select("a#default_content_download_button").get(0).attr("href"));
+                download(el.attr("href").replace("dl=0", "dl=1"));
             }
             wh.notification(intent, getString(R.string.lbl_download_complete, links.size()));
         } catch (IOException e) {
