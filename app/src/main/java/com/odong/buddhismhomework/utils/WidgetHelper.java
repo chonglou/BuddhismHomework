@@ -170,17 +170,7 @@ public class WidgetHelper {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Activity context = (Activity) WidgetHelper.this.context;
-                Dzj book = books.get(position);
-                Intent intent;
-                if (SyncService.CBETA_NAME.equals(book.getType())) {
-                    intent = new Intent(context, EpubActivity.class);
-                } else {
-                    intent = new Intent(context, TextActivity.class);
-                    intent.putExtra("type", "dzj");
-                }
-                intent.putExtra("file", new Gson().toJson(book));
-                context.startActivity(intent);
+                showDzj(books.get(position));
             }
         });
 
@@ -192,6 +182,18 @@ public class WidgetHelper {
                 }
             });
         }
+    }
+
+    public void showDzj(Dzj book){
+        Intent intent;
+        if (SyncService.CBETA_NAME.equals(book.getType())) {
+            intent = new Intent(context, EpubActivity.class);
+        } else {
+            intent = new Intent(context, TextActivity.class);
+            intent.putExtra("type", "dzj");
+        }
+        intent.putExtra("file", new Gson().toJson(book));
+        context.startActivity(intent);
     }
 
     public void showSearchDialog() {

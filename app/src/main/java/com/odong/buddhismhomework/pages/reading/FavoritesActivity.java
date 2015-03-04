@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,6 +17,7 @@ import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.models.Favorite;
 import com.odong.buddhismhomework.pages.WebActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,15 +90,15 @@ public class FavoritesActivity extends Activity {
                 Intent intent = null;
                 switch (fav.getType()) {
                     case "dzj":
-                        intent = new Intent(FavoritesActivity.this, TextActivity.class);
-                        intent.putExtra("file", new Gson().toJson(fav.getObj()));
-                        intent.putExtra("type", "dzj");
-                        break;
+                        Log.d("点击收藏夹", fav.getObj().toString());
+                        new WidgetHelper(FavoritesActivity.this).showDzj((Dzj)fav.getObj());
+                        return;
                     case "ddc":
                         intent = new Intent(FavoritesActivity.this, WebActivity.class);
                         intent.putExtra("url", (String) fav.getObj());
                         intent.putExtra("icon", R.drawable.ic_ddc);
                         intent.putExtra("title", R.string.title_ddc);
+
                         break;
                 }
                 if (intent != null) {

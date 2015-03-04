@@ -33,7 +33,7 @@ public class EpubActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_favorites:
+            case R.id.action_add_to_favorites:
                 new WidgetHelper(this).showFavoriteDialog(book);
                 break;
             default:

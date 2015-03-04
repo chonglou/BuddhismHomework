@@ -59,7 +59,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         keyword = "%" + keyword + "%";
         List<Dzj> books = new ArrayList<Dzj>();
         try {
-            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
+            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "type"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
             while (c.moveToNext()) {
                 Dzj d = createDzj(c);
                 books.add(d);
@@ -75,7 +75,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Dzj> getFavDzjList() {
         List<Dzj> books = new ArrayList<Dzj>();
         try {
-            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
+            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "type"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
             while (c.moveToNext()) {
                 Dzj d = createDzj(c);
                 d.setFav(true);
@@ -111,11 +111,9 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<Dzj> getDzjList(String type) {
         List<Dzj> books = new ArrayList<Dzj>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav"}, "type = ?", new String[]{type}, null, null, "id ASC");
+        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav", "type"}, "type = ?", new String[]{type}, null, null, "id ASC");
         while (c.moveToNext()) {
-
             Dzj d = createDzj(c);
-            d.setType(type);
             d.setFav(c.getInt(c.getColumnIndexOrThrow("fav")) == 1);
             books.add(d);
         }
@@ -225,6 +223,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         d.setName(c.getString(c.getColumnIndexOrThrow("name")));
         d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));
         d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+        d.setType(c.getString(c.getColumnIndexOrThrow("type")));
         return d;
     }
 
