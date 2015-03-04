@@ -22,7 +22,7 @@ public class YoutubePlayer {
     }
 
     public void start() {
-        Intent intent = YouTubeStandalonePlayer.createVideoIntent(context, Config.GOOGLE_DEVELOPER_KEY, vid, 0, true, true);
+        Intent intent = YouTubeStandalonePlayer.createVideoIntent(context, Config.GOOGLE_DEVELOPER_ANDROID_KEY, vid, 0, true, true);
 
         try {
             if (canResolveIntent(intent)) {
