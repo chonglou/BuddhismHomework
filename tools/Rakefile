@@ -1,0 +1,36 @@
+require 'yaml'
+
+RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
+
+namespace :dzj do
+  desc '创建大藏经数据'
+  task :sql do
+
+  end
+end
+
+namespace :youtube do
+  desc '创建视频数据'
+  task :sql do
+
+  end
+end
+
+namespace :ddz do
+  desc '创建法鼓全集数据'
+  task :sql do
+
+  end
+
+  desc '下载法鼓全集'
+  task :download do
+
+  end
+end
+
+namespace :res do
+  desc '生成MD5文件'
+  task :md5 do
+    `cd tmp && md5sum *.zip *.mp3 >> #{RES_ROOT}/raw/downloads.txt`
+  end
+end
