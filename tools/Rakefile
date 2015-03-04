@@ -1,37 +1,31 @@
-require 'yaml'
-
 RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
-TMP_ROOT =
 
-namespace :dzj do
-  desc '创建大藏经数据'
-  task :sql do
+def load_cfg
+  require 'yaml'
+  YAML.load_file('config.yml')
+end
 
+namespace :image do
+  desc '转换图片大小'
+  task :convert do
+    %w(books courses launcher morning musics evening sitting videos dict dzj zoom_in zoom_out action_favorite previous next ddc home help).each do |i|
+      j="ic_#{i}.png"
+      t = "#{RES_ROOT}/drawable"
+      if File.file?("images/#{j}")
+        `convert -resize 48x48 images/#{j} #{t}-mdpi/#{j}`
+        `convert -resize 72x72 images/#{j} #{t}-hdpi/#{j}`
+        `convert -resize 96x96 images/#{j} #{t}-xhdpi/#{j}`
+        `convert -resize 144x144 images/#{j} #{t}-xxhdpi/#{j}`
+      end
+    end
   end
 end
 
-namespace :youtube do
-  desc '创建视频数据'
-  task :sql do
-
+namespace :crawler do
+  desc '抓取youtube视频地址'
+  task :youtube do
+    cfg = load_cfg
+    puts cfg.inspect
   end
 end
 
-namespace :ddz do
-  desc '创建法鼓全集数据'
-  task :sql do
-
-  end
-
-  desc '下载法鼓全集'
-  task :download do
-
-  end
-end
-
-# namespace :res do
-#   desc '生成MD5文件'
-#   task :md5 do
-#     `cd tmp && md5sum *.zip *.mp3 >> #{RES_ROOT}/raw/downloads.txt`
-#   end
-# end
