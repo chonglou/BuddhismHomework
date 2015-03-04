@@ -1,9 +1,38 @@
+require 'yaml'
+require 'highline/import'
+
 RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
 
 def load_cfg
-  require 'yaml'
   YAML.load_file('config.yml')
 end
+
+namespace :adb do
+  desc '启动模拟器'
+  task :em do
+    sd = '/tmp/sd0'
+    unless File.file?(sd)
+      size = ask('虚拟SD卡大小？(G) ', Integer) do |q|
+        q.in=2..8
+        q.default = 2
+      end
+      puts `mksdcard #{size}G #{sd}`
+    end
+    wipe = ask('擦除虚拟SD卡？(y/n) ') { |q| q.default='n' }
+    puts `/opt/android-sdk/tools/emulator64-arm -avd galaxy -netspeed full -netdelay none -sdcard #{sd} #{'-wipe-data' if wipe == 'y'}`
+  end
+
+  desc '网络调试连接'
+  task :net do
+    ip = ask('IP地址？ ') { |q| q.default='localhost' }
+    port = ask('端口？ ', Integer) do |q|
+      q.in=1024..65535
+      q.default = 5555
+    end
+    puts `adb connect #{ip}:#{port}`
+  end
+end
+
 
 namespace :image do
   desc '转换图片大小'
@@ -12,10 +41,10 @@ namespace :image do
       j="ic_#{i}.png"
       t = "#{RES_ROOT}/drawable"
       if File.file?("images/#{j}")
-        `convert -resize 48x48 images/#{j} #{t}-mdpi/#{j}`
-        `convert -resize 72x72 images/#{j} #{t}-hdpi/#{j}`
-        `convert -resize 96x96 images/#{j} #{t}-xhdpi/#{j}`
-        `convert -resize 144x144 images/#{j} #{t}-xxhdpi/#{j}`
+        puts `convert -resize 48x48 images/#{j} #{t}-mdpi/#{j}`
+        puts `convert -resize 72x72 images/#{j} #{t}-hdpi/#{j}`
+        puts `convert -resize 96x96 images/#{j} #{t}-xhdpi/#{j}`
+        puts `convert -resize 144x144 images/#{j} #{t}-xxhdpi/#{j}`
       end
     end
   end
