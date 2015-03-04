@@ -17,30 +17,30 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 
 /**
  * Created by flamen on 15-3-3.
  */
 public class HttpClient {
-    private HttpClient(){}
+    private HttpClient() {
+    }
 
     public static String get(String url) throws IOException {
         return call(getClient(false), new HttpGet(url));
     }
-    public static String getS(String url) throws IOException,URISyntaxException{
-       return call(getClient(false), new HttpGet(new URI(url)));
+
+    public static String getS(String url) throws IOException, URISyntaxException {
+        return call(getClient(false), new HttpGet(new URI(url)));
     }
 
-    private static org.apache.http.client.HttpClient getClient(boolean ssl){
-        if(ssl){
+    private static org.apache.http.client.HttpClient getClient(boolean ssl) {
+        if (ssl) {
             SchemeRegistry sr = new SchemeRegistry();
             sr.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
             HttpParams hp = new BasicHttpParams();
             SingleClientConnManager cm = new SingleClientConnManager(hp, sr);
             return new DefaultHttpClient(cm, hp);
-        }
-        else {
+        } else {
             return new DefaultHttpClient();
         }
     }

@@ -1,6 +1,7 @@
 require 'yaml'
 
 RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
+TMP_ROOT =
 
 namespace :dzj do
   desc '创建大藏经数据'
@@ -28,9 +29,9 @@ namespace :ddz do
   end
 end
 
-namespace :res do
-  desc '生成MD5文件'
-  task :md5 do
-    `cd tmp && md5sum *.zip *.mp3 >> #{RES_ROOT}/raw/downloads.txt`
-  end
-end
+# namespace :res do
+#   desc '生成MD5文件'
+#   task :md5 do
+#     `cd tmp && md5sum *.zip *.mp3 >> #{RES_ROOT}/raw/downloads.txt`
+#   end
+# end

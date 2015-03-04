@@ -131,29 +131,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/lbl_empty"
-                android:src="@android:drawable/stat_sys_download" />
+                android:src="@drawable/ic_action_refresh" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp">
-
-            <TextView
-                android:id="@+id/tv_setting_import"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/btn_setting_import"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/lbl_empty"
-                android:src="@drawable/ic_action_import_export" />
         </LinearLayout>
 
     </LinearLayout>

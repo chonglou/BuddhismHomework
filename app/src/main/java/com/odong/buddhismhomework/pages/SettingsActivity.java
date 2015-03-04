@@ -15,8 +15,7 @@ import android.widget.TimePicker;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Calendar;
-import com.odong.buddhismhomework.services.DownloadService;
-import com.odong.buddhismhomework.services.ImportService;
+import com.odong.buddhismhomework.services.SyncService;
 import com.odong.buddhismhomework.utils.AlarmHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 
@@ -40,9 +39,15 @@ public class SettingsActivity extends Activity {
         KvHelper kv = new KvHelper(this);
         ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(kv.get("mp3.replay", Boolean.class, false));
 
-        ((TextView) findViewById(R.id.tv_setting_store)).setText(getString(R.string.tv_store_path, new CacheFile(this, "/").getRealFile()));
-        ((TextView) findViewById(R.id.tv_setting_sync)).setText(date2string(R.string.tv_last_sync, kv.get("sync.last", Date.class, null)));
-        ((TextView) findViewById(R.id.tv_setting_import)).setText(date2string(R.string.tv_last_import, kv.get("import.last", Date.class, null)));
+
+        Date lastSync = kv.get("sync.last", Date.class, null);
+        ((TextView) findViewById(R.id.tv_setting_sync)).setText(
+                getString(R.string.tv_sync_log,
+                        lastSync == null ? getString(R.string.lbl_never) : DateFormat.getDateTimeInstance().format(lastSync),
+                        new CacheFile(this, "/").getRealFile().toString(),
+                        "test"
+                ));
+
 
         initCalendar(R.id.tv_setting_morning,
                 R.string.tv_setting_morning,
@@ -123,21 +128,17 @@ public class SettingsActivity extends Activity {
     }
 
 
-    private String date2string(int rid, Date date) {
-        return getString(rid, date == null ? getString(R.string.lbl_never) : DateFormat.getDateTimeInstance().format(date));
-    }
-
     private void initEvents() {
         findViewById(R.id.btn_setting_sync).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
-                adb.setTitle(R.string.action_refresh);
-                adb.setMessage(R.string.dlg_download);
+                adb.setTitle(R.string.action_sync);
+                adb.setMessage(R.string.dlg_sync);
                 adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startService(new Intent(SettingsActivity.this, DownloadService.class));
+                        startService(new Intent(SettingsActivity.this, SyncService.class));
                     }
                 });
                 adb.setNegativeButton(android.R.string.no, null);
@@ -148,24 +149,6 @@ public class SettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new KvHelper(SettingsActivity.this).set("mp3.replay", ((Switch) v).isChecked());
-            }
-        });
-
-        findViewById(R.id.btn_setting_import).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
-                adb.setTitle(R.string.action_import);
-                adb.setMessage(R.string.dlg_import);
-                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startService(new Intent(SettingsActivity.this, ImportService.class));
-                    }
-                });
-                adb.setNegativeButton(android.R.string.no, null);
-                adb.create().show();
-
             }
         });
 

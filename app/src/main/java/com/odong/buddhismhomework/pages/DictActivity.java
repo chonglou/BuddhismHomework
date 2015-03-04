@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.services.ImportService;
+import com.odong.buddhismhomework.services.SyncService;
 import com.odong.buddhismhomework.utils.StarDict;
 
 import java.io.IOException;
@@ -82,7 +82,7 @@ public class DictActivity extends Activity {
 
     private void initDictList() {
         try {
-            dictList = StarDict.load(new CacheFile(this, ImportService.DICT_NAME).getRealFile());
+            dictList = StarDict.load(new CacheFile(this, SyncService.DICT_NAME).getRealFile());
         } catch (IOException e) {
             dictList = new ArrayList<>();
             Log.e("加载字典", "出错", e);

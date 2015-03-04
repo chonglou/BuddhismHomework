@@ -2,9 +2,7 @@ package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -12,15 +10,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.google.gson.Gson;
-import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Video;
-import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.XmlHelper;
 import com.odong.buddhismhomework.utils.YoutubePlayer;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,24 +28,6 @@ public class VideoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
-
-        new AsyncTask<String, Void, Void>(){
-
-            @Override
-            protected Void doInBackground(String... params) {
-                String url = "https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=DDMTV01&userIp=192.168.1.10&key=" + Config.GOOGLE_DEVELOPER_ANDROID_KEY;
-                Map<String, String> map = new HashMap<>();
-                try {
-
-                    String pl = HttpClient.getS(url);
-                    Log.d("播放列表", pl);
-                } catch (IOException |URISyntaxException e) {
-                    Log.d("Youtube", "播放列表", e);
-                }
-                return null;
-            }
-        }.execute();
-
 
 
         Video video = new Gson().fromJson(getIntent().getStringExtra("video"), Video.class);

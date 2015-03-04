@@ -13,7 +13,7 @@
     <string name="action_add_to_favorites">添加到收藏夹</string>
     <string name="action_favorites">收藏夹</string>
     <string name="action_import">导入数据</string>
-    <string name="action_refresh">同步数据</string>
+    <string name="action_sync">同步数据</string>
     <string name="action_search">搜索</string>
     <string name="action_settings">参数设置</string>
     <string name="action_about_me">关于我们</string>
@@ -31,11 +31,14 @@
     <string name="tv_setting_morning">早课时间(每天%1$02d:%2$02d)</string>
     <string name="tv_setting_evening">晚课时间(每天%1$02d:%2$02d)</string>
     <string name="tv_clocks">从现在开始打坐：</string>
-    <string name="tv_last_sync">上次更新：\n%s</string>
-    <string name="tv_store_path">数据存储目录：\n%s</string>
+    <string name="tv_sync_log">
+        上次检查：\n %1$s \n
+        数据目录：\n %2$s \n
+        日志记录：\n %3$s \n
+    </string>
+
     <string name="tv_replay">MP3循环播放</string>
     <string name="tv_hosts">下载节点</string>
-    <string name="tv_last_import">上次导入:\n%s</string>
 
 
     <string name="title_morning">早课</string>
@@ -77,7 +80,7 @@
 
 
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
-    <string name="dlg_download">下载资源文件会耗费流量，建议在WLAN连接下进行，请耐心等待，确定要继续？</string>
+    <string name="dlg_sync">下载资源文件会耗费流量，建议在WLAN连接下进行，请耐心等待，确定要继续？</string>
     <string name="dlg_import">导入数据会耗费时间比较长(7到10分钟)，请耐心等待，确定要继续？</string>
 
 
