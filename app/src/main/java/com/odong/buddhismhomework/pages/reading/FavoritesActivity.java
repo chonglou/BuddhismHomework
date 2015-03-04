@@ -88,7 +88,7 @@ public class FavoritesActivity extends Activity {
                 Intent intent = null;
                 switch (fav.getType()) {
                     case "dzj":
-                        intent = new Intent(FavoritesActivity.this, ShowActivity.class);
+                        intent = new Intent(FavoritesActivity.this, TextActivity.class);
                         intent.putExtra("file", new Gson().toJson(fav.getObj()));
                         intent.putExtra("type", "dzj");
                         break;

@@ -25,6 +25,7 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
+import com.odong.buddhismhomework.services.SyncService;
 import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -146,6 +147,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
                 intent.putExtra("type", "dzj");
+                intent.putExtra("chapter", SyncService.CBETA_NAME);
                 startActivity(intent);
             }
         }));

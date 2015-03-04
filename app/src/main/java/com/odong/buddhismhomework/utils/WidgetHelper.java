@@ -23,8 +23,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.pages.reading.EpubActivity;
 import com.odong.buddhismhomework.pages.reading.SearchActivity;
-import com.odong.buddhismhomework.pages.reading.ShowActivity;
+import com.odong.buddhismhomework.pages.reading.TextActivity;
 import com.odong.buddhismhomework.services.SyncService;
 
 import java.io.BufferedReader;
@@ -41,6 +42,23 @@ import java.util.Map;
 public class WidgetHelper {
     public WidgetHelper(Context context) {
         this.context = context;
+    }
+
+    public void showFavoriteDialog(final Dzj book) {
+        AlertDialog.Builder adbF = new AlertDialog.Builder(context);
+        adbF.setTitle(R.string.action_add_to_favorites);
+        adbF.setMessage(R.string.lbl_are_you_sure);
+        adbF.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DwDbHelper ddh = new DwDbHelper(context);
+                ddh.setDzjFav(book.getId(), true);
+                ddh.close();
+                toast(context.getString(R.string.lbl_success), false);
+            }
+        });
+        adbF.setNegativeButton(android.R.string.no, null);
+        adbF.create().show();
     }
 
     public void showSyncDialog() {
@@ -153,9 +171,15 @@ public class WidgetHelper {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Activity context = (Activity) WidgetHelper.this.context;
-                Intent intent = new Intent(context, ShowActivity.class);
-                intent.putExtra("file", new Gson().toJson(books.get(position)));
-                intent.putExtra("type", "dzj");
+                Dzj book = books.get(position);
+                Intent intent;
+                if (SyncService.CBETA_NAME.equals(book.getType())) {
+                    intent = new Intent(context, EpubActivity.class);
+                } else {
+                    intent = new Intent(context, TextActivity.class);
+                    intent.putExtra("type", "dzj");
+                }
+                intent.putExtra("file", new Gson().toJson(book));
                 context.startActivity(intent);
             }
         });

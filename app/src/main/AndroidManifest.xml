@@ -37,10 +37,11 @@
         <activity android:name=".pages.VideoActivity" />
         <activity android:name=".pages.DictActivity" />
         <activity android:name=".pages.WebActivity" />
-        <activity android:name=".pages.reading.ShowActivity" />
+        <activity android:name=".pages.reading.TextActivity" />
         <activity android:name=".pages.reading.CatalogActivity" />
         <activity android:name=".pages.reading.FavoritesActivity" />
         <activity android:name=".pages.reading.SearchActivity" />
+        <activity android:name=".pages.reading.EpubActivity"/>
 
         <service
             android:name=".services.SyncService"

@@ -18,7 +18,6 @@ import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.models.Pager;
-import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -30,7 +29,7 @@ import java.io.InputStreamReader;
 /**
  * Created by flamen on 15-2-19.
  */
-public class ShowActivity extends Activity {
+public class TextActivity extends Activity {
 
 
     @Override
@@ -78,6 +77,7 @@ public class ShowActivity extends Activity {
         if ("book".equals(type)) {
             menu.findItem(R.id.action_add_to_favorites).setVisible(false);
         }
+        menu.findItem(R.id.action_book_index).setVisible(false);
         return true;
     }
 
@@ -99,7 +99,7 @@ public class ShowActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final WidgetHelper wh = new WidgetHelper(ShowActivity.this);
+        final WidgetHelper wh = new WidgetHelper(TextActivity.this);
         int id = item.getItemId();
         switch (id) {
             case R.id.action_page_next:
@@ -117,10 +117,10 @@ public class ShowActivity extends Activity {
                 }
                 break;
             case R.id.action_page_goto:
-                AlertDialog.Builder adbG = new AlertDialog.Builder(ShowActivity.this);
+                AlertDialog.Builder adbG = new AlertDialog.Builder(TextActivity.this);
                 adbG.setTitle(getString(R.string.lbl_goto_page, pager.getSize()));
 
-                final EditText pg = new EditText(ShowActivity.this);
+                final EditText pg = new EditText(TextActivity.this);
                 pg.setInputType(InputType.TYPE_CLASS_NUMBER);
                 pg.setHint(R.string.lbl_hint_goto);
                 adbG.setView(pg);
@@ -150,20 +150,7 @@ public class ShowActivity extends Activity {
                 new WidgetHelper(this).zoomTextView(R.id.tv_book_content, true);
                 break;
             case R.id.action_add_to_favorites:
-                AlertDialog.Builder adbF = new AlertDialog.Builder(this);
-                adbF.setTitle(R.string.action_add_to_favorites);
-                adbF.setMessage(R.string.lbl_are_you_sure);
-                adbF.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DwDbHelper ddh = new DwDbHelper(ShowActivity.this);
-                        ddh.setDzjFav(((Dzj) book).getId(), true);
-                        ddh.close();
-                        wh.toast(getString(R.string.lbl_success), false);
-                    }
-                });
-                adbF.setNegativeButton(android.R.string.no, null);
-                adbF.create().show();
+                new WidgetHelper(this).showFavoriteDialog((Dzj) book);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

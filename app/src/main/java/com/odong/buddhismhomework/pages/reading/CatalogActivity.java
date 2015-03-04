@@ -99,8 +99,8 @@ public class CatalogActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(CatalogActivity.this, ShowActivity.class);
                 Book book = books.get(position);
+                Intent intent = new Intent(CatalogActivity.this, TextActivity.class);
                 intent.putExtra("file", new Gson().toJson(book));
                 intent.putExtra("type", "book");
                 startActivity(intent);
