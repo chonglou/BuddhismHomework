@@ -197,6 +197,7 @@ public class MainActivity extends Activity {
                         msg.what = UPGRADE;
                         versionHandler.sendMessage(msg);
                     }
+                    new KvHelper(MainActivity.this).set("version.last_check", new Date());
                 } catch (JsonParseException | IOException | URISyntaxException | PackageManager.NameNotFoundException e) {
                     new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
                 }

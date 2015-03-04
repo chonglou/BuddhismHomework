@@ -1,13 +1,20 @@
 package com.odong.buddhismhomework.services;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.pages.MainActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -41,9 +48,102 @@ public class SyncService extends IntentService {
     }
 
     @Override
+    public void onStart(Intent intent, int startId) {
+        wh = new WidgetHelper(this);
+        kh = new KvHelper(this);
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notification = new Notification();
+        notification.icon = R.drawable.ic_launcher;
+        updateIntent = new Intent(this, MainActivity.class);
+        notification.contentView = new RemoteViews(getPackageName(), R.layout.notice_bar);
+        notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, 0, false);
+        notification.contentIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
+
+        super.onStart(intent, startId);
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
+        StringBuilder sb = new StringBuilder();
+        download(sb);
+        unzip(sb);
+        cbeta(sb);
+        youtube(sb);
+
+        kh.set("sync.log", sb.toString());
+        Message msg = new Message();
+        msg.what = SUCCESS;
+        handler.sendMessage(msg);
+    }
+
+    private void download(StringBuilder sb) {
+        int i = 1;
+        increase(i);
+    }
+
+    private void unzip(StringBuilder sb) {
+        int i = 30;
+        increase(i);
+    }
+
+    private void cbeta(StringBuilder sb) {
+        int i = 70;
+        increase(i);
+    }
+
+    private void youtube(StringBuilder sb) {
+        int i = 90;
+        increase(i);
+    }
+
+    private void increase(int i) {
+        Message msg = new Message();
+        msg.what = INCREASE;
+        msg.arg1 = i;
+        handler.sendMessage(msg);
+    }
+
+    private WidgetHelper wh;
+    private KvHelper kh;
+    private NotificationManager nm;
+    private Notification notification;
+    private Intent updateIntent;
+
+    private final int SUCCESS = 1;
+    private final int FAIL = 2;
+    private final int INCREASE = 3;
+    private Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case SUCCESS:
+                    notification.defaults = Notification.DEFAULT_ALL;
+                    notification.contentIntent = PendingIntent.getActivity(SyncService.this, 0, new Intent(SyncService.this, MainActivity.class), 0);
+                    notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_success));
+                    notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, 100, false);
+                    nm.notify(0, notification);
+                    stopService(updateIntent);
+                    break;
+                case FAIL:
+                    notification.defaults = Notification.DEFAULT_ALL;
+                    notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_fail));
+                    nm.notify(0, notification);
+                    stopService(updateIntent);
+                    break;
+                case INCREASE:
+                    notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, msg.arg1, false);
+                    nm.notify(0, notification);
+                    break;
+            }
+            return true;
+        }
+    });
+
+    //----------------------------未整理------------------------
+    protected void onHandleIntent1(Intent intent) {
         WidgetHelper wh = new WidgetHelper(this);
-        //---------下载
+        //---------检查文件并下载----------------
         //-----------解压缩-----------------
         //-----------导入大正藏-------------
         //------------抓取视频--------------
@@ -213,7 +313,7 @@ public class SyncService extends IntentService {
             Document doc = Jsoup.connect(Config.DROPBOX_URL).get();
             Elements links = doc.select("a.filename-link");
             for (Element el : links) {
-                download(el.attr("href").replace("dl=0", "dl=1"));
+                downloadFile(el.attr("href").replace("dl=0", "dl=1"));
             }
             wh.notification(intent, getString(R.string.lbl_download_complete, links.size()));
         } catch (IOException e) {
@@ -229,7 +329,7 @@ public class SyncService extends IntentService {
     }
 
 
-    private void download(String url) throws IOException {
+    private void downloadFile(String url) throws IOException {
         String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
         CacheFile cf = new CacheFile(this, name);
         WidgetHelper wh = new WidgetHelper(this);
