@@ -13,7 +13,9 @@ import android.widget.RemoteViews;
 import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.pages.MainActivity;
+import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -23,14 +25,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -92,17 +98,44 @@ public class SyncService extends IntentService {
         int i = 30;
         increase(i);
 
-        unzip(DICT_NAME+".zip", DICT_NAME);
+        unzip(DICT_NAME + ".zip", DICT_NAME);
         i += 10;
         increase(i);
-        unzip(DZJ_NAME+".zip", DZJ_NAME);
+        unzip("cbeta_epub_201405.zip", CBETA_NAME);
 
     }
 
     private void cbeta() {
-        int i = 70;
-        increase(i);
-        //log(getString(R.string.lbl_import_complete, books.size()))
+        increase(70);
+        File index = new CacheFile(this, CBETA_NAME + "/filelist.txt").getRealFile();
+        if (!index.isFile()) {
+            fail(getString(R.string.lbl_file_not_exist, CBETA_NAME));
+            return;
+        }
+        log(getString(R.string.lbl_begin_import));
+
+        try {
+            List<Dzj> books = new ArrayList<>();
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(index)));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] ss = line.split("\t\t");
+                Dzj b = new Dzj();
+                b.setType(CBETA_NAME);
+                b.setName(ss[0].trim());
+                int i = ss[1].indexOf("【");
+                b.setTitle(ss[1].substring(0, i - 1).trim());
+                b.setAuthor(ss[1].substring(i).trim());
+                books.add(b);
+                Log.d("抓取图书", b.toString());
+            }
+            new DwDbHelper(this).resetDzj(books);
+            br.close();
+            log(getString(R.string.lbl_import_complete, books.size()));
+        } catch (IOException e) {
+            fail(getString(R.string.lbl_error_import));
+            Log.e("导入数据", "大藏经", e);
+        }
     }
 
     private void youtube() {
@@ -233,7 +266,7 @@ public class SyncService extends IntentService {
     }
 
 
-    public final static String DZJ_NAME = "dzj-f";
+    public final static String CBETA_NAME = "cbeta";
     public final static String DICT_NAME = "dict";
 
     private WidgetHelper wh;
@@ -281,13 +314,13 @@ public class SyncService extends IntentService {
 //    private String appendF(String url, int i) {
 //        String[] ss = url.split("/");
 //        ss[i] += "-f";
-//        return DZJ_NAME + "/" + Arrays.asList(ss).toString().replaceAll("(^\\[|\\]$)", "").replace(", ", "/");
+//        return CBETA_NAME + "/" + Arrays.asList(ss).toString().replaceAll("(^\\[|\\]$)", "").replace(", ", "/");
 //    }
 //
 //    private void importBooks() {
-//        CacheFile cf = new CacheFile(this, DZJ_NAME + "/index.html");
+//        CacheFile cf = new CacheFile(this, CBETA_NAME + "/index.html");
 //        if (!cf.exists()) {
-//            log(getString(R.string.lbl_file_not_exist, DZJ_NAME));
+//            log(getString(R.string.lbl_file_not_exist, CBETA_NAME));
 //            return;
 //        }
 //

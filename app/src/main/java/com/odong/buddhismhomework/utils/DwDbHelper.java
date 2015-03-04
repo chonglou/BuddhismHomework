@@ -126,19 +126,24 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public void resetDzj(List<Dzj> books) {
         SQLiteDatabase db = getWritableDatabase();
-        Log.d("数据库", "清空books");
-        getWritableDatabase().delete("books", null, null);
-        ContentValues cv = new ContentValues();
-        for (Dzj d : books) {
-            cv.put("type", d.getType());
-            cv.put("title", d.getTitle());
-            cv.put("author", d.getAuthor());
-            cv.put("name", d.getName());
+        try {
+            db.beginTransaction();
+            Log.d("数据库", "清空books");
+            db.delete("books", null, null);
+            ContentValues cv = new ContentValues();
+            for (Dzj d : books) {
+                cv.put("type", d.getType());
+                cv.put("title", d.getTitle());
+                cv.put("author", d.getAuthor());
+                cv.put("name", d.getName());
 
-            db.insert("books", null, cv);
+                db.insert("books", null, cv);
+            }
+            db.setTransactionSuccessful();
+
+        } finally {
+            db.endTransaction();
         }
-        db.close();
-
     }
 
 //    public void set(String key, Object val) {
