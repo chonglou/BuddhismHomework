@@ -2,21 +2,38 @@ package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
+import com.odong.buddhismhomework.utils.HttpClient;
+import com.odong.buddhismhomework.utils.KvHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 import com.odong.buddhismhomework.widgets.NavIconAdapter;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,6 +45,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         initGrid();
+        checkVersion();
     }
 
     @Override
@@ -42,6 +60,9 @@ public class MainActivity extends Activity {
         switch (id) {
             case R.id.action_favorites:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+                break;
+            case R.id.action_sync:
+                new WidgetHelper(MainActivity.this).showSyncDialog();
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -152,5 +173,73 @@ public class MainActivity extends Activity {
         ((GridView) findViewById(R.id.gv_main_icons)).setAdapter(new NavIconAdapter(this, icons));
 
     }
+
+    private void checkVersion() {
+        Date lc = new KvHelper(this).get("version.last_check", Date.class, null);
+        if (lc != null && (lc.getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24)) {
+            return;
+        }
+        new AsyncTask<String, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(String... params) {
+                String url = "https://api.github.com/repos/chonglou/BuddhismHomework/tags";
+                try {
+                    String pl = HttpClient.get(url);
+
+                    PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    Log.d("当前版本号", pi.versionName);
+                    Log.d("版本列表", pl);
+                    String version = new JsonParser().parse(pl).getAsJsonArray().get(0).getAsJsonObject().get("name").toString();
+
+                    if (version.compareTo(pi.versionName) > 0) {
+                        Message msg = new Message();
+                        msg.what = UPGRADE;
+                        versionHandler.sendMessage(msg);
+                    }
+                } catch (JsonParseException | IOException | URISyntaxException | PackageManager.NameNotFoundException e) {
+                    new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
+                }
+
+                return null;
+            }
+        }.execute();
+
+
+    }
+
+
+    final int UPGRADE = 1;
+    final int ERROR = 2;
+    private Handler versionHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPGRADE:
+                    AlertDialog.Builder adb = new AlertDialog.Builder(MainActivity.this);
+                    adb.setTitle(R.string.dlg_title_check_version);
+                    adb.setMessage(R.string.dlg_check_version);
+                    adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String name = getPackageName();
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + name)));
+                            } catch (ActivityNotFoundException e) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + name)));
+                            }
+                        }
+                    });
+                    adb.setNegativeButton(android.R.string.no, null);
+                    adb.create().show();
+                    break;
+                case ERROR:
+                    break;
+
+            }
+            return true;
+        }
+    });
+
 
 }

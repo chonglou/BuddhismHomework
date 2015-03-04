@@ -43,6 +43,10 @@ public class SyncService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         WidgetHelper wh = new WidgetHelper(this);
+        //---------下载
+        //-----------解压缩-----------------
+        //-----------导入大正藏-------------
+        //------------抓取视频--------------
         wh.toast(getString(R.string.lbl_begin_download), true);
         KvHelper kh = new KvHelper(this);
         Integer type = kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox);

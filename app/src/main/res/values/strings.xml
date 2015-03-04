@@ -72,6 +72,7 @@
     <string name="lbl_error_not_exists">数据不存在</string>
     <string name="lbl_error_io">读取数据出错。</string>
     <string name="lbl_error_download">下载数据出错</string>
+    <string name="lbl_error_check_version">检查新版本出错</string>
     <string name="lbl_error_import">导入数据出错</string>
     <string name="lbl_error_unzip">解压缩[%s.zip]出错</string>
     <string name="lbl_error_first_page">已经是第一页</string>
@@ -79,11 +80,10 @@
     <string name="lbl_error_page_not_valid">页码不正确</string>
 
 
+    <string name="dlg_title_check_version">发现新版本</string>
+    <string name="dlg_check_version">要安装么？</string>
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
-    <string name="dlg_sync">下载资源文件会耗费流量，建议在WLAN连接下进行，请耐心等待，确定要继续？</string>
-    <string name="dlg_import">导入数据会耗费时间比较长(7到10分钟)，请耐心等待，确定要继续？</string>
-
-
+    <string name="dlg_sync">下载资源文件会耗费流量(700M左右)，建议在WLAN连接下进行，导入数据很耗时，请耐心等待，确定要继续么？</string>
     <string name="lbl_search_result">搜索[%s]的结果</string>
     <string name="lbl_begin_import">开始导入数据, 请稍候</string>
     <string name="lbl_begin_download">开始下载文件, 请稍候</string>
@@ -102,14 +102,12 @@
     <string name="lbl_about_me">
         1: <i>配套图书</i>《<b>佛教朝暮课诵本</b>》法鼓文化出版社 \n
         2: <i>BUG报告地址</i> <u>https://github.com/chonglou/BuddhismHomework/issues</u> \n
-        3: 本软件所有经书来自与互联网，所有音频及视频资源链接均来自于<b>法鼓山信众教育院</b><u>http://dbs.ddm.org.tw/</u>。\n
+        3: 本软件所有经书来自于<i>CBETA 電子佛典</i><u>http://www.cbeta.org/epub.php</u>，所有音频及视频资源链接均来自于<b>法鼓山信众教育院</b><u>http://dbs.ddm.org.tw/</u>。\n
         4: 感恩<b>法鼓山</b>(<u>https://www.ddm.org.tw/</u>)为推广佛教教育作出的卓越贡献。\n
         5: 请仅用作学习用途，谢谢！
     </string>
     <string name="lbl_help">
-        由于APP大小所限，许多第三方的资源并未直接包含，如果您需要使用全部功能（如梵呗、字典查询、大藏经等功能），还需要进行如下操作： \n
-        1： 打开“参数设置”页，点击下载按钮，可以下载数据包，耗时比较长（取决于您当前网速）。\n
-        2： 数据包下载后，如需使用“，还需要打开“参数设置”页，点击导入按钮，耗时约7到15分钟(取决于设备性能)。\n
+        由于APP大小所限，许多第三方的资源并未直接包含，如果您需要使用全部功能（如梵呗、字典查询、大藏经等功能），还需要同步数据包： \n
         注意：处理过程中请耐心等待，不要进行关于本APP的其它操作，完毕后在顶部消息栏会有提醒。\n
         友情提示，请仅用于学习交流用户，请勿用于任何商业用途！！！\n
     </string>

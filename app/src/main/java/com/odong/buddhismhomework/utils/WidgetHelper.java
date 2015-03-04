@@ -25,6 +25,7 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.pages.reading.SearchActivity;
 import com.odong.buddhismhomework.pages.reading.ShowActivity;
+import com.odong.buddhismhomework.services.SyncService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +43,19 @@ public class WidgetHelper {
         this.context = context;
     }
 
+    public void showSyncDialog() {
+        AlertDialog.Builder adb = new AlertDialog.Builder(context);
+        adb.setTitle(R.string.action_sync);
+        adb.setMessage(R.string.dlg_sync);
+        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                context.startService(new Intent(context, SyncService.class));
+            }
+        });
+        adb.setNegativeButton(android.R.string.no, null);
+        adb.create().show();
+    }
 
     public String readFile(Integer... files) throws IOException {
         StringBuilder sb = new StringBuilder();

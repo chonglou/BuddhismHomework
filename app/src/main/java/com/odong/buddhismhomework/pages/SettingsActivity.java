@@ -3,7 +3,6 @@ package com.odong.buddhismhomework.pages;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,9 +14,9 @@ import android.widget.TimePicker;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Calendar;
-import com.odong.buddhismhomework.services.SyncService;
 import com.odong.buddhismhomework.utils.AlarmHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
+import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -45,7 +44,7 @@ public class SettingsActivity extends Activity {
                 getString(R.string.tv_sync_log,
                         lastSync == null ? getString(R.string.lbl_never) : DateFormat.getDateTimeInstance().format(lastSync),
                         new CacheFile(this, "/").getRealFile().toString(),
-                        "test"
+                        kv.get("sync.log", String.class, "")
                 ));
 
 
@@ -132,17 +131,7 @@ public class SettingsActivity extends Activity {
         findViewById(R.id.btn_setting_sync).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
-                adb.setTitle(R.string.action_sync);
-                adb.setMessage(R.string.dlg_sync);
-                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startService(new Intent(SettingsActivity.this, SyncService.class));
-                    }
-                });
-                adb.setNegativeButton(android.R.string.no, null);
-                adb.create().show();
+                new WidgetHelper(SettingsActivity.this).showSyncDialog();
             }
         });
         findViewById(R.id.btn_settings_replay).setOnClickListener(new View.OnClickListener() {
