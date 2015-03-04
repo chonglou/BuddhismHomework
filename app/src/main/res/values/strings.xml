@@ -32,9 +32,9 @@
     <string name="tv_setting_evening">晚课时间(每天%1$02d:%2$02d)</string>
     <string name="tv_clocks">从现在开始打坐：</string>
     <string name="tv_sync_log">
-        上次检查：\n %1$s \n
-        数据目录：\n %2$s \n
-        日志记录：\n %3$s \n
+        <b>上次检查</b>：\n <u>%1$s</u> \n
+        <b>数据目录</b>：\n <u>%2$s</u> \n
+        <b>日志记录</b>：\n <u>%3$s</u> \n
     </string>
 
     <string name="tv_replay">MP3循环播放</string>
@@ -86,6 +86,7 @@
     <string name="dlg_sync">下载资源文件会耗费流量(700M左右)，建议在WLAN连接下进行，导入数据很耗时，请耐心等待，确定要继续么？</string>
     <string name="lbl_search_result">搜索[%s]的结果</string>
     <string name="lbl_begin_import">开始导入数据, 请稍候</string>
+    <string name="lbl_begin_uncompress">开始解压缩[%s]</string>
     <string name="lbl_begin_download">开始下载文件, 请稍候</string>
     <string name="lbl_sd_card_not_exist">SD卡不存在[%s]</string>
     <string name="lbl_file_not_exist">文件[%s]不存在</string>
@@ -93,11 +94,13 @@
     <string name="lbl_download_success">下载[%s]成功</string>
     <string name="lbl_download_complete">下载完毕,共[%d]个文件</string>
     <string name="lbl_import_complete">导入完毕,共[%d]个文件</string>
+    <string name="lbl_uncompress_complete">解压缩[%s]完毕</string>
     <string name="lbl_unknown_host">未知下载节点</string>
     <string name="lbl_download_error">下载出错，原因: %s</string>
     <string name="lbl_no_valid_host">下载节点当前不可用，请另选一个</string>
     <string name="lbl_file_broken">文件[%s]损坏, 要删除么？</string>
     <string name="lbl_success">操作成功</string>
+    <string name="lbl_progressing">正在处理&#8230;</string>
     <string name="lbl_fail">操作失败</string>
     <string name="lbl_loading">努力加载中,请稍候。。。</string>
     <string name="lbl_about_me">
