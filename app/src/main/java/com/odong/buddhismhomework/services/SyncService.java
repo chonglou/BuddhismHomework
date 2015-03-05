@@ -25,9 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Date;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -90,23 +88,24 @@ public class SyncService extends IntentService {
         }
         success();
     }
-    private void downloadAndImport(String name){
-        String sql = name+".sql";
+
+    private void downloadAndImport(String name) {
+        String sql = name + ".sql";
         download(fetchUrl(sql), sql);
         increase(5);
         new DwDbHelper(this).loadSql(new CacheFile(this, sql).getRealFile());
         increase(5);
     }
 
-    private void downloadAndZip(String name){
-        String zip = name+".zip";
+    private void downloadAndZip(String name) {
+        String zip = name + ".zip";
         download(fetchUrl(zip), zip);
         increase(5);
         unzip(zip, name);
         increase(5);
     }
 
-    private String fetchUrl(String file){
+    private String fetchUrl(String file) {
         return Config.getUrlMap().get(kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)).get(file);
     }
 
@@ -191,7 +190,7 @@ public class SyncService extends IntentService {
             return;
         }
 
-        if(url == null){
+        if (url == null) {
             fail(getString(R.string.lbl_no_valid_host));
             return;
         }

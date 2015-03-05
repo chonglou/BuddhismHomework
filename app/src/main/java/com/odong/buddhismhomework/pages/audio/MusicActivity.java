@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Music;
-import com.odong.buddhismhomework.models.Pager;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -28,7 +27,7 @@ import java.io.IOException;
 /**
  * Created by flamen on 15-2-8.
  */
-public class PlayerActivity extends Activity {
+public class MusicActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +38,8 @@ public class PlayerActivity extends Activity {
 
         getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
 
-        book = new Gson().fromJson(getIntent().getStringExtra("book"), Music.class);
-        setTitle(book.getName());
+        music = new Gson().fromJson(getIntent().getStringExtra("music"), Music.class);
+        setTitle(music.getName());
 
 
         ((TextView) findViewById(R.id.tv_player_content)).setMovementMethod(new ScrollingMovementMethod());
@@ -51,15 +50,6 @@ public class PlayerActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (book.getMp3() == null) {
-            TextView tv = (TextView) findViewById(R.id.tv_player_content);
-            Pager p = new Pager();
-            p.setX(tv.getScrollX());
-            p.setY(tv.getScrollY());
-
-            new KvHelper(this).set("scroll://book/" + book.getName(), p);
-
-        }
         if (mp3Player != null && mp3Player.isPlaying()) {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setMessage(R.string.dlg_will_pause);
@@ -67,7 +57,7 @@ public class PlayerActivity extends Activity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     releasePlayer();
-                    PlayerActivity.this.finish();
+                    MusicActivity.this.finish();
                 }
             });
             adb.setNegativeButton(android.R.string.no, null);
@@ -92,9 +82,9 @@ public class PlayerActivity extends Activity {
 
     private void initMp3View() {
         boolean ok = false;
-        if (book.getMp3() != null) {
+        if (music.getMp3() != null) {
 
-            final CacheFile cf = new CacheFile(this, book.getMp3());
+            final CacheFile cf = new CacheFile(this, music.getMp3());
             if (cf.exists()) {
 
                 try {
@@ -156,7 +146,7 @@ public class PlayerActivity extends Activity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             cf.remove();
-                            PlayerActivity.this.finish();
+                            MusicActivity.this.finish();
                         }
                     });
                     adb.setNegativeButton(android.R.string.no, null);
@@ -164,7 +154,7 @@ public class PlayerActivity extends Activity {
                     adb.create().show();
                 }
             } else {
-                new WidgetHelper(PlayerActivity.this).toast(getString(R.string.lbl_file_not_exist, book.getMp3()), false);
+                new WidgetHelper(MusicActivity.this).toast(getString(R.string.lbl_file_not_exist, music.getMp3()), false);
 
             }
         }
@@ -179,27 +169,24 @@ public class PlayerActivity extends Activity {
 
     private void initTextView() {
         TextView tv = (TextView) findViewById(R.id.tv_player_content);
-        if (book.getFiles().isEmpty()) {
+        if (music.getFiles().isEmpty()) {
             tv.setText(R.string.lbl_empty);
             return;
         }
 
         try {
-            tv.setText(new WidgetHelper(this).readFile(book.getFiles().toArray(new Integer[1])));
+            tv.setText(new WidgetHelper(this).readFile(music.getFiles().toArray(new Integer[1])));
 
         } catch (IOException e) {
-            Log.e("读取文件", book.getName(), e);
+            Log.e("读取文件", music.getName(), e);
             tv.setText(R.string.lbl_error_io);
         }
 
-
-        Pager p = new KvHelper(this).get("scroll://book/" + book.getName(), Pager.class, new Pager());
-        tv.scrollTo(p.getX(), p.getY());
     }
 
 
     private SeekBar mp3Seeker;
     private MediaPlayer mp3Player;
-    private Music book;
+    private Music music;
     private Handler durationHandler = new Handler();
 }

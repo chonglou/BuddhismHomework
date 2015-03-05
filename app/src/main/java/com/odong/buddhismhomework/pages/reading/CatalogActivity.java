@@ -78,7 +78,7 @@ public class CatalogActivity extends Activity {
     }
 
     private void initForBook() {
-        final List<Music> books = new XmlHelper(this).getBookList("books");
+        final List<Music> books = new XmlHelper(this).getMusicList("books");
 
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
         for (Music b : books) {

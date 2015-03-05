@@ -12,6 +12,10 @@ public class Music implements Serializable {
         files = new ArrayList<Integer>();
     }
 
+    public String getScrollId() {
+        return "scroll://music/" + name;
+    }
+
     @Override
     public String toString() {
         return name;

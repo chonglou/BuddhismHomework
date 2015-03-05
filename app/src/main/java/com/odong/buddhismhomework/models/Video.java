@@ -8,9 +8,17 @@ import java.io.Serializable;
 public class Video implements Serializable {
     private int id;
     private String pid;
+    private String vid;
     private String title;
     private String description;
 
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
 
     public int getId() {
         return id;

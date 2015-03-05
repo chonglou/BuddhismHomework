@@ -25,6 +25,11 @@ def dump_str(s)
   s.inspect[1..-2].gsub(/'/, "''")
 end
 
+def test_sql(name)
+  puts "测试[#{name}]"
+  puts `cat #{name} | sqlite3 /tmp/a.db`
+end
+
 namespace :adb do
   desc '启动模拟器'
   task :em do
@@ -147,9 +152,11 @@ namespace :crawler do
           author: ss[1][i..-1].chomp
       }
     end
-    File.open("#{File.dirname __FILE__}/tmp/cbeta.sql", 'w') do |f|
+
+    name = "#{File.dirname __FILE__}/tmp/cbeta.sql"
+    File.open(name, 'w') do |f|
       f.puts 'DROP TABLE IF EXISTS books;'
-      f.puts 'CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
+      f.puts 'CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, fav INTEGER(1) NOT NULL DEFAULT 0, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
       f.puts 'CREATE INDEX IF NOT EXISTS books_name ON books(name);'
       f.puts 'CREATE INDEX IF NOT EXISTS books_title ON books(title);'
       f.puts 'CREATE INDEX IF NOT EXISTS books_author ON books(author);'
@@ -157,8 +164,14 @@ namespace :crawler do
       books.each do |b|
         f.puts "INSERT INTO books(name, type, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :type}', '#{b.fetch :title}', '#{b.fetch :author}');"
       end
+
+      #金剛般若波羅蜜經|般若波羅蜜多心經|大方廣圓覺修多羅了義經|楞伽阿跋多羅寶經|大佛頂如來密因修證了義諸菩薩萬行首楞嚴經|維摩詰所說經|六祖大師法寶壇經|妙法蓮華經
+      %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub).each do |n|
+        f.puts "UPDATE books SET fav=1 WHERE name='#{n}';"
+      end
     end
     puts "采集到#{books.size}本书"
+    test_sql name
   end
 
   desc '采集youtube视频'
@@ -203,7 +216,8 @@ namespace :crawler do
       end
     end
 
-    File.open("#{File.dirname __FILE__}/tmp/videos.sql", 'w') do |f|
+    name = "#{File.dirname __FILE__}/tmp/videos.sql"
+    File.open(name, 'w') do |f|
       f.puts 'DROP TABLE IF EXISTS channels;'
       f.puts 'DROP TABLE IF EXISTS playlist;'
       f.puts 'DROP TABLE IF EXISTS videos;'
@@ -233,6 +247,7 @@ namespace :crawler do
       end
     end
 
+    test_sql name
 
   end
 end

@@ -35,7 +35,7 @@ public class SectionActivity extends Activity {
         setTitle(getResources().getIdentifier("title_" + type, "string", getPackageName()));
         getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
 
-        books = new XmlHelper(this).getBookList(type);
+        musics = new XmlHelper(this).getMusicList(type);
         initListView();
 
 
@@ -45,7 +45,7 @@ public class SectionActivity extends Activity {
     private void initListView() {
 
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        for (Music b : books) {
+        for (Music b : musics) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", b.getName());
             map.put("details", b.getAuthor());
@@ -64,9 +64,9 @@ public class SectionActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SectionActivity.this, PlayerActivity.class);
-                Music book = books.get(position);
-                intent.putExtra("book", new Gson().toJson(book));
+                Intent intent = new Intent(SectionActivity.this, MusicActivity.class);
+                Music music = musics.get(position);
+                intent.putExtra("music", new Gson().toJson(music));
                 intent.putExtra("type", type);
                 startActivity(intent);
             }
@@ -74,8 +74,8 @@ public class SectionActivity extends Activity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                final Music book = books.get(position);
-                if (book.getMp3() != null) {
+                final Music music = musics.get(position);
+                if (music.getMp3() != null) {
 
                     AlertDialog.Builder adb = new AlertDialog.Builder(SectionActivity.this);
                     adb.setMessage(R.string.lbl_remove_item_cache);
@@ -84,7 +84,7 @@ public class SectionActivity extends Activity {
                     adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new CacheFile(SectionActivity.this, book.getMp3()).remove();
+                            new CacheFile(SectionActivity.this, music.getMp3()).remove();
 
 
                         }
@@ -99,7 +99,7 @@ public class SectionActivity extends Activity {
 
     }
 
-    private List<Music> books;
+    private List<Music> musics;
     private String type;
 
 

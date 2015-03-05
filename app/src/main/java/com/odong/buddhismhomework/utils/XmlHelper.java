@@ -4,20 +4,16 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
-import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
 import com.odong.buddhismhomework.models.Music;
-import com.odong.buddhismhomework.models.Video;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by flamen on 15-2-12.
@@ -27,77 +23,8 @@ public class XmlHelper {
         this.context = context;
     }
 
-    public Map<String, String> getHostMap() {
-
-        final Map<String, String> hosts = new HashMap<String, String>();
-        read("hosts", new Callback() {
-            @Override
-            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
-                String type = xrp.getAttributeValue(null, "type");
-                String name = readText(xrp);
-                hosts.put(type, name);
-            }
-        });
-        return hosts;
-    }
-
-    public List<Video> getVideoList() {
-        List<Video> videos = new ArrayList<Video>();
-        try {
-            XmlResourceParser xrp = context.getResources().getXml(R.xml.videos);
-
-            Video video = null;
-            for (int et = xrp.getEventType(); et != XmlPullParser.END_DOCUMENT; et = xrp.next()) {
-                switch (et) {
-                    case XmlPullParser.START_TAG:
-                        if (xrp.getName().equals("entry")) {
-                            video = new Video();
-                        } else if (xrp.getName().equals("name")) {
-                            video.setName(readText(xrp));
-                        } else if (xrp.getName().equals("author")) {
-                            video.setAuthor(readText(xrp));
-                        } else if (xrp.getName().equals("item")) {
-                            String key = xrp.getAttributeValue(null, "vid");
-                            String val = readText(xrp);
-                            video.getItems().put(key, val);
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        if (xrp.getName().equals("entry")) {
-                            videos.add(video);
-                        }
-                        break;
-
-                }
-            }
-        } catch (XmlPullParserException e) {
-            Log.e("XML", "PARSER", e);
-        } catch (IOException e) {
-            Log.e("XML", "IO", e);
-        }
-        return videos;
-    }
-
-    public List<String> getDownloadFileList() {
-        final List<String> files = new ArrayList<String>();
-
-        Callback cb = new Callback() {
-            @Override
-            public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
-                String mp3 = xrp.getAttributeValue(null, "mp3");
-                if (mp3 != null) {
-                    files.add(mp3);
-                }
-            }
-        };
-        read("courses", cb);
-        read("musics", cb);
-        return files;
-
-    }
-
-    public List<Music> getBookList(String name) {
-        final List<Music> books = new ArrayList<Music>();
+    public List<Music> getMusicList(String name) {
+        final List<Music> musics = new ArrayList<Music>();
         read(name, new Callback() {
             @Override
             public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
@@ -108,10 +35,10 @@ public class XmlHelper {
                 for (String name : readText(xrp).split("\\n")) {
                     b.getFiles().add(name2rid("raw", name));
                 }
-                books.add(b);
+                musics.add(b);
             }
         });
-        return books;
+        return musics;
     }
 
     public List<Clock> getClockList() {

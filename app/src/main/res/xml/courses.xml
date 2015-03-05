@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<books>
+<musics>
     <entry
         mp3="楞严咒.mp3"
         name="楞严咒"
@@ -45,4 +45,4 @@
         author="圣严法师">
         emituofosizifohao
     </entry>
-</books>
+</musics>

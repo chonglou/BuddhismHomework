@@ -7,7 +7,9 @@ import java.io.Serializable;
  */
 public class Playlist implements Serializable {
     private int id;
-    private String vid;
+    private String cid;
+    private String pid;
+
     private String title;
     private String description;
 
@@ -19,12 +21,20 @@ public class Playlist implements Serializable {
         this.id = id;
     }
 
-    public String getVid() {
-        return vid;
+    public String getCid() {
+        return cid;
     }
 
-    public void setVid(String vid) {
-        this.vid = vid;
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
     public String getTitle() {

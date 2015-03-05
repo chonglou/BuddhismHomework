@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<books>
+<musics>
     <entry
         mp3="法鼓山.mp3"
         name="法鼓山"
@@ -30,4 +30,4 @@
         author="法鼓山">
         pingange
     </entry>
-</books>
+</musics>

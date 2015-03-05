@@ -10,12 +10,14 @@ import android.util.Log;
 
 import com.google.gson.internal.LinkedHashTreeMap;
 import com.odong.buddhismhomework.models.Book;
+import com.odong.buddhismhomework.models.Channel;
+import com.odong.buddhismhomework.models.Playlist;
+import com.odong.buddhismhomework.models.Video;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -28,6 +30,50 @@ import java.util.Map;
  */
 public class DwDbHelper extends SQLiteOpenHelper {
 
+    public List<Channel> listChannel() {
+        List<Channel> channels = new ArrayList<>();
+        Cursor c = getReadableDatabase().query("channels", new String[]{"cid", "title", "description"}, null, null, null, null, "created ASC");
+
+        while (c.moveToNext()) {
+            Channel ch = new Channel();
+            ch.setCid(c.getString(c.getColumnIndexOrThrow("cid")));
+            ch.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            ch.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
+            channels.add(ch);
+        }
+        c.close();
+        return channels;
+    }
+
+    public List<Playlist> listPlaylist(String channel) {
+        List<Playlist> playlist = new ArrayList<>();
+        Cursor c = getReadableDatabase().query("playlist", new String[]{"pid", "title", "description"}, "cid = ?", new String[]{channel}, null, null, "created DESC");
+
+        while (c.moveToNext()) {
+            Playlist p = new Playlist();
+            p.setPid(c.getString(c.getColumnIndexOrThrow("pid")));
+            p.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            p.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
+            playlist.add(p);
+        }
+        c.close();
+        return playlist;
+    }
+
+    public List<Video> listVideo(String playlist) {
+        List<Video> videos = new ArrayList<>();
+        Cursor c = getReadableDatabase().query("videos", new String[]{"vid", "title", "description"}, "pid = ?", new String[]{playlist}, null, null, "created DESC");
+
+        while (c.moveToNext()) {
+            Video v = new Video();
+            v.setVid(c.getString(c.getColumnIndexOrThrow("vid")));
+            v.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            v.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
+            videos.add(v);
+        }
+        c.close();
+        return videos;
+    }
 
     public Map<String, String> listDdc() {
         Map<String, String> map = new LinkedHashTreeMap<>();
@@ -147,53 +193,6 @@ public class DwDbHelper extends SQLiteOpenHelper {
         }
     }
 
-
-//    public void resetBook(List<Book> books) {
-//        SQLiteDatabase db = getWritableDatabase();
-//        try {
-//            db.beginTransaction();
-//            Log.d("数据库", "清空books");
-//            db.delete("books", null, null);
-//            ContentValues cv = new ContentValues();
-//            for (Book d : books) {
-//                cv.put("type", d.getType());
-//                cv.put("title", d.getTitle());
-//                cv.put("author", d.getAuthor());
-//                cv.put("name", d.getName());
-//
-//                db.insert("books", null, cv);
-//            }
-//            db.setTransactionSuccessful();
-//
-//        } finally {
-//            db.endTransaction();
-//        }
-//    }
-
-//    public void set(String key, Object val) {
-//        SQLiteDatabase db = getWritableDatabase();
-//        ContentValues cv = new ContentValues();
-//        cv.put("val", new Gson().toJson(val));
-//        if (get(key, val.getClass()) == null) {
-//            cv.put("`key`", key);
-//            db.insert("settings", null, cv);
-//        } else {
-//            db.update("settings", cv, "`key` = ?", new String[]{key});
-//        }
-//    }
-//
-//
-//    public <T> T get(String key, Class<T> clazz) {
-//        Cursor c = getReadableDatabase().query("settings", new String[]{"val"}, "`key` = ?", new String[]{key}, null, null, null, "1");
-//        T obj = null;
-//        if (c.moveToFirst()) {
-//            String val = c.getString(c.getColumnIndexOrThrow("val"));
-//            obj = new Gson().fromJson(val, clazz);
-//        }
-//        c.close();
-//        return obj;
-//
-//    }
 
     public interface LogCallback {
         void call(String message, Date created);
