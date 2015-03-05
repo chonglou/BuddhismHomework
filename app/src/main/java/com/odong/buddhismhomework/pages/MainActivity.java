@@ -21,6 +21,7 @@ import android.widget.GridView;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
@@ -59,6 +60,18 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_storage:
+                try {
+                    Intent storage = new Intent();
+                    storage.setAction(Intent.ACTION_GET_CONTENT);
+                    storage.setData(Uri.parse(new CacheFile(this, "").getRootPath()));
+                    storage.setType("file/*");
+                    startActivity(storage);
+                }
+                catch (ActivityNotFoundException e){
+                    Log.e("文件浏览", "出错", e);
+                }
+                break;
             case R.id.action_favorites:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 break;

@@ -32,47 +32,60 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<Channel> listChannel() {
         List<Channel> channels = new ArrayList<>();
-        Cursor c = getReadableDatabase().query("channels", new String[]{"cid", "title", "description", "type"}, null, null, null, null, "created ASC");
+        try {
+            Cursor c = getReadableDatabase().query("channels", new String[]{"cid", "title", "description", "type"}, null, null, null, null, "created ASC");
 
-        while (c.moveToNext()) {
-            Channel ch = new Channel();
-            ch.setCid(c.getString(c.getColumnIndexOrThrow("cid")));
-            ch.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
-            ch.setType(c.getString(c.getColumnIndexOrThrow("type")));
-            ch.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
-            channels.add(ch);
+            while (c.moveToNext()) {
+                Channel ch = new Channel();
+                ch.setCid(c.getString(c.getColumnIndexOrThrow("cid")));
+                ch.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+                ch.setType(c.getString(c.getColumnIndexOrThrow("type")));
+                ch.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
+                channels.add(ch);
+            }
+            c.close();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.d("数据库", "锁定", e);
         }
-        c.close();
         return channels;
     }
 
     public List<Playlist> listPlaylist(String channel) {
         List<Playlist> playlist = new ArrayList<>();
-        Cursor c = getReadableDatabase().query("playlist", new String[]{"pid", "title", "description"}, "cid = ?", new String[]{channel}, null, null, "created DESC");
+        try {
 
-        while (c.moveToNext()) {
-            Playlist p = new Playlist();
-            p.setPid(c.getString(c.getColumnIndexOrThrow("pid")));
-            p.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
-            p.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
-            playlist.add(p);
+            Cursor c = getReadableDatabase().query("playlist", new String[]{"pid", "title", "description"}, "cid = ?", new String[]{channel}, null, null, "created DESC");
+
+            while (c.moveToNext()) {
+                Playlist p = new Playlist();
+                p.setPid(c.getString(c.getColumnIndexOrThrow("pid")));
+                p.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+                p.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
+                playlist.add(p);
+            }
+            c.close();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.d("数据库", "锁定", e);
         }
-        c.close();
         return playlist;
     }
 
     public List<Video> listVideo(String playlist) {
         List<Video> videos = new ArrayList<>();
-        Cursor c = getReadableDatabase().query("videos", new String[]{"vid", "title", "description"}, "pid = ?", new String[]{playlist}, null, null, "created DESC");
+        try {
+            Cursor c = getReadableDatabase().query("videos", new String[]{"vid", "title", "description"}, "pid = ?", new String[]{playlist}, null, null, "created DESC");
 
-        while (c.moveToNext()) {
-            Video v = new Video();
-            v.setVid(c.getString(c.getColumnIndexOrThrow("vid")));
-            v.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
-            v.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
-            videos.add(v);
+            while (c.moveToNext()) {
+                Video v = new Video();
+                v.setVid(c.getString(c.getColumnIndexOrThrow("vid")));
+                v.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+                v.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
+                videos.add(v);
+            }
+            c.close();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.d("数据库", "锁定", e);
         }
-        c.close();
         return videos;
     }
 
@@ -204,7 +217,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
-                if (line.endsWith("');")) {
+                if (line.endsWith(";")) {
                     db.execSQL(sb.toString());
                     sb = new StringBuilder();
                 } else {

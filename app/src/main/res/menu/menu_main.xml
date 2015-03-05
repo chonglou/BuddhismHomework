@@ -20,6 +20,12 @@
         android:orderInCategory="100"
         android:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_storage"
+        android:title="@string/action_storage"
+        android:icon="@drawable/ic_storage"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_about_me"
         android:title="@string/action_about_me"
         android:icon="@drawable/ic_action_help"

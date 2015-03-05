@@ -17,6 +17,7 @@
     <string name="action_sync">同步数据</string>
     <string name="action_search">搜索</string>
     <string name="action_settings">参数设置</string>
+    <string name="action_storage">文件管理</string>
     <string name="action_about_me">关于我们</string>
     <string name="action_home">返回主页</string>
     <string name="action_help">帮助文档</string>
