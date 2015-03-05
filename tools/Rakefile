@@ -80,6 +80,7 @@ namespace :crawler do
         puts "\t抓取频道[#{ch_sn.fetch('title')}]"
         channels << {
             id: channel.fetch('id'),
+            type: 'youtube',
             title: ch_sn.fetch('title'),
             description: ch_sn.fetch('description'),
             playlist: http_get("https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=#{channel.fetch('id')}&maxResults=50&key=#{key}").fetch('items').map do |playlist|

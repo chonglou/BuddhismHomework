@@ -260,10 +260,11 @@ public class DwDbHelper extends SQLiteOpenHelper {
         switch (version) {
             case 5:
                 for (String s : new String[]{
-                        "CREATE TABLE IF NOT EXISTS channels(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS channels(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, type VARCHAR(8) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE TABLE IF NOT EXISTS playlist(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE TABLE IF NOT EXISTS videos(id INTEGER PRIMARY KEY AUTOINCREMENT, vid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE INDEX IF NOT EXISTS channels_cid ON channels(cid)",
+                        "CREATE INDEX IF NOT EXISTS channels_type ON channels(type)",
                         "CREATE INDEX IF NOT EXISTS playlist_cid ON playlist(cid)",
                         "CREATE INDEX IF NOT EXISTS playlist_pid ON playlist(pid)",
                         "CREATE INDEX IF NOT EXISTS playlist_title ON playlist(title)",
