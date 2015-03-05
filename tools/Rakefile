@@ -111,7 +111,7 @@ namespace :crawler do
       f.puts 'DELETE FROM videos;'
       channels.each do |ch|
 
-        f.puts "INSERT INTO channels(cid, title, description) VALUES('#{ch.fetch(:id)}', '#{dump_str ch.fetch(:title)}', '#{dump_str ch.fetch(:description)}');"
+        f.puts "INSERT INTO channels(cid, type, title, description) VALUES('#{ch.fetch(:id)}', '#{ch.fetch(:type)}', '#{dump_str ch.fetch(:title)}', '#{dump_str ch.fetch(:description)}');"
         ch.fetch(:playlist).each do |pl|
           f.puts "INSERT INTO playlist(pid, cid, title, description) VALUES('#{pl.fetch(:id)}','#{ch.fetch(:id)}', '#{dump_str pl.fetch(:title)}', '#{dump_str pl.fetch(:description)}');"
           pl.fetch(:videos).each do |v|
