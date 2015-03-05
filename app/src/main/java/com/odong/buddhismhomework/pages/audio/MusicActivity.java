@@ -84,7 +84,7 @@ public class MusicActivity extends Activity {
         boolean ok = false;
         if (music.getMp3() != null) {
 
-            final CacheFile cf = new CacheFile(this, music.getMp3());
+            final CacheFile cf = new CacheFile(this, "musics/" + music.getMp3());
             if (cf.exists()) {
 
                 try {

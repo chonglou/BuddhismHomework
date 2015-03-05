@@ -40,7 +40,7 @@ public class VideoActivity extends Activity {
                 initPlaylist(new Gson().fromJson(getIntent().getStringExtra("channel"), Channel.class));
                 break;
             case "videos":
-                initVideoList(new Gson().fromJson(getIntent().getStringExtra("playlist"), Playlist.class));
+                initVideosList(new Gson().fromJson(getIntent().getStringExtra("playlist"), Playlist.class));
                 break;
         }
 
@@ -56,7 +56,7 @@ public class VideoActivity extends Activity {
         for (Channel c : channels) {
             Map<String, String> map = new HashMap<>();
             map.put("title", c.getTitle());
-            map.put("details", c.getDescription());
+            map.put("details", shortTxt(c.getDescription()));
             items.add(map);
         }
         ListAdapter adapter = new SimpleAdapter(this,
@@ -74,7 +74,7 @@ public class VideoActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(VideoActivity.this, VideoActivity.class);
                 Channel ch = channels.get(position);
-                intent.putExtra("type", "channel");
+                intent.putExtra("type", "playlist");
                 intent.putExtra("channel", new Gson().toJson(ch));
                 startActivity(intent);
             }
@@ -91,7 +91,7 @@ public class VideoActivity extends Activity {
         for (Playlist pl : playlist) {
             Map<String, String> map = new HashMap<>();
             map.put("title", pl.getTitle());
-            map.put("details", pl.getDescription());
+            map.put("details", shortTxt(pl.getDescription()));
             items.add(map);
         }
         ListAdapter adapter = new SimpleAdapter(this,
@@ -109,14 +109,14 @@ public class VideoActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(VideoActivity.this, VideoActivity.class);
                 Playlist pl = playlist.get(position);
-                intent.putExtra("type", "playlist");
+                intent.putExtra("type", "videos");
                 intent.putExtra("playlist", new Gson().toJson(pl));
                 startActivity(intent);
             }
         });
     }
 
-    private void initVideoList(Playlist playlist) {
+    private void initVideosList(Playlist playlist) {
         setTitle(playlist.getTitle());
         final List<Video> videos = new DwDbHelper(this).listVideo(playlist.getPid());
 
@@ -125,7 +125,7 @@ public class VideoActivity extends Activity {
         for (Video v : videos) {
             Map<String, String> map = new HashMap<>();
             map.put("title", v.getTitle());
-            map.put("details", v.getDescription());
+            map.put("details", shortTxt(v.getDescription()));
             items.add(map);
         }
         ListAdapter adapter = new SimpleAdapter(this,
@@ -144,6 +144,11 @@ public class VideoActivity extends Activity {
                 new YoutubePlayer(VideoActivity.this, v.getVid()).start();
             }
         });
+    }
+
+    private String shortTxt(String text) {
+        //String text = Jsoup.parse(html).text();
+        return text.length() > 128 ? text.substring(0, 120) : text;
     }
 
 

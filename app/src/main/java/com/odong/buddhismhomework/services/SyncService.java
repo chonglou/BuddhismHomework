@@ -41,6 +41,7 @@ public class SyncService extends IntentService {
     public void onStart(Intent intent, int startId) {
         progress = 0;
         sb = new StringBuilder();
+        ddh = new DwDbHelper(this);
         wh = new WidgetHelper(this);
         kh = new KvHelper(this);
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -69,21 +70,21 @@ public class SyncService extends IntentService {
                 downloadAndImport("ddc");
                 break;
             case "musics.zip":
-                downloadAndZip("musics");
+                downloadAndUnzip("musics");
                 break;
             case "dict.zip":
-                downloadAndZip("dict");
+                downloadAndUnzip("dict");
                 break;
             case "cbeta.zip":
-                downloadAndZip("cbeta");
+                downloadAndUnzip("cbeta");
                 break;
             default:
                 downloadAndImport("cbeta");
                 downloadAndImport("videos");
-                downloadAndZip("books");
-                downloadAndZip("dict");
-                downloadAndZip("musics");
-                downloadAndZip("cbeta");
+                downloadAndUnzip("dict");
+                downloadAndImport("ddc");
+                downloadAndUnzip("musics");
+                downloadAndUnzip("cbeta");
                 kh.set("sync://all.zip", new Date());
                 break;
         }
@@ -94,12 +95,12 @@ public class SyncService extends IntentService {
         String sql = name + ".sql";
         download(fetchUrl(sql), sql);
         increase(5);
-        new DwDbHelper(this).loadSql(new CacheFile(this, sql).getRealFile());
+        ddh.loadSql(new CacheFile(this, sql).getRealFile());
         increase(5);
         kh.set("sync://" + sql, new Date());
     }
 
-    private void downloadAndZip(String name) {
+    private void downloadAndUnzip(String name) {
         String zip = name + ".zip";
         download(fetchUrl(zip), zip);
         increase(5);
@@ -222,6 +223,7 @@ public class SyncService extends IntentService {
     }
 
 
+    private DwDbHelper ddh;
     private WidgetHelper wh;
     private KvHelper kh;
     private NotificationManager nm;

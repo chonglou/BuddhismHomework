@@ -148,7 +148,9 @@ public class MainActivity extends Activity {
                 if (new KvHelper(MainActivity.this).get("sync://videos.sql", Date.class, null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("videos.sql");
                 } else {
-                    startActivity(new Intent(MainActivity.this, VideoActivity.class));
+                    Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+                    intent.putExtra("type", "channel");
+                    startActivity(intent);
                 }
             }
         }));

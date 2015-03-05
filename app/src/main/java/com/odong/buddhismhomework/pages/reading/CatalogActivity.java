@@ -68,7 +68,7 @@ public class CatalogActivity extends Activity {
         List<Map<String, String>> items = new ArrayList<>();
         for (Book b : books) {
             Map<String, String> map = new HashMap<String, String>();
-            map.put("title", b.getName());
+            map.put("title", b.getTitle());
             map.put("details", b.getAuthor());
             items.add(map);
         }

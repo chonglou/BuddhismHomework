@@ -22,7 +22,8 @@ def http_html_get(url)
 end
 
 def dump_str(s)
-  s.inspect[1..-2].gsub(/'/, "''")
+  #s.inspect[1..-2].gsub(/'/, "''")
+  s.gsub(/'/, "''")
 end
 
 
@@ -173,7 +174,6 @@ namespace :crawler do
       i = ss[1].index '【'
 
       books << {
-          type: 'cbeta',
           name: ss[0].chomp,
           title: (ss[1][i-1] == '　' ? ss[1][0..i-2] : ss[1][0..i-1]).chomp,
           author: ss[1][i..-1].chomp
@@ -184,7 +184,7 @@ namespace :crawler do
     File.open(name, 'w') do |f|
       f.puts 'DELETE FROM books;'
       books.each do |b|
-        f.puts "INSERT INTO books(name, type, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :type}', '#{b.fetch :title}', '#{b.fetch :author}');"
+        f.puts "INSERT INTO books(name, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :title}', '#{b.fetch :author}');"
       end
 
       %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub T10/T10n0279.epub).each do |n|

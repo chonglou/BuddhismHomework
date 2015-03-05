@@ -32,7 +32,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public List<Channel> listChannel() {
         List<Channel> channels = new ArrayList<>();
-        Cursor c = getReadableDatabase().query("channels", new String[]{"cid", "title", "description"}, null, null, null, null, "created ASC");
+        Cursor c = getReadableDatabase().query("channels", new String[]{"cid", "title", "description", "type"}, null, null, null, null, "created ASC");
 
         while (c.moveToNext()) {
             Channel ch = new Channel();
@@ -198,12 +198,22 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
         try {
             db.beginTransaction();
+
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            StringBuilder sb = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
-                db.execSQL(line);
+                sb.append(line);
+                if (line.endsWith("');")) {
+                    db.execSQL(sb.toString());
+                    sb = new StringBuilder();
+                } else {
+                    sb.append("\n");
+                }
             }
             br.close();
+
+
             db.setTransactionSuccessful();
         } catch (IOException e) {
             Log.d("加载", "SQL", e);
@@ -307,7 +317,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
                         "CREATE INDEX IF NOT EXISTS favorites_type ON favorites(type)",
 
                         "DROP TABLE IF EXISTS books",
-                        "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL,  fav INTEGER(1) NOT NULL DEFAULT 0, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, fav INTEGER(1) NOT NULL DEFAULT 0, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE INDEX IF NOT EXISTS books_name ON books(name)",
                         "CREATE INDEX IF NOT EXISTS books_title ON books(title)",
                         "CREATE INDEX IF NOT EXISTS books_author ON books(author)",
