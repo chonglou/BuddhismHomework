@@ -65,6 +65,9 @@ public class SyncService extends IntentService {
             case "videos.sql":
                 downloadAndImport("videos");
                 break;
+            case "ddc.sql":
+                downloadAndImport("ddc");
+                break;
             case "musics.zip":
                 downloadAndZip("musics");
                 break;
@@ -84,6 +87,7 @@ public class SyncService extends IntentService {
                 downloadAndZip("dict");
                 downloadAndZip("musics");
                 downloadAndZip("cbeta");
+                kh.set("sync://all.zip", new Date());
                 break;
         }
         success();
@@ -95,6 +99,7 @@ public class SyncService extends IntentService {
         increase(5);
         new DwDbHelper(this).loadSql(new CacheFile(this, sql).getRealFile());
         increase(5);
+        kh.set("sync://" + sql, new Date());
     }
 
     private void downloadAndZip(String name) {
@@ -103,8 +108,10 @@ public class SyncService extends IntentService {
         increase(5);
         unzip(zip, name);
         increase(5);
+        kh.set("sync://" + zip, new Date());
     }
 
+    //------------------------------------------------------------------
     private String fetchUrl(String file) {
         return Config.getUrlMap().get(kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)).get(file);
     }
@@ -243,7 +250,6 @@ public class SyncService extends IntentService {
                     notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_success));
                     notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, 100, false);
                     nm.notify(0, notification);
-                    kh.set("sync.last", new Date());
                     kh.set("sync.log", sb.toString());
                     stopService(updateIntent);
                     break;

@@ -39,7 +39,7 @@ public class SettingsActivity extends Activity {
         ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(kv.get("mp3.replay", Boolean.class, false));
 
 
-        Date lastSync = kv.get("sync.last", Date.class, null);
+        Date lastSync = kv.get("sync://all.zip", Date.class, null);
         ((TextView) findViewById(R.id.tv_setting_sync)).setText(
                 getString(R.string.tv_sync_log,
                         lastSync == null ? getString(R.string.lbl_never) : DateFormat.getDateTimeInstance().format(lastSync),
@@ -131,7 +131,7 @@ public class SettingsActivity extends Activity {
         findViewById(R.id.btn_setting_sync).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new WidgetHelper(SettingsActivity.this).showSyncDialog();
+                new WidgetHelper(SettingsActivity.this).showSyncDialog("all.zip");
             }
         });
         findViewById(R.id.btn_settings_replay).setOnClickListener(new View.OnClickListener() {

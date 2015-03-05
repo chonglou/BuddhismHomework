@@ -90,7 +90,7 @@ public class FavoritesActivity extends Activity {
                 switch (fav.getType()) {
                     case "dzj":
                         Log.d("点击收藏夹", fav.getObj().toString());
-                        new WidgetHelper(FavoritesActivity.this).showDzj((Book) fav.getObj());
+                        new WidgetHelper(FavoritesActivity.this).showBook((Book) fav.getObj());
                         return;
                     case "ddc":
                         intent = new Intent(FavoritesActivity.this, WebActivity.class);

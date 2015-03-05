@@ -61,14 +61,16 @@ public class WidgetHelper {
         adbF.create().show();
     }
 
-    public void showSyncDialog() {
+    public void showSyncDialog(final String type) {
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
         adb.setTitle(R.string.action_sync);
-        adb.setMessage(R.string.dlg_sync);
+        adb.setMessage(context.getString(R.string.dlg_sync, type));
         adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                context.startService(new Intent(context, SyncService.class));
+                Intent intent = new Intent(context, SyncService.class);
+                intent.putExtra("type", type);
+                context.startService(intent);
             }
         });
         adb.setNegativeButton(android.R.string.no, null);
@@ -147,7 +149,7 @@ public class WidgetHelper {
 
     }
 
-    public void initDzjBookList(int lvId, final List<Book> books, final BookListCallback callback) {
+    public void initBookList(int lvId, final List<Book> books, final BookListCallback callback) {
         Activity context = (Activity) this.context;
 
         final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
@@ -170,7 +172,7 @@ public class WidgetHelper {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showDzj(books.get(position));
+                showBook(books.get(position));
             }
         });
 
@@ -184,7 +186,7 @@ public class WidgetHelper {
         }
     }
 
-    public void showDzj(Book book) {
+    public void showBook(Book book) {
         Intent intent;
         if (SyncService.CBETA_NAME.equals(book.getType())) {
             intent = new Intent(context, EpubActivity.class);

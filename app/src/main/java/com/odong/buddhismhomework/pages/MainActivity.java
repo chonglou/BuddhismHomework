@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 break;
             case R.id.action_sync:
-                new WidgetHelper(MainActivity.this).showSyncDialog();
+                new WidgetHelper(MainActivity.this).showSyncDialog("all.zip");
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -133,22 +133,36 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_videos, R.drawable.ic_videos, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, VideoActivity.class));
+                if (new KvHelper(MainActivity.this).get("sync://videos.sql", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("videos.sql");
+                } else {
+                    startActivity(new Intent(MainActivity.this, VideoActivity.class));
+                }
             }
         }));
         icons.add(new NavIcon(R.string.title_dict, R.drawable.ic_dict, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, DictActivity.class));
+                if (new KvHelper(MainActivity.this).get("sync://dict.zip", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
+                } else {
+                    startActivity(new Intent(MainActivity.this, DictActivity.class));
+                }
             }
         }));
         icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
-                intent.putExtra("type", "dzj");
-                intent.putExtra("chapter", SyncService.CBETA_NAME);
-                startActivity(intent);
+
+                if (new KvHelper(MainActivity.this).get("sync://cbeta.sql", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
+                } else {
+                    Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                    intent.putExtra("type", "dzj");
+                    intent.putExtra("chapter", SyncService.CBETA_NAME);
+                    startActivity(intent);
+                }
+
             }
         }));
         icons.add(new NavIcon(R.string.title_ddc, R.drawable.ic_ddc, new View.OnClickListener() {
@@ -181,6 +195,7 @@ public class MainActivity extends Activity {
         if (lc != null && (lc.getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24)) {
             return;
         }
+
         new AsyncTask<String, Void, Void>() {
 
             @Override

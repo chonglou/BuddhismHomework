@@ -142,7 +142,7 @@ public class CatalogActivity extends Activity {
         DwDbHelper ddh = new DwDbHelper(this);
         final List<Book> books = ddh.getBookList(chapter);
         ddh.close();
-        new WidgetHelper(this).initDzjBookList(R.id.lv_items, books, null);
+        new WidgetHelper(this).initBookList(R.id.lv_items, books, null);
     }
 
     private String type;

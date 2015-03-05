@@ -40,7 +40,7 @@ public class SearchActivity extends Activity {
     private void initDzjList(String keyword) {
         DwDbHelper ddh = new DwDbHelper(this);
         List<Book> books = ddh.searchBook(keyword);
-        new WidgetHelper(this).initDzjBookList(R.id.lv_items, books, null);
+        new WidgetHelper(this).initBookList(R.id.lv_items, books, null);
     }
 
     private void initChineseConverter() {

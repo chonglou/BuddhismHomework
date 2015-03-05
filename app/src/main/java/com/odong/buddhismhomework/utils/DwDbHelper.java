@@ -283,6 +283,39 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
+            case 5:
+                for (String s : new String[]{
+                        "CREATE TABLE IF NOT EXISTS favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, type VARCHAR(16) NOT NULL, tid INTEGER NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE INDEX IF NOT EXISTS favorites_type ON favorites(type)",
+
+                        "DROP TABLE IF EXISTS books",
+                        "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE INDEX IF NOT EXISTS books_name ON books(name)",
+                        "CREATE INDEX IF NOT EXISTS books_title ON books(title)",
+                        "CREATE INDEX IF NOT EXISTS books_author ON books(author)",
+                        "CREATE INDEX IF NOT EXISTS books_type ON books(type)",
+
+                        "DROP INDEX IF EXISTS ddc_url",
+                        "DROP TABLE IF EXISTS ddc",
+                        "CREATE TABLE IF NOT EXISTS ddc(id INTEGER PRIMARY KEY AUTOINCREMENT, url VARCHAR(255) NOT NULL, content TEXT NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE UNIQUE INDEX IF NOT EXISTS ddc_url ON ddc(url)",
+
+                        "CREATE TABLE IF NOT EXISTS channels(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, type VARCHAR(8) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS playlist(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS videos(id INTEGER PRIMARY KEY AUTOINCREMENT, vid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+
+                        "CREATE INDEX IF NOT EXISTS channels_cid ON channels(cid)",
+                        "CREATE INDEX IF NOT EXISTS channels_type ON channels(type)",
+                        "CREATE INDEX IF NOT EXISTS playlist_cid ON playlist(cid)",
+                        "CREATE INDEX IF NOT EXISTS playlist_pid ON playlist(pid)",
+                        "CREATE INDEX IF NOT EXISTS playlist_title ON playlist(title)",
+                        "CREATE INDEX IF NOT EXISTS videos_vid ON videos(vid)",
+                        "CREATE INDEX IF NOT EXISTS videos_title ON videos(title)",
+                        "CREATE INDEX IF NOT EXISTS videos_pid ON videos(pid)",
+                }) {
+                    db.execSQL(s);
+                }
+                break;
             case 4:
                 for (String s : new String[]{
                         "CREATE TABLE IF NOT EXISTS ddc(title VARCHAR(255) NOT NULL, url VARCHAR(255)  PRIMARY KEY, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
@@ -325,7 +358,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return "DROP INDEX IF EXISTS " + name;
     }
 
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "BuddhismHomework.db";
 
 
