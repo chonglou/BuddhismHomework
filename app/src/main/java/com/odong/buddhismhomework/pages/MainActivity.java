@@ -25,7 +25,7 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
-import com.odong.buddhismhomework.services.SyncService;
+import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -108,25 +108,37 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_courses, R.drawable.ic_courses, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SectionActivity.class);
-                intent.putExtra("type", "courses");
-                startActivity(intent);
+                if (new KvHelper(MainActivity.this).get("sync://musics.zip", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("musics.zip");
+                } else {
+                    Intent intent = new Intent(MainActivity.this, SectionActivity.class);
+                    intent.putExtra("type", "courses");
+                    startActivity(intent);
+                }
             }
         }));
         icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
-                intent.putExtra("type", "book");
-                startActivity(intent);
+                if (new KvHelper(MainActivity.this).get("sync://cbeta.sql", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
+                } else {
+                    Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                    intent.putExtra("type", "fav");
+                    startActivity(intent);
+                }
             }
         }));
         icons.add(new NavIcon(R.string.title_musics, R.drawable.ic_musics, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SectionActivity.class);
-                intent.putExtra("type", "musics");
-                startActivity(intent);
+                if (new KvHelper(MainActivity.this).get("sync://musics.zip", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("musics.zip");
+                } else {
+                    Intent intent = new Intent(MainActivity.this, SectionActivity.class);
+                    intent.putExtra("type", "musics");
+                    startActivity(intent);
+                }
             }
         }));
 
@@ -140,41 +152,48 @@ public class MainActivity extends Activity {
                 }
             }
         }));
+
         icons.add(new NavIcon(R.string.title_dict, R.drawable.ic_dict, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (new KvHelper(MainActivity.this).get("sync://dict.zip", Date.class, null) == null) {
-                    new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
+                    new WidgetHelper(MainActivity.this).showSyncDialog("dict.zip");
                 } else {
                     startActivity(new Intent(MainActivity.this, DictActivity.class));
                 }
             }
         }));
+
         icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (new KvHelper(MainActivity.this).get("sync://cbeta.sql", Date.class, null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
                 } else {
                     Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
                     intent.putExtra("type", "dzj");
-                    intent.putExtra("chapter", SyncService.CBETA_NAME);
                     startActivity(intent);
                 }
 
             }
         }));
+
         icons.add(new NavIcon(R.string.title_ddc, R.drawable.ic_ddc, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WebActivity.class);
+                if (new KvHelper(MainActivity.this).get("sync://ddc.sql", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("ddc.sql");
+                } else {
+                    new WidgetHelper(MainActivity.this).showDdc(new DwDbHelper(MainActivity.this).getDdc("/mobile/customize.php"));
+                }
+                Intent intent = new Intent(MainActivity.this, DdcActivity.class);
                 intent.putExtra("url", "http://ddc.shengyen.org/mobile/");
                 intent.putExtra("icon", R.drawable.ic_ddc);
                 intent.putExtra("title", R.string.title_ddc);
                 startActivity(intent);
             }
         }));
+
         icons.add(new NavIcon(R.string.title_help, R.drawable.ic_help, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

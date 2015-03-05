@@ -8,8 +8,17 @@ import java.io.Serializable;
 public class Channel implements Serializable {
     private String cid;
     private int id;
+    private String type;
     private String title;
     private String description;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getCid() {
         return cid;

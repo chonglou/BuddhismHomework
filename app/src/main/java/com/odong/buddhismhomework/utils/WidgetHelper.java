@@ -23,15 +23,17 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
+import com.odong.buddhismhomework.models.Ddc;
+import com.odong.buddhismhomework.pages.DdcActivity;
 import com.odong.buddhismhomework.pages.reading.EpubActivity;
 import com.odong.buddhismhomework.pages.reading.SearchActivity;
-import com.odong.buddhismhomework.pages.reading.TextActivity;
 import com.odong.buddhismhomework.services.SyncService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,7 @@ public class WidgetHelper {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DwDbHelper ddh = new DwDbHelper(context);
-                ddh.setBookFav(book.getId(), true);
+                ddh.setFavorite("dzj", book.getId(), book.getTitle(), true);
                 ddh.close();
                 toast(context.getString(R.string.lbl_success), false);
             }
@@ -186,16 +188,20 @@ public class WidgetHelper {
         }
     }
 
-    public void showBook(Book book) {
-        Intent intent;
-        if (SyncService.CBETA_NAME.equals(book.getType())) {
-            intent = new Intent(context, EpubActivity.class);
-        } else {
-            intent = new Intent(context, TextActivity.class);
-            intent.putExtra("type", "dzj");
-        }
-        intent.putExtra("file", new Gson().toJson(book));
+    public void showDdc(Ddc ddc) {
+        Intent intent = new Intent(context, DdcActivity.class);
+        intent.putExtra("ddc", new Gson().toJson(ddc));
         context.startActivity(intent);
+    }
+
+    public void showBook(Book book) {
+        if (new KvHelper(context).get("sync://cbeta.zip", Date.class, null) == null) {
+            showSyncDialog("cbeta.zip");
+        } else {
+            Intent intent = new Intent(context, EpubActivity.class);
+            intent.putExtra("book", new Gson().toJson(book));
+            context.startActivity(intent);
+        }
     }
 
     public void showSearchDialog() {

@@ -7,8 +7,17 @@ import java.io.Serializable;
  */
 public class Ddc implements Serializable {
     private String content;
+    private String title;
     private String url;
     private int id;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getContent() {
         return content;

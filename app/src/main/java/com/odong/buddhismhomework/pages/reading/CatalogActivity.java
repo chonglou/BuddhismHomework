@@ -1,24 +1,19 @@
 package com.odong.buddhismhomework.pages.reading;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
-import com.odong.buddhismhomework.models.Music;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
-import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,22 +31,13 @@ public class CatalogActivity extends Activity {
 
         type = getIntent().getStringExtra("type");
 
-        if ("book".equals(type)) {
+        if ("fav".equals(type)) {
             getActionBar().setIcon(R.drawable.ic_books);
-            initForBook();
+            initList(new DwDbHelper(this).getFavBookList());
         } else if ("dzj".equals(type)) {
             getActionBar().setIcon(R.drawable.ic_dzj);
-            String chapter = getIntent().getStringExtra("chapter");
-
-            if (chapter == null) {
-                initForDzj();
-            } else {
-                initForDzjChapter(chapter);
-            }
-
+            initList(new DwDbHelper(this).getBookList());
         }
-
-
     }
 
 
@@ -77,11 +63,10 @@ public class CatalogActivity extends Activity {
         return true;
     }
 
-    private void initForBook() {
-        final List<Music> books = new XmlHelper(this).getMusicList("books");
 
-        List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        for (Music b : books) {
+    private void initList(final List<Book> books) {
+        List<Map<String, String>> items = new ArrayList<>();
+        for (Book b : books) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", b.getName());
             map.put("details", b.getAuthor());
@@ -99,51 +84,11 @@ public class CatalogActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Music book = books.get(position);
-                Intent intent = new Intent(CatalogActivity.this, TextActivity.class);
-                intent.putExtra("file", new Gson().toJson(book));
-                intent.putExtra("type", "book");
-                startActivity(intent);
-            }
-        });
-
-
-    }
-
-    private void initForDzj() {
-        setTitle(R.string.title_dzj);
-
-        DwDbHelper ddh = new DwDbHelper(this);
-        final List<String> chapters = ddh.getBookTypeList();
-        ddh.close();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                chapters);
-
-        ListView lv = (ListView) findViewById(R.id.lv_items);
-        lv.setAdapter(adapter);
-
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(CatalogActivity.this, CatalogActivity.class);
-                intent.putExtra("chapter", chapters.get(position));
-                intent.putExtra("type", "dzj");
-                startActivity(intent);
+                new WidgetHelper(CatalogActivity.this).showBook(books.get(position));
             }
         });
     }
 
-    private void initForDzjChapter(String chapter) {
-        setTitle(chapter);
-
-        DwDbHelper ddh = new DwDbHelper(this);
-        final List<Book> books = ddh.getBookList(chapter);
-        ddh.close();
-        new WidgetHelper(this).initBookList(R.id.lv_items, books, null);
-    }
 
     private String type;
 

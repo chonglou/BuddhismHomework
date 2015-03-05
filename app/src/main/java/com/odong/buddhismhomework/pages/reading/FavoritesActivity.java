@@ -3,18 +3,14 @@ package com.odong.buddhismhomework.pages.reading;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Favorite;
-import com.odong.buddhismhomework.pages.WebActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -39,35 +35,16 @@ public class FavoritesActivity extends Activity {
 
     private void initList() {
         DwDbHelper ddh = new DwDbHelper(this);
-        List<Book> books = ddh.getFavBookList();
-        Map<String, String> ddc = ddh.listDdc();
+        final List<Favorite> favorites = ddh.listFavorite();
         ddh.close();
 
-        favorites = new ArrayList<>();
-        for (Book b : books) {
-            Favorite f = new Favorite();
-            f.setTitle(b.getTitle());
-            f.setDetails(b.getAuthor());
-            f.setObj(b);
-            f.setType("dzj");
-            favorites.add(f);
-        }
-        for (Map.Entry<String, String> e : ddc.entrySet()) {
-            Favorite f = new Favorite();
-            f.setTitle(e.getValue());
-            f.setDetails(e.getKey());
-            f.setObj(e.getKey());
-            f.setType("ddc");
-            favorites.add(f);
-        }
 
         final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-
 
         for (Favorite f : favorites) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", f.getTitle());
-            map.put("details", f.getDetails());
+            map.put("details", getString(f.getTypeId()));
             items.add(map);
         }
 
@@ -86,22 +63,16 @@ public class FavoritesActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Favorite fav = favorites.get(position);
-                Intent intent = null;
+
+                DwDbHelper ddh = new DwDbHelper(FavoritesActivity.this);
+                WidgetHelper wh = new WidgetHelper(FavoritesActivity.this);
                 switch (fav.getType()) {
                     case "dzj":
-                        Log.d("点击收藏夹", fav.getObj().toString());
-                        new WidgetHelper(FavoritesActivity.this).showBook((Book) fav.getObj());
+                        wh.showBook(ddh.getBook(fav.getTid()));
                         return;
                     case "ddc":
-                        intent = new Intent(FavoritesActivity.this, WebActivity.class);
-                        intent.putExtra("url", (String) fav.getObj());
-                        intent.putExtra("icon", R.drawable.ic_ddc);
-                        intent.putExtra("title", R.string.title_ddc);
-
+                        wh.showDdc(ddh.getDdc(fav.getTid()));
                         break;
-                }
-                if (intent != null) {
-                    startActivity(intent);
                 }
             }
         });
@@ -119,14 +90,7 @@ public class FavoritesActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         Favorite fav = favorites.get(position);
                         DwDbHelper ddh = new DwDbHelper(FavoritesActivity.this);
-                        switch (fav.getType()) {
-                            case "dzj":
-                                ddh.setBookFav(((Book) fav.getObj()).getId(), false);
-                                break;
-                            case "ddc":
-                                ddh.delDdc((String) fav.getObj());
-                                break;
-                        }
+                        ddh.setFavorite(fav.getType(), fav.getTid(), null, false);
                         ddh.close();
                         items.remove(position);
                         favorites.remove(position);
@@ -142,8 +106,6 @@ public class FavoritesActivity extends Activity {
         });
 
     }
-
-    private List<Favorite> favorites;
 
 
 }

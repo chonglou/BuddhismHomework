@@ -1,15 +1,44 @@
 package com.odong.buddhismhomework.models;
 
+import com.odong.buddhismhomework.R;
+
 import java.io.Serializable;
 
 /**
  * Created by flamen on 15-2-26.
  */
 public class Favorite implements Serializable {
+    public int getTypeId() {
+        switch (type) {
+            case "ddc":
+                return R.string.title_ddc;
+            case "dzj":
+                return R.string.title_dzj;
+        }
+        return R.string.lbl_null;
+    }
+
     private String type;
     private String title;
-    private Object obj;
-    private String details;
+    private int id;
+    private int tid;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTid() {
+        return tid;
+    }
+
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
 
     public String getType() {
         return type;
@@ -27,19 +56,4 @@ public class Favorite implements Serializable {
         this.title = title;
     }
 
-    public Object getObj() {
-        return obj;
-    }
-
-    public void setObj(Object obj) {
-        this.obj = obj;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
 }

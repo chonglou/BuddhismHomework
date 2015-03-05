@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,25 +14,24 @@ import android.webkit.WebViewClient;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.models.Ddc;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Created by flamen on 15-2-24.
+ * Created by flamen on 15-3-5.
  */
-public class WebActivity extends Activity {
+public class DdcActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
 
-        setTitle(getIntent().getIntExtra("title", R.string.app_name));
-        getActionBar().setIcon(getIntent().getIntExtra("icon", R.drawable.ic_launcher));
+        setTitle(getIntent().getIntExtra("title", R.string.title_ddc));
+        getActionBar().setIcon(getIntent().getIntExtra("icon", R.drawable.ic_ddc));
 
-        initWebView(getIntent().getStringExtra("url"), getIntent().getBooleanExtra("js", true));
+        Ddc ddc = new Gson().fromJson(getIntent().getStringExtra("ddc"), Ddc.class);
+        initWebView(ddc);
 
     }
 
@@ -53,13 +53,12 @@ public class WebActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         WebView wv = (WebView) findViewById(R.id.wv_content);
-                        DwDbHelper ddh = new DwDbHelper(WebActivity.this);
-                        Map<String, String> cfg = new HashMap<String, String>();
-                        cfg.put("title", wv.getTitle());
-                        cfg.put("url", wv.getUrl());
-                        ddh.setFavorite("www", 0, new Gson().toJson(cfg), true);
+
+                        DwDbHelper ddh = new DwDbHelper(DdcActivity.this);
+                        Ddc ddc = ddh.getDdc(wv.getUrl());
+                        ddh.setFavorite("ddc", ddc.getId(), ddc.getTitle(), true);
                         ddh.close();
-                        new WidgetHelper(WebActivity.this).toast(getString(R.string.lbl_success), false);
+                        new WidgetHelper(DdcActivity.this).toast(getString(R.string.lbl_success), false);
                     }
                 });
                 adbF.setNegativeButton(android.R.string.no, null);
@@ -74,18 +73,19 @@ public class WebActivity extends Activity {
         return true;
     }
 
-    private void initWebView(String url, boolean js) {
+    private void initWebView(Ddc ddc) {
         WebView wv = (WebView) findViewById(R.id.wv_content);
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+
+                Log.d("链接", url);
+                view.loadDataWithBaseURL(null, new DwDbHelper(DdcActivity.this).getDdc(url).getContent(), "text/html", "utf-8", null);
                 return true;
             }
         });
-        wv.getSettings().setJavaScriptEnabled(js);
         wv.getSettings().setDomStorageEnabled(true);
-        wv.loadUrl(url);
+        wv.loadDataWithBaseURL(null, ddc.getContent(), "text/html", "utf-8", null);
     }
 
     @Override

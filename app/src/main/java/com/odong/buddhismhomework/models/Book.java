@@ -18,7 +18,6 @@ public class Book implements Serializable {
     private String author;
     private String name;
     private String title;
-    private String type;
     private boolean fav;
     private int id;
 
@@ -36,14 +35,6 @@ public class Book implements Serializable {
 
     public void setFav(boolean fav) {
         this.fav = fav;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getAuthor() {

@@ -181,6 +181,10 @@ namespace :crawler do
         f.puts "INSERT INTO books(name, type, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :type}', '#{b.fetch :title}', '#{b.fetch :author}');"
       end
 
+      %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub T10/T10n0279.epub).each do |n|
+        f.puts "UPDATE books SET fav=1 WHERE name='#{n}';"
+      end
+
     end
     puts "采集到#{books.size}本书"
   end

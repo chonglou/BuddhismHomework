@@ -8,9 +8,10 @@ import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.gson.internal.LinkedHashTreeMap;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Channel;
+import com.odong.buddhismhomework.models.Ddc;
+import com.odong.buddhismhomework.models.Favorite;
 import com.odong.buddhismhomework.models.Playlist;
 import com.odong.buddhismhomework.models.Video;
 
@@ -23,7 +24,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by flamen on 15-2-7.
@@ -38,6 +38,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
             Channel ch = new Channel();
             ch.setCid(c.getString(c.getColumnIndexOrThrow("cid")));
             ch.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            ch.setType(c.getString(c.getColumnIndexOrThrow("type")));
             ch.setDescription(c.getString(c.getColumnIndexOrThrow("description")));
             channels.add(ch);
         }
@@ -75,44 +76,51 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return videos;
     }
 
-    public Map<String, String> listDdc() {
-        Map<String, String> map = new LinkedHashTreeMap<>();
-        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title"}, null, null, null, null, "created DESC");
 
-        while (c.moveToNext()) {
-            String url = c.getString(c.getColumnIndexOrThrow("url"));
-            String title = c.getString(c.getColumnIndexOrThrow("title"));
-            map.put(url, title);
+    public Ddc getDdc(String url) {
+        Ddc d = null;
+        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title", "id", "content"}, "WHERE url = ?", new String[]{url}, null, null, "created DESC", "1");
+        if (c.moveToNext()) {
+            d = new Ddc();
+            d.setUrl(c.getString(c.getColumnIndexOrThrow("url")));
+            d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
+            d.setContent(c.getString(c.getColumnIndexOrThrow("content")));
         }
         c.close();
-        return map;
+        return d;
     }
 
-    public void addDdc(String url, String title) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("title", title);
-        Cursor c = db.rawQuery("SELECT COUNT(*) FROM ddc WHERE url=?", new String[]{url});
-        c.moveToFirst();
-        int size = c.getInt(0);
-        c.close();
-        if (size == 0) {
-            cv.put("url", url);
-            db.insert("ddc", null, cv);
-        } else {
-            db.update("ddc", cv, "url = ?", new String[]{url});
+    public Ddc getDdc(int id) {
+        Ddc d = null;
+        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title", "id", "content"}, "WHERE id = ?", new String[]{Integer.toString(id)}, null, null, "created DESC", "1");
+        if (c.moveToNext()) {
+            d = new Ddc();
+            d.setUrl(c.getString(c.getColumnIndexOrThrow("url")));
+            d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
+            d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
+            d.setContent(c.getString(c.getColumnIndexOrThrow("content")));
         }
+        c.close();
+        return d;
     }
 
-    public void delDdc(String url) {
-        getWritableDatabase().delete("ddc", "url=?", new String[]{url});
+    public Book getBook(int id) {
+        Book book = null;
+        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "id = ?", new String[]{Integer.toString(id)}, null, null, null, "1");
+        if (c.moveToNext()) {
+            book = createBook(c);
+
+        }
+        c.close();
+        return book;
     }
 
     public List<Book> searchBook(String keyword) {
         keyword = "%" + keyword + "%";
         List<Book> books = new ArrayList<Book>();
         try {
-            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "type"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
+            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
             while (c.moveToNext()) {
                 Book d = createBook(c);
                 books.add(d);
@@ -128,7 +136,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Book> getFavBookList() {
         List<Book> books = new ArrayList<Book>();
         try {
-            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "type"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
+            Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
             while (c.moveToNext()) {
                 Book d = createBook(c);
                 d.setFav(true);
@@ -141,30 +149,41 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return books;
     }
 
-    public void setBookFav(int id, boolean fav) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("fav", fav ? 1 : 0);
-        db.update("books", cv, "id = ?", new String[]{Integer.toString(id)});
-    }
+    public List<Favorite> listFavorite() {
+        List<Favorite> favorites = new ArrayList<>();
 
-    public List<String> getBookTypeList() {
-        List<String> types = new ArrayList<String>();
-        try {
-            Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, "id ASC", null);
-            while (c.moveToNext()) {
-                types.add(c.getString(c.getColumnIndexOrThrow("type")));
-            }
-            c.close();
-        } catch (SQLiteDatabaseLockedException e) {
-            Log.d("数据库", "锁定", e);
+        Cursor c = getReadableDatabase().query("favorites", new String[]{"id", "tid", "type", "title"}, null, null, null, null, "id ASC");
+        while (c.moveToNext()) {
+            Favorite f = new Favorite();
+            f.setId(c.getInt(c.getColumnIndex("id")));
+            f.setTid(c.getInt(c.getColumnIndex("tid")));
+            f.setType(c.getString(c.getColumnIndex("type")));
+            f.setTitle(c.getString(c.getColumnIndex("title")));
+            favorites.add(f);
         }
-        return types;
+        c.close();
+        return favorites;
     }
 
-    public List<Book> getBookList(String type) {
+    public void setFavorite(String type, int tid, String title, boolean fav) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        if (fav) {
+            ContentValues cv = new ContentValues();
+            cv.put("type", type);
+            cv.put("tid", tid);
+            cv.put("title", title);
+            db.insert("favorites", null, cv);
+
+        } else {
+            db.delete("favorites", "tid = ? AND type = ? ", new String[]{"tid", "type"});
+
+        }
+    }
+
+    public List<Book> getBookList() {
         List<Book> books = new ArrayList<Book>();
-        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav", "type"}, "type = ?", new String[]{type}, null, null, "id ASC");
+        Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav"}, null, null, null, null, "id ASC");
         while (c.moveToNext()) {
             Book d = createBook(c);
             d.setFav(c.getInt(c.getColumnIndexOrThrow("fav")) == 1);
@@ -248,7 +267,6 @@ public class DwDbHelper extends SQLiteOpenHelper {
         d.setName(c.getString(c.getColumnIndexOrThrow("name")));
         d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));
         d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
-        d.setType(c.getString(c.getColumnIndexOrThrow("type")));
         return d;
     }
 
@@ -285,20 +303,21 @@ public class DwDbHelper extends SQLiteOpenHelper {
         switch (version) {
             case 5:
                 for (String s : new String[]{
-                        "CREATE TABLE IF NOT EXISTS favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, type VARCHAR(16) NOT NULL, tid INTEGER NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, type VARCHAR(16) NOT NULL, tid INTEGER NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE INDEX IF NOT EXISTS favorites_type ON favorites(type)",
 
                         "DROP TABLE IF EXISTS books",
-                        "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL,  fav INTEGER(1) NOT NULL DEFAULT 0, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE INDEX IF NOT EXISTS books_name ON books(name)",
                         "CREATE INDEX IF NOT EXISTS books_title ON books(title)",
                         "CREATE INDEX IF NOT EXISTS books_author ON books(author)",
-                        "CREATE INDEX IF NOT EXISTS books_type ON books(type)",
 
                         "DROP INDEX IF EXISTS ddc_url",
+                        "DROP INDEX IF EXISTS ddc_title",
                         "DROP TABLE IF EXISTS ddc",
-                        "CREATE TABLE IF NOT EXISTS ddc(id INTEGER PRIMARY KEY AUTOINCREMENT, url VARCHAR(255) NOT NULL, content TEXT NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS ddc(id INTEGER PRIMARY KEY AUTOINCREMENT, url VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, content TEXT NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE UNIQUE INDEX IF NOT EXISTS ddc_url ON ddc(url)",
+                        "CREATE INDEX IF NOT EXISTS ddc_title ON ddc(title)",
 
                         "CREATE TABLE IF NOT EXISTS channels(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, type VARCHAR(8) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE TABLE IF NOT EXISTS playlist(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",

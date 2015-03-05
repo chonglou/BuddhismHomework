@@ -77,9 +77,6 @@ public class SyncService extends IntentService {
             case "cbeta.zip":
                 downloadAndZip("cbeta");
                 break;
-            case "books.zip":
-                downloadAndZip("books");
-                break;
             default:
                 downloadAndImport("cbeta");
                 downloadAndImport("videos");
@@ -224,9 +221,6 @@ public class SyncService extends IntentService {
 
     }
 
-
-    public final static String CBETA_NAME = "cbeta";
-    public final static String DICT_NAME = "dict";
 
     private WidgetHelper wh;
     private KvHelper kh;
