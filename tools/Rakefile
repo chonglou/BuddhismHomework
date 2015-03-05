@@ -15,7 +15,8 @@ def http_get(url)
 end
 
 def dump_str(s)
-  s.inspect[1..-1].gsub("'", %q(\\\'))
+  #s.inspect[1..-2].gsub("'", %q(\\\'))
+  s.inspect[1..-2].gsub(/'/, "''")
 end
 
 namespace :adb do
@@ -69,15 +70,15 @@ namespace :crawler do
 
     #DDMTV02 DDMTV04 DDMTV03 DDMTV01 DDMTV05
     #聖嚴法師經典講座|法鼓山經典講座|法鼓講堂|聖嚴法師大法鼓|Master Sheng Yen
-    # DDMTV04 DDMTV03 DDMTV01 DDMTV05
+    #
     channels=[]
-    %w(DDMTV02).each do |user|
+    %w(DDMTV02 DDMTV04 DDMTV03 DDMTV01 DDMTV05).each do |user|
       puts "抓取用户[#{user}]"
-      channels << http_get("https://www.googleapis.com/youtube/v3/channels?part=snippet&maxResults=50&forUsername=#{user}&key=#{key}").fetch('items').map do |channel|
+      http_get("https://www.googleapis.com/youtube/v3/channels?part=snippet&maxResults=50&forUsername=#{user}&key=#{key}").fetch('items').map do |channel|
         ch_sn = channel.fetch('snippet')
 
         puts "\t抓取频道[#{ch_sn.fetch('title')}]"
-        {
+        channels << {
             id: channel.fetch('id'),
             title: ch_sn.fetch('title'),
             description: ch_sn.fetch('description'),
