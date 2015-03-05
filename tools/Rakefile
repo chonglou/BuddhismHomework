@@ -3,6 +3,9 @@ require 'json'
 require 'net/http'
 require 'sqlite3'
 require 'highline/import'
+require 'nokogiri'
+require 'open-uri'
+require 'fileutils'
 
 RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
 
@@ -10,12 +13,15 @@ def load_cfg
   YAML.load_file('config.yml')
 end
 
-def http_get(url)
-  JSON.parse(Net::HTTP.get(URI(url)))
+def http_json_get(url)
+  JSON.parse Net::HTTP.get(URI(url))
+end
+
+def http_html_get(url)
+  Nokogiri::HTML open(url)
 end
 
 def dump_str(s)
-  #s.inspect[1..-2].gsub("'", %q(\\\'))
   s.inspect[1..-2].gsub(/'/, "''")
 end
 
@@ -62,7 +68,68 @@ namespace :image do
   end
 end
 
-namespace :dzj do
+def get_ddc(root, url, path)
+  sleep 3
+  puts "#{Time.now}: GET #{url}/#{path} => #{path}"
+  content = http_html_get("#{url}/#{path}").css('div[data-role="page"]')
+
+  fn = "#{root}/#{path}"
+
+  return if File.exist?(fn)
+
+  dn = File.dirname fn
+  unless Dir.exist?(dn)
+    FileUtils.mkpath dn
+  end
+  File.open(fn, 'w') { |f| f.puts content }
+
+  ul = content.css('ul[data-role="listview"]')
+  return if ul.size == 0
+
+  ul.css('a').each do |a|
+    href = a['href']
+
+    if href.start_with?('http')
+      if href.start_with?(url)
+        get_ddc root, url, href[url.size..-1]
+      else
+        puts "丢弃 #{href}"
+      end
+    else
+      if href.end_with?('.php')
+        if href.start_with?('/')
+          get_ddc root, url, href[1..-1]
+        else
+          get_ddc root, url, "#{path[0..path.rindex('/')]}#{href}"
+        end
+      else
+        puts "丢弃 #{href}"
+      end
+    end
+
+
+  end
+
+end
+
+namespace :crawler do
+  desc '采集DDC'
+  task :ddc do
+    root = "#{File.dirname __FILE__}/tmp/ddc"
+    ddc = load_cfg.fetch('ddc')
+
+    craw = ask('要更新目录么？(y/n) ') { |q| q.default='n' }
+    if craw == 'y'
+      if Dir.exist?(root)
+        FileUtils.move root, "#{root}-#{Time.now.strftime '%Y%m%d%H%M%S'}"
+      end
+      puts "抓取DDC 开始时间 #{Time.new}"
+      get_ddc root, ddc.fetch('url'), ddc.fetch('home')
+    end
+
+
+  end
+
   desc '采集CBETA'
   task :cbeta do
     cbeta = "#{File.dirname __FILE__}/tmp/cbeta"
@@ -74,13 +141,13 @@ namespace :dzj do
       i = ss[1].index '【'
 
       books << {
-          type:'cbeta',
+          type: 'cbeta',
           name: ss[0].chomp,
           title: (ss[1][i-1] == '　' ? ss[1][0..i-2] : ss[1][0..i-1]).chomp,
           author: ss[1][i..-1].chomp
       }
     end
-    File.open("#{RES_ROOT}/raw/books.sql", 'w') do |f|
+    File.open("#{File.dirname __FILE__}/tmp/cbeta.sql", 'w') do |f|
       f.puts 'DROP TABLE IF EXISTS books;'
       f.puts 'CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
       f.puts 'CREATE INDEX IF NOT EXISTS books_name ON books(name);'
@@ -91,12 +158,9 @@ namespace :dzj do
         f.puts "INSERT INTO books(name, type, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :type}', '#{b.fetch :title}', '#{b.fetch :author}');"
       end
     end
-
+    puts "采集到#{books.size}本书"
   end
 
-end
-
-namespace :crawler do
   desc '采集youtube视频'
   task :youtube do
     key = load_cfg.fetch('youtube').fetch('key')
@@ -108,7 +172,7 @@ namespace :crawler do
     channels=[]
     %w(DDMTV02 DDMTV04 DDMTV03 DDMTV01 DDMTV05).each do |user|
       puts "抓取用户[#{user}]"
-      http_get("https://www.googleapis.com/youtube/v3/channels?part=snippet&maxResults=50&forUsername=#{user}&key=#{key}").fetch('items').map do |channel|
+      http_json_get("https://www.googleapis.com/youtube/v3/channels?part=snippet&maxResults=50&forUsername=#{user}&key=#{key}").fetch('items').map do |channel|
         ch_sn = channel.fetch('snippet')
 
         puts "\t抓取频道[#{ch_sn.fetch('title')}]"
@@ -117,14 +181,14 @@ namespace :crawler do
             type: 'youtube',
             title: ch_sn.fetch('title'),
             description: ch_sn.fetch('description'),
-            playlist: http_get("https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=#{channel.fetch('id')}&maxResults=50&key=#{key}").fetch('items').map do |playlist|
+            playlist: http_json_get("https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=#{channel.fetch('id')}&maxResults=50&key=#{key}").fetch('items').map do |playlist|
               pl_sn = playlist.fetch('snippet')
               puts "\t\t抓取播放列表[#{pl_sn.fetch('title')}]"
               {
                   id: playlist.fetch('id'),
                   title: pl_sn.fetch('title'),
                   description: pl_sn.fetch('description'),
-                  videos: http_get("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=#{playlist.fetch('id')}&key=#{key}").fetch('items').map do |video|
+                  videos: http_json_get("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=#{playlist.fetch('id')}&key=#{key}").fetch('items').map do |video|
                     v_sn = video.fetch('snippet')
                     {
                         id: v_sn.fetch('resourceId').fetch('videoId'),
@@ -139,7 +203,7 @@ namespace :crawler do
       end
     end
 
-    File.open("#{RES_ROOT}/raw/videos.sql", 'w') do |f|
+    File.open("#{File.dirname __FILE__}/tmp/videos.sql", 'w') do |f|
       f.puts 'DROP TABLE IF EXISTS channels;'
       f.puts 'DROP TABLE IF EXISTS playlist;'
       f.puts 'DROP TABLE IF EXISTS videos;'

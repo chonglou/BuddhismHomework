@@ -22,6 +22,7 @@ import java.util.Map;
  */
 public class DwDbHelper extends SQLiteOpenHelper {
 
+
     public Map<String, String> listDdc() {
         Map<String, String> map = new LinkedHashTreeMap<>();
         Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title"}, null, null, null, null, "created DESC");
@@ -258,9 +259,6 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
-            case 5:
-               //todo 创建索引表
-                break;
             case 4:
                 for (String s : new String[]{
                         "CREATE TABLE IF NOT EXISTS ddc(title VARCHAR(255) NOT NULL, url VARCHAR(255)  PRIMARY KEY, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
@@ -303,7 +301,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return "DROP INDEX IF EXISTS " + name;
     }
 
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "BuddhismHomework.db";
 
 
