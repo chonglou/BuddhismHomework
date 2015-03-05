@@ -62,8 +62,42 @@ namespace :image do
   end
 end
 
+namespace :dzj do
+  desc '采集CBETA'
+  task :cbeta do
+    cbeta = "#{File.dirname __FILE__}/tmp/cbeta"
+    puts `[ ! -d #{cbeta} ] && mkdir -pv #{cbeta} && cd #{cbeta} && unzip ../cbeta_epub_201405.zip`
+
+    books=[]
+    IO.foreach("#{cbeta}/filelist.txt") do |line|
+      ss = line.split "\t\t"
+      i = ss[1].index '【'
+
+      books << {
+          type:'cbeta',
+          name: ss[0].chomp,
+          title: (ss[1][i-1] == '　' ? ss[1][0..i-2] : ss[1][0..i-1]).chomp,
+          author: ss[1][i..-1].chomp
+      }
+    end
+    File.open("#{RES_ROOT}/raw/books.sql", 'w') do |f|
+      f.puts 'DROP TABLE IF EXISTS books;'
+      f.puts 'CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
+      f.puts 'CREATE INDEX IF NOT EXISTS books_name ON books(name);'
+      f.puts 'CREATE INDEX IF NOT EXISTS books_title ON books(title);'
+      f.puts 'CREATE INDEX IF NOT EXISTS books_author ON books(author);'
+      f.puts 'CREATE INDEX IF NOT EXISTS books_type ON books(type);'
+      books.each do |b|
+        f.puts "INSERT INTO books(name, type, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :type}', '#{b.fetch :title}', '#{b.fetch :author}');"
+      end
+    end
+
+  end
+
+end
+
 namespace :crawler do
-  desc '抓取youtube视频地址'
+  desc '采集youtube视频'
   task :youtube do
     key = load_cfg.fetch('youtube').fetch('key')
 
@@ -105,10 +139,24 @@ namespace :crawler do
       end
     end
 
-    File.open("#{File.dirname __FILE__}/tmp/videos.sql", 'w') do |f|
-      f.puts 'DELETE FROM channels;'
-      f.puts 'DELETE FROM playlist;'
-      f.puts 'DELETE FROM videos;'
+    File.open("#{RES_ROOT}/raw/videos.sql", 'w') do |f|
+      f.puts 'DROP TABLE IF EXISTS channels;'
+      f.puts 'DROP TABLE IF EXISTS playlist;'
+      f.puts 'DROP TABLE IF EXISTS videos;'
+      f.puts 'CREATE TABLE IF NOT EXISTS channels(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, type VARCHAR(8) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
+      f.puts 'CREATE TABLE IF NOT EXISTS playlist(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
+      f.puts 'CREATE TABLE IF NOT EXISTS videos(id INTEGER PRIMARY KEY AUTOINCREMENT, vid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);'
+      f.puts 'CREATE INDEX IF NOT EXISTS channels_cid ON channels(cid);'
+      f.puts 'CREATE INDEX IF NOT EXISTS channels_type ON channels(type);'
+      f.puts 'CREATE INDEX IF NOT EXISTS playlist_cid ON playlist(cid);'
+      f.puts 'CREATE INDEX IF NOT EXISTS playlist_pid ON playlist(pid);'
+      f.puts 'CREATE INDEX IF NOT EXISTS playlist_title ON playlist(title);'
+      f.puts 'CREATE INDEX IF NOT EXISTS videos_vid ON videos(vid);'
+      f.puts 'CREATE INDEX IF NOT EXISTS videos_title ON videos(title);'
+      f.puts 'CREATE INDEX IF NOT EXISTS videos_pid ON videos(pid);'
+      # f.puts 'DELETE FROM channels;'
+      # f.puts 'DELETE FROM playlist;'
+      # f.puts 'DELETE FROM videos;'
       channels.each do |ch|
 
         f.puts "INSERT INTO channels(cid, type, title, description) VALUES('#{ch.fetch(:id)}', '#{ch.fetch(:type)}', '#{dump_str ch.fetch(:title)}', '#{dump_str ch.fetch(:description)}');"
