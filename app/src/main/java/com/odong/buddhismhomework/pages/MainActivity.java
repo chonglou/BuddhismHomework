@@ -67,8 +67,7 @@ public class MainActivity extends Activity {
                     storage.setData(Uri.parse(new CacheFile(this, "").getRootPath()));
                     storage.setType("file/*");
                     startActivity(storage);
-                }
-                catch (ActivityNotFoundException e){
+                } catch (ActivityNotFoundException e) {
                     Log.e("文件浏览", "出错", e);
                 }
                 break;
@@ -199,13 +198,8 @@ public class MainActivity extends Activity {
                 if (new KvHelper(MainActivity.this).get("sync://ddc.sql", Date.class, null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("ddc.sql");
                 } else {
-                    new WidgetHelper(MainActivity.this).showDdc(new DwDbHelper(MainActivity.this).getDdc("/mobile/customize.php"));
+                    new WidgetHelper(MainActivity.this).showDdc(new DwDbHelper(MainActivity.this).getDdc("/mobile/index.php"));
                 }
-                Intent intent = new Intent(MainActivity.this, DdcActivity.class);
-                intent.putExtra("url", "http://ddc.shengyen.org/mobile/");
-                intent.putExtra("icon", R.drawable.ic_ddc);
-                intent.putExtra("title", R.string.title_ddc);
-                startActivity(intent);
             }
         }));
 

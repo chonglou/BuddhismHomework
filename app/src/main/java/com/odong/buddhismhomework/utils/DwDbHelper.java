@@ -92,7 +92,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     public Ddc getDdc(String url) {
         Ddc d = null;
-        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title", "id", "content"}, "WHERE url = ?", new String[]{url}, null, null, "created DESC", "1");
+        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title", "id", "content"}, "url = ?", new String[]{url}, null, null, null, "1");
         if (c.moveToNext()) {
             d = new Ddc();
             d.setUrl(c.getString(c.getColumnIndexOrThrow("url")));

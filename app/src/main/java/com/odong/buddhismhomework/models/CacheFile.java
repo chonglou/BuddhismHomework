@@ -55,7 +55,7 @@ public class CacheFile {
         return f != null && f.exists();
     }
 
-    public String getRootPath(){
+    public String getRootPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name);
     }
 

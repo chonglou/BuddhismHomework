@@ -1,5 +1,7 @@
 package com.odong.buddhismhomework.models;
 
+import org.jsoup.Jsoup;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ public class Ddc implements Serializable {
     private String title;
     private String url;
     private int id;
+
 
     public String getTitle() {
         return title;

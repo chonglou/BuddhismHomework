@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -78,17 +79,33 @@ public class DdcActivity extends Activity {
         WebView wv = (WebView) findViewById(R.id.wv_content);
         wv.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                Log.d("开始加载", url);
+                super.onPageStarted(view, url, favicon);
+            }
 
-                Log.d("链接", url);
-                Ddc ddc = new DwDbHelper(DdcActivity.this).getDdc(url);
-                view.loadDataWithBaseURL(null, ddc.getContent(), "text/html", "utf-8", null);
-                setTitle(ddc.getTitle());
-                return true;
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.d("加载完毕", url);
+                super.onPageFinished(view, url);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("打开页面", url);
+                
+//                Ddc ddc = new DwDbHelper(DdcActivity.this).getDdc(url);
+//                view.loadData(ddc.getContent(), MIME_TYPE, ENCODING);
+//                setTitle(ddc.getTitle());
+                return false;
             }
         });
         wv.getSettings().setDomStorageEnabled(true);
-        wv.loadDataWithBaseURL(null, ddc.getContent(), "text/html", "utf-8", null);
+
+        Log.d("打开", ddc.getUrl());
+        wv.loadDataWithBaseURL("/", ddc.getContent(), MIME_TYPE, ENCODING, null);
+
+
     }
 
     @Override
@@ -100,6 +117,9 @@ public class DdcActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private final String ENCODING = "utf-8";
+    private final String MIME_TYPE = "text/html";
 
 
 }

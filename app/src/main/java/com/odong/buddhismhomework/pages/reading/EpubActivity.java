@@ -18,7 +18,7 @@ public class EpubActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epub);
-        book = new Gson().fromJson(getIntent().getStringExtra("file"), Book.class);
+        book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
         getActionBar().setIcon(R.drawable.ic_dzj);
         setTitle(book.getTitle());
     }
