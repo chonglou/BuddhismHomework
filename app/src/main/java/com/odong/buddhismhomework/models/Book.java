@@ -1,42 +1,57 @@
 package com.odong.buddhismhomework.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by flamen on 15-2-12.
+ * Created by flamen on 15-2-19.
  */
 public class Book implements Serializable {
-    public Book() {
-        files = new ArrayList<Integer>();
-    }
-
     public String getScrollId() {
-        return "scroll://book/" + name;
+        return "scroll://book/" + id;
     }
 
     @Override
     public String toString() {
-        return name;
+        return title;
     }
 
-
-    private String name;
     private String author;
-    private String mp3;
-    private List<Integer> files;
+    private String name;
+    private String title;
+    private String type;
+    private boolean fav;
+    private int id;
 
-    public List<Integer> getFiles() {
-        return files;
+    public int getId() {
+        return id;
     }
 
-    public String getMp3() {
-        return mp3;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setMp3(String mp3) {
-        this.mp3 = mp3;
+    public boolean isFav() {
+        return fav;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getName() {
@@ -47,11 +62,11 @@ public class Book implements Serializable {
         this.name = name;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

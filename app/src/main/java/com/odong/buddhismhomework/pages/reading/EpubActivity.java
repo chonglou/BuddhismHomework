@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
@@ -18,7 +18,7 @@ public class EpubActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_epub);
-        book = new Gson().fromJson(getIntent().getStringExtra("file"), Dzj.class);
+        book = new Gson().fromJson(getIntent().getStringExtra("file"), Book.class);
         getActionBar().setIcon(R.drawable.ic_dzj);
         setTitle(book.getTitle());
     }
@@ -46,5 +46,6 @@ public class EpubActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-    private Dzj book;
+
+    private Book book;
 }

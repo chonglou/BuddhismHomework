@@ -5,9 +5,9 @@ import android.content.res.XmlResourceParser;
 import android.util.Log;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Clock;
 import com.odong.buddhismhomework.models.Homework;
+import com.odong.buddhismhomework.models.Music;
 import com.odong.buddhismhomework.models.Video;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -96,12 +96,12 @@ public class XmlHelper {
 
     }
 
-    public List<Book> getBookList(String name) {
-        final List<Book> books = new ArrayList<Book>();
+    public List<Music> getBookList(String name) {
+        final List<Music> books = new ArrayList<Music>();
         read(name, new Callback() {
             @Override
             public void run(XmlResourceParser xrp) throws IOException, XmlPullParserException {
-                Book b = new Book();
+                Music b = new Music();
                 b.setName(xrp.getAttributeValue(null, "name"));
                 b.setAuthor(xrp.getAttributeValue(null, "author"));
                 b.setMp3(xrp.getAttributeValue(null, "mp3"));

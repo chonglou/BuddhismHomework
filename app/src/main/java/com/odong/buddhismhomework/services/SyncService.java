@@ -13,30 +13,21 @@ import android.widget.RemoteViews;
 import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.models.Dzj;
 import com.odong.buddhismhomework.pages.MainActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -50,6 +41,7 @@ public class SyncService extends IntentService {
 
     @Override
     public void onStart(Intent intent, int startId) {
+        progress = 0;
         sb = new StringBuilder();
         wh = new WidgetHelper(this);
         kh = new KvHelper(this);
@@ -67,87 +59,55 @@ public class SyncService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        download();
-        uncompress();
-        cbeta();
-        youtube();
-        success();
-    }
-
-    private void download() {
-        int i = 1;
-        increase(i);
-
-        log(getString(R.string.lbl_begin_download));
-        Integer type = kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox);
-
-        switch (type) {
-            case R.id.btn_setting_home_dropbox:
-                onDropbox(i);
+        increase(2);
+        switch (intent.getStringExtra("type")) {
+            case "cbeta.sql":
+                downloadAndImport("cbeta");
                 break;
-            case R.id.btn_setting_home_baiduyun:
-                onBaiduyun();
+            case "videos.sql":
+                downloadAndImport("videos");
+                break;
+            case "musics.zip":
+                downloadAndZip("musics");
+                break;
+            case "dict.zip":
+                downloadAndZip("dict");
+                break;
+            case "cbeta.zip":
+                downloadAndZip("cbeta");
+                break;
+            case "books.zip":
+                downloadAndZip("books");
                 break;
             default:
-                log(getString(R.string.lbl_unknown_host));
+                downloadAndImport("cbeta");
+                downloadAndImport("videos");
+                downloadAndZip("books");
+                downloadAndZip("dict");
+                downloadAndZip("musics");
+                downloadAndZip("cbeta");
+                break;
         }
-
+        success();
+    }
+    private void downloadAndImport(String name){
+        String sql = name+".sql";
+        download(fetchUrl(sql), sql);
+        increase(5);
+        new DwDbHelper(this).loadSql(new CacheFile(this, sql).getRealFile());
+        increase(5);
     }
 
-    private void uncompress() {
-        int i = 30;
-        increase(i);
-
-        unzip(DICT_NAME + ".zip", DICT_NAME);
-        i += 10;
-        increase(i);
-        unzip("cbeta_epub_201405.zip", CBETA_NAME);
-
+    private void downloadAndZip(String name){
+        String zip = name+".zip";
+        download(fetchUrl(zip), zip);
+        increase(5);
+        unzip(zip, name);
+        increase(5);
     }
 
-    private void cbeta() {
-        increase(70);
-        File index = new CacheFile(this, CBETA_NAME + "/filelist.txt").getRealFile();
-        if (!index.isFile()) {
-            fail(getString(R.string.lbl_file_not_exist, CBETA_NAME));
-            return;
-        }
-        log(getString(R.string.lbl_begin_import));
-
-        try {
-            List<Dzj> books = new ArrayList<>();
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(index)));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] ss = line.split("\t\t");
-                Dzj b = new Dzj();
-                b.setType(CBETA_NAME);
-                b.setName(ss[0].trim());
-                int i = ss[1].indexOf("【");
-                b.setTitle(ss[1].substring(0, i - 1).trim());
-                b.setAuthor(ss[1].substring(i).trim());
-                books.add(b);
-                Log.d("抓取图书", b.toString());
-            }
-            new DwDbHelper(this).resetDzj(books);
-            br.close();
-            log(getString(R.string.lbl_import_complete, books.size()));
-        } catch (IOException e) {
-            fail(getString(R.string.lbl_error_import));
-            Log.e("导入数据", "大藏经", e);
-        }
-    }
-
-    private void youtube() {
-        int i = 90;
-        increase(i);
-    }
-
-    private void increase(int i) {
-        Message msg = new Message();
-        msg.what = INCREASE;
-        msg.arg1 = i;
-        handler.sendMessage(msg);
+    private String fetchUrl(String file){
+        return Config.getUrlMap().get(kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)).get(file);
     }
 
     private void fail(String msg) {
@@ -167,6 +127,15 @@ public class SyncService extends IntentService {
         sb.append(msg);
         sb.append('\n');
         wh.toast(msg, true);
+    }
+
+
+    private void increase(int i) {
+        progress += i;
+        Message msg = new Message();
+        msg.what = INCREASE;
+        msg.arg1 = progress;
+        handler.sendMessage(msg);
     }
 
 
@@ -212,35 +181,18 @@ public class SyncService extends IntentService {
 
     }
 
+    private void download(String url, String name) {
 
-    private void onDropbox(int i) {
-        try {
-            Document doc = Jsoup.connect(Config.DROPBOX_URL).get();
-            Elements links = doc.select("a.filename-link");
-            for (Element el : links) {
-                downloadFile(el.attr("href").replace("dl=0", "dl=1"));
-                i += 2;
-                increase(i);
-            }
-            log(getString(R.string.lbl_download_complete, links.size()));
-        } catch (IOException e) {
-            Log.e("下载", "IO", e);
-            fail(getString(R.string.lbl_download_error, e.getMessage()));
-        }
-
-    }
-
-    private void onBaiduyun() {
-        fail(getString(R.string.lbl_no_valid_host));
-    }
-
-
-    private void downloadFile(String url) throws IOException {
-        String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
+        //String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
         CacheFile cf = new CacheFile(this, name);
 
         if (cf.exists()) {
             log(getString(R.string.lbl_already_exist, name));
+            return;
+        }
+
+        if(url == null){
+            fail(getString(R.string.lbl_no_valid_host));
             return;
         }
 
@@ -258,9 +210,10 @@ public class SyncService extends IntentService {
             fos.flush();
             log(getString(R.string.lbl_download_success, name));
             Log.d("下载完成", name);
-        } catch (IOException | StringIndexOutOfBoundsException e) {
+        } catch (IOException e) {
             Log.e("下载", name, e);
             cf.remove();
+            fail(getString(R.string.lbl_error_download, name));
         }
 
     }
@@ -275,6 +228,7 @@ public class SyncService extends IntentService {
     private Notification notification;
     private Intent updateIntent;
     private StringBuilder sb;
+    private int progress;
 
     private final int SUCCESS = 1;
     private final int FAIL = 2;
@@ -310,95 +264,5 @@ public class SyncService extends IntentService {
         }
     });
 
-
-//    private String appendF(String url, int i) {
-//        String[] ss = url.split("/");
-//        ss[i] += "-f";
-//        return CBETA_NAME + "/" + Arrays.asList(ss).toString().replaceAll("(^\\[|\\]$)", "").replace(", ", "/");
-//    }
-//
-//    private void importBooks() {
-//        CacheFile cf = new CacheFile(this, CBETA_NAME + "/index.html");
-//        if (!cf.exists()) {
-//            log(getString(R.string.lbl_file_not_exist, CBETA_NAME));
-//            return;
-//        }
-//
-//        try {
-//            Document doc = Jsoup.parse(cf.getRealFile(), "UTF-8");
-//            List<Dzj> books = new ArrayList<Dzj>();
-//            Elements links = doc.select("a");
-//
-//            for (Element el : links) {
-//                String url = el.attr("href");
-//                if (url.endsWith(".txt")) {
-//                    Dzj d = new Dzj();
-//
-//                    d.setTitle(el.text());
-//                    d.setAuthor(el.parent().nextElementSibling().text());
-//
-//                    if (url.startsWith("T/")) {
-//                        d.setType("大正藏");
-//                        d.setName(appendF(url, 2));
-//                    } else if (url.startsWith("X/")) {
-//                        d.setType("卐續藏");
-//                        d.setName(appendF(url, 2));
-//                    } else if (url.startsWith("J/J")) {
-//                        d.setType("嘉興藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("A/A")) {
-//                        d.setType("趙城金藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("C/C")) {
-//                        d.setType("中華藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("F/F")) {
-//                        d.setType("房山石經");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("G/G")) {
-//                        d.setType("佛教大藏經");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("K/K")) {
-//                        d.setType("高麗藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("L/L")) {
-//                        d.setType("乾隆藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("M/M")) {
-//                        d.setType("卍正藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("P/P")) {
-//                        d.setType("永樂北藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("S/S")) {
-//                        d.setType("宋藏遺珍");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("U/U")) {
-//                        d.setType("洪武南藏");
-//                        d.setName(appendF(url, 1));
-//                    } else if (url.startsWith("N/N")) {
-//                        d.setType("漢譯南傳大藏經（元亨寺版）");
-//                        d.setName(appendF(url, 1));
-//                    } else {
-//                        d.setType("其它");
-//                    }
-//                    //d.setName(el.parent().parent().parent().previousElementSibling().previousElementSibling().child(0).text());
-//                    Log.d("抓取", d.toString());
-//                    books.add(d);
-//                }
-//            }
-//
-//            DwDbHelper ddh = new DwDbHelper(this);
-//            ddh.resetDzj(books);
-//            ddh.close();
-//
-//            Log.d("导入", "成功");
-//            log(getString(R.string.lbl_import_complete, books.size()));
-//
-//        } catch (IOException e) {
-//            fail(getString(R.string.lbl_error_import));
-//            Log.e("导入数据", cf.getName(), e);
-//        }
-//    }
 
 }

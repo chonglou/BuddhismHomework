@@ -9,8 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.google.gson.internal.LinkedHashTreeMap;
-import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Book;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,13 +62,13 @@ public class DwDbHelper extends SQLiteOpenHelper {
         getWritableDatabase().delete("ddc", "url=?", new String[]{url});
     }
 
-    public List<Dzj> searchDzj(String keyword) {
+    public List<Book> searchBook(String keyword) {
         keyword = "%" + keyword + "%";
-        List<Dzj> books = new ArrayList<Dzj>();
+        List<Book> books = new ArrayList<Book>();
         try {
             Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "type"}, "name LIKE ? OR title LIKE ? OR author LIKE ?", new String[]{keyword, keyword, keyword}, null, null, "id ASC", "250");
             while (c.moveToNext()) {
-                Dzj d = createDzj(c);
+                Book d = createBook(c);
                 books.add(d);
             }
             c.close();
@@ -73,12 +79,12 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return books;
     }
 
-    public List<Dzj> getFavDzjList() {
-        List<Dzj> books = new ArrayList<Dzj>();
+    public List<Book> getFavBookList() {
+        List<Book> books = new ArrayList<Book>();
         try {
             Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "type"}, "fav = ?", new String[]{"1"}, null, null, "id ASC");
             while (c.moveToNext()) {
-                Dzj d = createDzj(c);
+                Book d = createBook(c);
                 d.setFav(true);
                 books.add(d);
             }
@@ -89,14 +95,14 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return books;
     }
 
-    public void setDzjFav(int id, boolean fav) {
+    public void setBookFav(int id, boolean fav) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("fav", fav ? 1 : 0);
         db.update("books", cv, "id = ?", new String[]{Integer.toString(id)});
     }
 
-    public List<String> getDzjTypeList() {
+    public List<String> getBookTypeList() {
         List<String> types = new ArrayList<String>();
         try {
             Cursor c = getReadableDatabase().query(true, "books", new String[]{"type"}, null, null, null, null, "id ASC", null);
@@ -110,11 +116,11 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return types;
     }
 
-    public List<Dzj> getDzjList(String type) {
-        List<Dzj> books = new ArrayList<Dzj>();
+    public List<Book> getBookList(String type) {
+        List<Book> books = new ArrayList<Book>();
         Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author", "fav", "type"}, "type = ?", new String[]{type}, null, null, "id ASC");
         while (c.moveToNext()) {
-            Dzj d = createDzj(c);
+            Book d = createBook(c);
             d.setFav(c.getInt(c.getColumnIndexOrThrow("fav")) == 1);
             books.add(d);
         }
@@ -122,28 +128,47 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return books;
     }
 
-
-    public void resetDzj(List<Dzj> books) {
+    public void loadSql(File file) {
         SQLiteDatabase db = getWritableDatabase();
+
         try {
             db.beginTransaction();
-            Log.d("数据库", "清空books");
-            db.delete("books", null, null);
-            ContentValues cv = new ContentValues();
-            for (Dzj d : books) {
-                cv.put("type", d.getType());
-                cv.put("title", d.getTitle());
-                cv.put("author", d.getAuthor());
-                cv.put("name", d.getName());
-
-                db.insert("books", null, cv);
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+            while ((line = br.readLine()) != null) {
+                db.execSQL(line);
             }
+            br.close();
             db.setTransactionSuccessful();
-
+        } catch (IOException e) {
+            Log.d("加载", "SQL", e);
         } finally {
             db.endTransaction();
         }
     }
+
+
+//    public void resetBook(List<Book> books) {
+//        SQLiteDatabase db = getWritableDatabase();
+//        try {
+//            db.beginTransaction();
+//            Log.d("数据库", "清空books");
+//            db.delete("books", null, null);
+//            ContentValues cv = new ContentValues();
+//            for (Book d : books) {
+//                cv.put("type", d.getType());
+//                cv.put("title", d.getTitle());
+//                cv.put("author", d.getAuthor());
+//                cv.put("name", d.getName());
+//
+//                db.insert("books", null, cv);
+//            }
+//            db.setTransactionSuccessful();
+//
+//        } finally {
+//            db.endTransaction();
+//        }
+//    }
 
 //    public void set(String key, Object val) {
 //        SQLiteDatabase db = getWritableDatabase();
@@ -218,8 +243,8 @@ public class DwDbHelper extends SQLiteOpenHelper {
     }
 
 
-    private Dzj createDzj(Cursor c) {
-        Dzj d = new Dzj();
+    private Book createBook(Cursor c) {
+        Book d = new Book();
         d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
         d.setName(c.getString(c.getColumnIndexOrThrow("name")));
         d.setAuthor(c.getString(c.getColumnIndexOrThrow("author")));

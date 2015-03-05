@@ -11,9 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Favorite;
 import com.odong.buddhismhomework.pages.WebActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
@@ -40,12 +39,12 @@ public class FavoritesActivity extends Activity {
 
     private void initList() {
         DwDbHelper ddh = new DwDbHelper(this);
-        List<Dzj> books = ddh.getFavDzjList();
+        List<Book> books = ddh.getFavBookList();
         Map<String, String> ddc = ddh.listDdc();
         ddh.close();
 
         favorites = new ArrayList<>();
-        for (Dzj b : books) {
+        for (Book b : books) {
             Favorite f = new Favorite();
             f.setTitle(b.getTitle());
             f.setDetails(b.getAuthor());
@@ -91,7 +90,7 @@ public class FavoritesActivity extends Activity {
                 switch (fav.getType()) {
                     case "dzj":
                         Log.d("点击收藏夹", fav.getObj().toString());
-                        new WidgetHelper(FavoritesActivity.this).showDzj((Dzj)fav.getObj());
+                        new WidgetHelper(FavoritesActivity.this).showDzj((Book) fav.getObj());
                         return;
                     case "ddc":
                         intent = new Intent(FavoritesActivity.this, WebActivity.class);
@@ -122,7 +121,7 @@ public class FavoritesActivity extends Activity {
                         DwDbHelper ddh = new DwDbHelper(FavoritesActivity.this);
                         switch (fav.getType()) {
                             case "dzj":
-                                ddh.setDzjFav(((Dzj) fav.getObj()).getId(), false);
+                                ddh.setBookFav(((Book) fav.getObj()).getId(), false);
                                 break;
                             case "ddc":
                                 ddh.delDdc((String) fav.getObj());

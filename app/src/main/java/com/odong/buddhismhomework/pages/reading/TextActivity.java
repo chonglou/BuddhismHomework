@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
-import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Music;
 import com.odong.buddhismhomework.models.Pager;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -49,17 +49,17 @@ public class TextActivity extends Activity {
 
         try {
             if ("book".equals(type)) {
-                book = new Gson().fromJson(file, Book.class);
+                book = new Gson().fromJson(file, Music.class);
                 getActionBar().setIcon(R.drawable.ic_books);
-                setTitle(((Book) book).getName());
-                pager = kh.get(((Book) book).getScrollId(), Pager.class, new Pager());
+                setTitle(((Music) book).getName());
+                pager = kh.get(((Music) book).getScrollId(), Pager.class, new Pager());
 
 
             } else if ("dzj".equals(type)) {
                 getActionBar().setIcon(R.drawable.ic_dzj);
-                book = new Gson().fromJson(file, Dzj.class);
-                setTitle(((Dzj) book).getTitle());
-                pager = kh.get(((Dzj) book).getScrollId(), Pager.class, new Pager());
+                book = new Gson().fromJson(file, Book.class);
+                setTitle(((Book) book).getTitle());
+                pager = kh.get(((Book) book).getScrollId(), Pager.class, new Pager());
             }
 
             read(pager.getCur(), false);
@@ -90,9 +90,9 @@ public class TextActivity extends Activity {
         KvHelper kv = new KvHelper(this);
 
         if (type.equals("book")) {
-            kv.set(((Book) book).getScrollId(), pager);
+            kv.set(((Music) book).getScrollId(), pager);
         } else if (type.equals("dzj")) {
-            kv.set(((Dzj) book).getScrollId(), pager);
+            kv.set(((Book) book).getScrollId(), pager);
         }
         super.onBackPressed();
     }
@@ -150,7 +150,7 @@ public class TextActivity extends Activity {
                 new WidgetHelper(this).zoomTextView(R.id.tv_book_content, true);
                 break;
             case R.id.action_add_to_favorites:
-                new WidgetHelper(this).showFavoriteDialog((Dzj) book);
+                new WidgetHelper(this).showFavoriteDialog((Book) book);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -182,10 +182,10 @@ public class TextActivity extends Activity {
         BufferedReader br;
         switch (type) {
             case "book":
-                br = new BufferedReader(new InputStreamReader(getResources().openRawResource(((Book) book).getFiles().get(0))));
+                br = new BufferedReader(new InputStreamReader(getResources().openRawResource(((Music) book).getFiles().get(0))));
                 break;
             case "dzj":
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(new CacheFile(this, ((Dzj) book).getName()).getRealFile())));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(new CacheFile(this, ((Book) book).getName()).getRealFile())));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -229,10 +229,10 @@ public class TextActivity extends Activity {
         KvHelper kh = new KvHelper(this);
         switch (type) {
             case "book":
-                kh.set(((Book) book).getScrollId(), pager);
+                kh.set(((Music) book).getScrollId(), pager);
                 break;
             case "dzj":
-                kh.set(((Dzj) book).getScrollId(), pager);
+                kh.set(((Book) book).getScrollId(), pager);
                 break;
         }
     }

@@ -15,7 +15,7 @@ import android.widget.SimpleAdapter;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
-import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Music;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 import com.odong.buddhismhomework.utils.XmlHelper;
@@ -78,10 +78,10 @@ public class CatalogActivity extends Activity {
     }
 
     private void initForBook() {
-        final List<Book> books = new XmlHelper(this).getBookList("books");
+        final List<Music> books = new XmlHelper(this).getBookList("books");
 
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        for (Book b : books) {
+        for (Music b : books) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", b.getName());
             map.put("details", b.getAuthor());
@@ -99,7 +99,7 @@ public class CatalogActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Book book = books.get(position);
+                Music book = books.get(position);
                 Intent intent = new Intent(CatalogActivity.this, TextActivity.class);
                 intent.putExtra("file", new Gson().toJson(book));
                 intent.putExtra("type", "book");
@@ -114,7 +114,7 @@ public class CatalogActivity extends Activity {
         setTitle(R.string.title_dzj);
 
         DwDbHelper ddh = new DwDbHelper(this);
-        final List<String> chapters = ddh.getDzjTypeList();
+        final List<String> chapters = ddh.getBookTypeList();
         ddh.close();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
@@ -140,7 +140,7 @@ public class CatalogActivity extends Activity {
         setTitle(chapter);
 
         DwDbHelper ddh = new DwDbHelper(this);
-        final List<Dzj> books = ddh.getDzjList(chapter);
+        final List<Book> books = ddh.getBookList(chapter);
         ddh.close();
         new WidgetHelper(this).initDzjBookList(R.id.lv_items, books, null);
     }

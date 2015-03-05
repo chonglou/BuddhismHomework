@@ -1,9 +1,6 @@
 package com.odong.buddhismhomework.models;
 
-import com.google.gson.internal.LinkedHashTreeMap;
-
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Created by flamen on 15-2-12.

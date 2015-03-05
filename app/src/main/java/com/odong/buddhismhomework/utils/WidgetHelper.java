@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Dzj;
+import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.pages.reading.EpubActivity;
 import com.odong.buddhismhomework.pages.reading.SearchActivity;
 import com.odong.buddhismhomework.pages.reading.TextActivity;
@@ -44,7 +44,7 @@ public class WidgetHelper {
         this.context = context;
     }
 
-    public void showFavoriteDialog(final Dzj book) {
+    public void showFavoriteDialog(final Book book) {
         AlertDialog.Builder adbF = new AlertDialog.Builder(context);
         adbF.setTitle(R.string.action_add_to_favorites);
         adbF.setMessage(R.string.lbl_are_you_sure);
@@ -52,7 +52,7 @@ public class WidgetHelper {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DwDbHelper ddh = new DwDbHelper(context);
-                ddh.setDzjFav(book.getId(), true);
+                ddh.setBookFav(book.getId(), true);
                 ddh.close();
                 toast(context.getString(R.string.lbl_success), false);
             }
@@ -147,11 +147,11 @@ public class WidgetHelper {
 
     }
 
-    public void initDzjBookList(int lvId, final List<Dzj> books, final BookListCallback callback) {
+    public void initDzjBookList(int lvId, final List<Book> books, final BookListCallback callback) {
         Activity context = (Activity) this.context;
 
         final List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        for (Dzj d : books) {
+        for (Book d : books) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", d.getTitle());
             map.put("details", d.getAuthor());
@@ -184,7 +184,7 @@ public class WidgetHelper {
         }
     }
 
-    public void showDzj(Dzj book){
+    public void showDzj(Book book) {
         Intent intent;
         if (SyncService.CBETA_NAME.equals(book.getType())) {
             intent = new Intent(context, EpubActivity.class);

@@ -16,8 +16,8 @@ import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Music;
 import com.odong.buddhismhomework.models.Pager;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -39,7 +39,7 @@ public class PlayerActivity extends Activity {
 
         getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
 
-        book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
+        book = new Gson().fromJson(getIntent().getStringExtra("book"), Music.class);
         setTitle(book.getName());
 
 
@@ -200,6 +200,6 @@ public class PlayerActivity extends Activity {
 
     private SeekBar mp3Seeker;
     private MediaPlayer mp3Player;
-    private Book book;
+    private Music book;
     private Handler durationHandler = new Handler();
 }

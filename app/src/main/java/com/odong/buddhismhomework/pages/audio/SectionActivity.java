@@ -13,8 +13,8 @@ import android.widget.SimpleAdapter;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Music;
 import com.odong.buddhismhomework.utils.XmlHelper;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class SectionActivity extends Activity {
     private void initListView() {
 
         List<Map<String, String>> items = new ArrayList<Map<String, String>>();
-        for (Book b : books) {
+        for (Music b : books) {
             Map<String, String> map = new HashMap<String, String>();
             map.put("title", b.getName());
             map.put("details", b.getAuthor());
@@ -65,7 +65,7 @@ public class SectionActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SectionActivity.this, PlayerActivity.class);
-                Book book = books.get(position);
+                Music book = books.get(position);
                 intent.putExtra("book", new Gson().toJson(book));
                 intent.putExtra("type", type);
                 startActivity(intent);
@@ -74,7 +74,7 @@ public class SectionActivity extends Activity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                final Book book = books.get(position);
+                final Music book = books.get(position);
                 if (book.getMp3() != null) {
 
                     AlertDialog.Builder adb = new AlertDialog.Builder(SectionActivity.this);
@@ -99,7 +99,7 @@ public class SectionActivity extends Activity {
 
     }
 
-    private List<Book> books;
+    private List<Music> books;
     private String type;
 
 
