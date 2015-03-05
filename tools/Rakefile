@@ -1,10 +1,21 @@
 require 'yaml'
+require 'json'
+require 'net/http'
+require 'sqlite3'
 require 'highline/import'
 
 RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
 
 def load_cfg
   YAML.load_file('config.yml')
+end
+
+def http_get(url)
+  JSON.parse(Net::HTTP.get(URI(url)))
+end
+
+def dump_str(s)
+  s.inspect[1..-1].gsub("'", %q(\\\'))
 end
 
 namespace :adb do
@@ -53,8 +64,62 @@ end
 namespace :crawler do
   desc '抓取youtube视频地址'
   task :youtube do
-    cfg = load_cfg
-    puts cfg.inspect
+    key = load_cfg.fetch('youtube').fetch('key')
+
+
+    #DDMTV02 DDMTV04 DDMTV03 DDMTV01 DDMTV05
+    #聖嚴法師經典講座|法鼓山經典講座|法鼓講堂|聖嚴法師大法鼓|Master Sheng Yen
+    # DDMTV04 DDMTV03 DDMTV01 DDMTV05
+    channels=[]
+    %w(DDMTV02).each do |user|
+      puts "抓取用户[#{user}]"
+      channels << http_get("https://www.googleapis.com/youtube/v3/channels?part=snippet&maxResults=50&forUsername=#{user}&key=#{key}").fetch('items').map do |channel|
+        ch_sn = channel.fetch('snippet')
+
+        puts "\t抓取频道[#{ch_sn.fetch('title')}]"
+        {
+            id: channel.fetch('id'),
+            title: ch_sn.fetch('title'),
+            description: ch_sn.fetch('description'),
+            playlist: http_get("https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=#{channel.fetch('id')}&maxResults=50&key=#{key}").fetch('items').map do |playlist|
+              pl_sn = playlist.fetch('snippet')
+              puts "\t\t抓取播放列表[#{pl_sn.fetch('title')}]"
+              {
+                  id: playlist.fetch('id'),
+                  title: pl_sn.fetch('title'),
+                  description: pl_sn.fetch('description'),
+                  videos: http_get("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=#{playlist.fetch('id')}&key=#{key}").fetch('items').map do |video|
+                    v_sn = video.fetch('snippet')
+                    {
+                        id: v_sn.fetch('resourceId').fetch('videoId'),
+                        title: v_sn.fetch('title'),
+                        description: v_sn.fetch('description')
+                    }
+                  end
+              }
+            end
+        }
+
+      end
+    end
+
+    File.open("#{File.dirname __FILE__}/tmp/videos.sql", 'w') do |f|
+      f.puts 'DELETE FROM channels;'
+      f.puts 'DELETE FROM playlist;'
+      f.puts 'DELETE FROM videos;'
+      channels.each do |ch|
+
+        f.puts "INSERT INTO channels(cid, title, description) VALUES('#{ch.fetch(:id)}', '#{dump_str ch.fetch(:title)}', '#{dump_str ch.fetch(:description)}');"
+        ch.fetch(:playlist).each do |pl|
+          f.puts "INSERT INTO playlist(pid, cid, title, description) VALUES('#{pl.fetch(:id)}','#{ch.fetch(:id)}', '#{dump_str pl.fetch(:title)}', '#{dump_str pl.fetch(:description)}');"
+          pl.fetch(:videos).each do |v|
+            f.puts "INSERT INTO videos(vid, pid, title, description) VALUES('#{v.fetch(:id)}', '#{pl.fetch :id}', '#{dump_str v.fetch(:title)}', '#{dump_str v.fetch(:description)}');"
+          end
+        end
+      end
+    end
+
+
   end
 end
 

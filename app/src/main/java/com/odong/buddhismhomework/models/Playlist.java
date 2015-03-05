@@ -1,19 +1,15 @@
 package com.odong.buddhismhomework.models;
 
-import com.google.gson.internal.LinkedHashTreeMap;
-
 import java.io.Serializable;
-import java.util.Map;
 
 /**
- * Created by flamen on 15-2-12.
+ * Created by flamen on 15-3-4.
  */
-public class Video implements Serializable {
+public class Playlist implements Serializable {
     private int id;
-    private String pid;
+    private String vid;
     private String title;
     private String description;
-
 
     public int getId() {
         return id;
@@ -23,12 +19,12 @@ public class Video implements Serializable {
         this.id = id;
     }
 
-    public String getPid() {
-        return pid;
+    public String getVid() {
+        return vid;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
+    public void setVid(String vid) {
+        this.vid = vid;
     }
 
     public String getTitle() {
