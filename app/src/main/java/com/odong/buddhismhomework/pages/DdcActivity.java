@@ -31,6 +31,7 @@ public class DdcActivity extends Activity {
         getActionBar().setIcon(getIntent().getIntExtra("icon", R.drawable.ic_ddc));
 
         Ddc ddc = new Gson().fromJson(getIntent().getStringExtra("ddc"), Ddc.class);
+        setTitle(ddc.getTitle());
         initWebView(ddc);
 
     }
@@ -80,7 +81,9 @@ public class DdcActivity extends Activity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 Log.d("链接", url);
-                view.loadDataWithBaseURL(null, new DwDbHelper(DdcActivity.this).getDdc(url).getContent(), "text/html", "utf-8", null);
+                Ddc ddc = new DwDbHelper(DdcActivity.this).getDdc(url);
+                view.loadDataWithBaseURL(null, ddc.getContent(), "text/html", "utf-8", null);
+                setTitle(ddc.getTitle());
                 return true;
             }
         });

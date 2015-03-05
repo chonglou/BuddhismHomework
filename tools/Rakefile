@@ -120,7 +120,6 @@ def get_ddc(root, url, path)
       end
     end
 
-
   end
 
 end
@@ -147,7 +146,14 @@ namespace :crawler do
         f.puts 'DELETE FROM ddc;'
         Dir["#{root}/**/*"].each do |fn|
           if File.file?(fn)
-            f.puts "INSERT INTO ddc(url, content) VALUES('#{fn[root.size..-1]}', '#{dump_str File.open(fn, 'r').read}');"
+            content = File.open(fn, 'r').read
+            title = Nokogiri::HTML(content).css('p[style="text-align:center"]').first
+            if title
+              f.puts "INSERT INTO ddc(url, title, content) VALUES('#{fn[root.size..-1]}', '#{dump_str title.inner_text}', '#{dump_str content}');"
+            else
+              puts("找不到#{fn}的标题")
+            end
+
           end
         end
       end
