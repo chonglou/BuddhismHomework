@@ -13,7 +13,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -98,8 +97,6 @@ public class DdcActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 
 
 }

@@ -40,11 +40,11 @@ public class SyncService extends IntentService {
     @Override
     public void onStart(Intent intent, int startId) {
         progress = 0;
-        sb = new StringBuilder();
-        ddh = new DwDbHelper(this);
-        wh = new WidgetHelper(this);
-        kh = new KvHelper(this);
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        stringBuilder = new StringBuilder();
+        dwDbHelper = new DwDbHelper(this);
+        widgetHelper = new WidgetHelper(this);
+        kvHelper = new KvHelper(this);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notification = new Notification();
         notification.icon = R.drawable.ic_launcher;
         updateIntent = new Intent(this, MainActivity.class);
@@ -85,7 +85,7 @@ public class SyncService extends IntentService {
                 downloadAndUnzip("ddc");
                 downloadAndUnzip("musics");
                 downloadAndUnzip("cbeta");
-                kh.set("sync://all.zip", new Date());
+                kvHelper.set("sync://all.zip", new Date());
                 break;
         }
         success();
@@ -95,9 +95,9 @@ public class SyncService extends IntentService {
         String sql = name + ".sql";
         download(fetchUrl(sql), sql);
         increase(5);
-        ddh.loadSql(new CacheFile(this, sql).getRealFile());
+        dwDbHelper.loadSql(new CacheFile(this, sql).getRealFile());
         increase(5);
-        kh.set("sync://" + sql, new Date());
+        kvHelper.set("sync://" + sql, new Date());
     }
 
     private void downloadAndUnzip(String name) {
@@ -106,12 +106,12 @@ public class SyncService extends IntentService {
         increase(5);
         unzip(zip, name);
         increase(5);
-        kh.set("sync://" + zip, new Date());
+        kvHelper.set("sync://" + zip, new Date());
     }
 
     //------------------------------------------------------------------
     private String fetchUrl(String file) {
-        return Config.getUrlMap().get(kh.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)).get(file);
+        return Config.getUrlMap().get(kvHelper.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)).get(file);
     }
 
     private void fail(String msg) {
@@ -128,9 +128,9 @@ public class SyncService extends IntentService {
     }
 
     private void log(String msg) {
-        sb.append(msg);
-        sb.append('\n');
-        wh.toast(msg, true);
+        stringBuilder.append(msg);
+        stringBuilder.append('\n');
+        widgetHelper.toast(msg, true);
     }
 
 
@@ -223,13 +223,13 @@ public class SyncService extends IntentService {
     }
 
 
-    private DwDbHelper ddh;
-    private WidgetHelper wh;
-    private KvHelper kh;
-    private NotificationManager nm;
+    private DwDbHelper dwDbHelper;
+    private WidgetHelper widgetHelper;
+    private KvHelper kvHelper;
+    private NotificationManager notificationManager;
     private Notification notification;
     private Intent updateIntent;
-    private StringBuilder sb;
+    private StringBuilder stringBuilder;
     private int progress;
 
     private final int SUCCESS = 1;
@@ -242,23 +242,25 @@ public class SyncService extends IntentService {
             switch (msg.what) {
                 case SUCCESS:
                     notification.defaults = Notification.DEFAULT_ALL;
+                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
                     notification.contentIntent = PendingIntent.getActivity(SyncService.this, 0, new Intent(SyncService.this, MainActivity.class), 0);
                     notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_success));
                     notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, 100, false);
-                    nm.notify(0, notification);
-                    kh.set("sync.log", sb.toString());
+                    notificationManager.notify(0, notification);
+                    kvHelper.set("sync.log", stringBuilder.toString());
                     stopService(updateIntent);
                     break;
                 case FAIL:
                     notification.defaults = Notification.DEFAULT_ALL;
+                    notification.flags |= Notification.FLAG_AUTO_CANCEL;
                     notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_fail));
-                    nm.notify(0, notification);
-                    kh.set("sync.log", sb.toString());
+                    notificationManager.notify(0, notification);
+                    kvHelper.set("sync.log", stringBuilder.toString());
                     stopService(updateIntent);
                     break;
                 case INCREASE:
                     notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, msg.arg1, false);
-                    nm.notify(0, notification);
+                    notificationManager.notify(0, notification);
                     break;
             }
             return true;
