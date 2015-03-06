@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -48,9 +47,7 @@ public class InfoActivity extends Activity {
                     ));
 
             Bitmap bp = BitmapFactory.decodeStream(epub.getCoverImage().getInputStream());
-
             tv.setCompoundDrawablesWithIntrinsicBounds(null, null, null, new BitmapDrawable(getResources(), bp));
-            //((ImageView)findViewById(R.id.iv_book_cover)).setImageBitmap(bitmap);
 
         } catch (IOException e) {
             Log.e("EPUB", "目录", e);
