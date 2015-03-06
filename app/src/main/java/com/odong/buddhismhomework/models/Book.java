@@ -1,11 +1,21 @@
 package com.odong.buddhismhomework.models;
 
+import android.content.Context;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
+
+import nl.siegmann.epublib.epub.EpubReader;
 
 /**
  * Created by flamen on 15-2-19.
  */
 public class Book implements Serializable {
+    public nl.siegmann.epublib.domain.Book toEpub(Context context) throws IOException {
+        return new EpubReader().readEpub(new FileInputStream(new CacheFile(context, "/cbeta/" + name).getRealFile()));
+    }
+
     public String getScrollId() {
         return "scroll://book/" + id;
     }

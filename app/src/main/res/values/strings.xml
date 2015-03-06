@@ -5,12 +5,12 @@
     <string name="homework">功课列表</string>
 
 
-    <string name="action_page_goto">跳转</string>
+    <string name="action_page_goto">页面跳转</string>
     <string name="action_page_next">下一页</string>
     <string name="action_page_previous">上一页</string>
-    <string name="action_zoom_in">缩小</string>
-    <string name="action_zoom_out">放大</string>
-    <string name="action_book_index">目录</string>
+    <string name="action_zoom_in">字体缩小</string>
+    <string name="action_zoom_out">字体放大</string>
+    <string name="action_book_chapter">章节目录</string>
     <string name="action_add_to_favorites">添加到收藏夹</string>
     <string name="action_favorites">收藏夹</string>
     <string name="action_import">导入数据</string>
@@ -73,6 +73,7 @@
     <string name="lbl_already_exist">文件[%s]已经存在</string>
     <string name="lbl_error_not_exists">数据不存在</string>
     <string name="lbl_error_io">读取数据出错。</string>
+    <string name="lbl_error_book_format">图书格式不对</string>
     <string name="lbl_error_download">下载数据[%s]出错</string>
     <string name="lbl_error_check_version">检查新版本出错</string>
     <string name="lbl_error_import">导入数据出错</string>

@@ -77,7 +77,7 @@ public class TextActivity extends Activity {
         if ("book".equals(type)) {
             menu.findItem(R.id.action_add_to_favorites).setVisible(false);
         }
-        menu.findItem(R.id.action_book_index).setVisible(false);
+        menu.findItem(R.id.action_book_chapter).setVisible(false);
         return true;
     }
 
