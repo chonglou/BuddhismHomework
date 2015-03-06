@@ -44,6 +44,7 @@
         <activity android:name=".pages.reading.SearchActivity" />
         <activity android:name=".pages.reading.EpubActivity" />
         <activity android:name=".pages.reading.ChapterActivity"/>
+        <activity android:name=".pages.reading.InfoActivity"/>
 
         <service
             android:name=".services.SyncService"

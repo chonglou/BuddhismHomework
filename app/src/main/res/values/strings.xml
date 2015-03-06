@@ -11,6 +11,7 @@
     <string name="action_zoom_in">字体缩小</string>
     <string name="action_zoom_out">字体放大</string>
     <string name="action_book_chapter">章节目录</string>
+    <string name="action_book_info">书本信息</string>
     <string name="action_add_to_favorites">添加到收藏夹</string>
     <string name="action_favorites">收藏夹</string>
     <string name="action_import">导入数据</string>
@@ -41,6 +42,16 @@
 
     <string name="tv_replay">MP3循环播放</string>
     <string name="tv_hosts">下载节点</string>
+    <string name="tv_book_info">
+        书名： %1$s \n
+        作者： %2$s \n
+        出版社： %3$s \n
+        出版时间： %4$s \n
+        语言： %5$s \n
+        简介： %6$s \n
+        封面图：
+    </string>
+
 
 
     <string name="title_morning">早课</string>

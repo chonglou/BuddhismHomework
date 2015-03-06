@@ -2,8 +2,6 @@ package com.odong.buddhismhomework.pages.reading;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,7 +31,7 @@ public class EpubActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_book, menu);
+        getMenuInflater().inflate(R.menu.menu_epub, menu);
         return true;
     }
 
@@ -48,6 +46,11 @@ public class EpubActivity extends Activity {
                 Intent chapter = new Intent(this, ChapterActivity.class);
                 chapter.putExtra("book", new Gson().toJson(book));
                 startActivity(chapter);
+                break;
+            case R.id.action_book_info:
+                Intent info = new Intent(this, InfoActivity.class);
+                info.putExtra("book", new Gson().toJson(book));
+                startActivity(info);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -64,11 +67,6 @@ public class EpubActivity extends Activity {
         try {
             nl.siegmann.epublib.domain.Book epub = book.toEpub(this);
 
-            Log.d("标题", epub.getTitle());
-            Log.d("作者", epub.getMetadata().getAuthors().toString());
-
-            Bitmap bitmap = BitmapFactory.decodeStream(epub.getCoverImage().getInputStream());
-            Log.d("封面", "大小 " + bitmap.getWidth() + "x" + bitmap.getHeight() + " pixels");
 
         } catch (IOException e) {
             Log.d("读取", "EPUB", e);
