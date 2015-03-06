@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
 
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.pages.MainActivity;
+import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.io.BufferedInputStream;
@@ -63,6 +65,7 @@ public class EpubActivity extends Activity {
             showBookByLink(link);
         }
 
+        new WidgetHelper(this).setWebViewFont(R.id.wv_content);
 
     }
 
@@ -96,6 +99,12 @@ public class EpubActivity extends Activity {
                 break;
             case R.id.action_home:
                 startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.action_zoom_in:
+                wh.zoomWebView(R.id.wv_content, false);
+                break;
+            case R.id.action_zoom_out:
+                wh.zoomWebView(R.id.wv_content, true);
                 break;
             case R.id.action_page_goto:
                 AlertDialog.Builder adbG = new AlertDialog.Builder(this);

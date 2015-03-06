@@ -13,6 +13,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -134,19 +136,41 @@ public class WidgetHelper {
         ((TextView) context.findViewById(rid)).setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
+    public void setWebViewFont(int rid) {
+        Integer font = new KvHelper(context).get("web.font.size", Integer.class, null);
+        if (font != null) {
+            Activity context = (Activity) this.context;
+            WebSettings ws = (((WebView) context.findViewById(rid))).getSettings();
+            ws.setTextZoom(font);
+        }
+    }
+
+    public void zoomWebView(int rid, boolean out) {
+        Activity context = (Activity) this.context;
+        WebSettings ws = (((WebView) context.findViewById(rid))).getSettings();
+        KvHelper kh = new KvHelper(context);
+
+        int i = kh.get("web.font.size", Integer.class, ws.getTextZoom());
+        int j = 10;
+        int k = out ? (i + j) : (i - j);
+        Log.d("字体大小", "" + i + "\t" + k);
+        ws.setTextZoom(k);
+        kh.set("web.font.size", k);
+    }
+
     public void zoomTextView(int rid, boolean out) {
         Activity context = (Activity) this.context;
         TextView tv = ((TextView) context.findViewById(rid));
         KvHelper kh = new KvHelper(context);
 
-        float i = kh.get("book.font.size", Float.class, tv.getTextSize());
+        float i = kh.get("text.font.size", Float.class, tv.getTextSize());
         float j = 1f;
         float k = out ? (i + j) : (i - j);
 
         Log.d("字体大小", "" + i + "\t" + k);
 
         tv.setTextSize(k);
-        kh.set("book.font.size", k);
+        kh.set("text.font.size", k);
 
     }
 

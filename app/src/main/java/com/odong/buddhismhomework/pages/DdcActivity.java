@@ -9,11 +9,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
@@ -33,13 +35,14 @@ public class DdcActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_web, menu);
+        getMenuInflater().inflate(R.menu.menu_ddc, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        WidgetHelper wh = new WidgetHelper(this);
         switch (id) {
             case R.id.action_add_to_favorites:
                 AlertDialog.Builder adbF = new AlertDialog.Builder(this);
@@ -58,6 +61,12 @@ public class DdcActivity extends Activity {
                 });
                 adbF.setNegativeButton(android.R.string.no, null);
                 adbF.create().show();
+                break;
+            case R.id.action_zoom_in:
+                wh.zoomWebView(R.id.wv_content, false);
+                break;
+            case R.id.action_zoom_out:
+                wh.zoomWebView(R.id.wv_content, true);
                 break;
             case R.id.action_home:
                 startActivity(new Intent(this, MainActivity.class));
@@ -84,6 +93,8 @@ public class DdcActivity extends Activity {
 
         Log.d("打开", url);
         wv.loadUrl(url);
+
+      new WidgetHelper(this).setWebViewFont(R.id.wv_content);
     }
 
     @Override
