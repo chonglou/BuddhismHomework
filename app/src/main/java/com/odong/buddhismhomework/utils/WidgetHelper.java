@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
-import com.odong.buddhismhomework.models.Ddc;
 import com.odong.buddhismhomework.pages.DdcActivity;
 import com.odong.buddhismhomework.pages.reading.EpubActivity;
 import com.odong.buddhismhomework.pages.reading.SearchActivity;
@@ -54,7 +53,7 @@ public class WidgetHelper {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DwDbHelper ddh = new DwDbHelper(context);
-                ddh.setFavorite("dzj", book.getId(), book.getTitle(), true);
+                ddh.setFavorite("dzj", book.getId(), book.getTitle(), null, true);
                 ddh.close();
                 toast(context.getString(R.string.lbl_success), false);
             }
@@ -188,9 +187,9 @@ public class WidgetHelper {
         }
     }
 
-    public void showDdc(Ddc ddc) {
+    public void showDdc(String url) {
         Intent intent = new Intent(context, DdcActivity.class);
-        intent.putExtra("ddc", new Gson().toJson(ddc));
+        intent.putExtra("url", url);
         context.startActivity(intent);
     }
 

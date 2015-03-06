@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Channel;
-import com.odong.buddhismhomework.models.Ddc;
 import com.odong.buddhismhomework.models.Favorite;
 import com.odong.buddhismhomework.models.Playlist;
 import com.odong.buddhismhomework.models.Video;
@@ -90,34 +89,6 @@ public class DwDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public Ddc getDdc(String url) {
-        Ddc d = null;
-        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title", "id", "content"}, "url = ?", new String[]{url}, null, null, null, "1");
-        if (c.moveToNext()) {
-            d = new Ddc();
-            d.setUrl(c.getString(c.getColumnIndexOrThrow("url")));
-            d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
-            d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
-            d.setContent(c.getString(c.getColumnIndexOrThrow("content")));
-        }
-        c.close();
-        return d;
-    }
-
-    public Ddc getDdc(int id) {
-        Ddc d = null;
-        Cursor c = getReadableDatabase().query("ddc", new String[]{"url", "title", "id", "content"}, "WHERE id = ?", new String[]{Integer.toString(id)}, null, null, "created DESC", "1");
-        if (c.moveToNext()) {
-            d = new Ddc();
-            d.setUrl(c.getString(c.getColumnIndexOrThrow("url")));
-            d.setTitle(c.getString(c.getColumnIndexOrThrow("title")));
-            d.setId(c.getInt(c.getColumnIndexOrThrow("id")));
-            d.setContent(c.getString(c.getColumnIndexOrThrow("content")));
-        }
-        c.close();
-        return d;
-    }
-
     public Book getBook(int id) {
         Book book = null;
         Cursor c = getReadableDatabase().query("books", new String[]{"id", "name", "title", "author"}, "id = ?", new String[]{Integer.toString(id)}, null, null, null, "1");
@@ -178,7 +149,8 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return favorites;
     }
 
-    public void setFavorite(String type, int tid, String title, boolean fav) {
+
+    public void setFavorite(String type, int tid, String title, String extra, boolean fav) {
         SQLiteDatabase db = getWritableDatabase();
 
         if (fav) {
@@ -186,6 +158,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
             cv.put("type", type);
             cv.put("tid", tid);
             cv.put("title", title);
+            cv.put("extra", extra);
             db.insert("favorites", null, cv);
 
         } else {
@@ -326,7 +299,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
         switch (version) {
             case 5:
                 for (String s : new String[]{
-                        "CREATE TABLE IF NOT EXISTS favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, type VARCHAR(16) NOT NULL, tid INTEGER NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
+                        "CREATE TABLE IF NOT EXISTS favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, type VARCHAR(16) NOT NULL, tid INTEGER NOT NULL, extra VARCHAR(500), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE INDEX IF NOT EXISTS favorites_type ON favorites(type)",
 
                         "DROP TABLE IF EXISTS books",
@@ -336,11 +309,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
                         "CREATE INDEX IF NOT EXISTS books_author ON books(author)",
 
                         "DROP INDEX IF EXISTS ddc_url",
-                        "DROP INDEX IF EXISTS ddc_title",
                         "DROP TABLE IF EXISTS ddc",
-                        "CREATE TABLE IF NOT EXISTS ddc(id INTEGER PRIMARY KEY AUTOINCREMENT, url VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, content TEXT NOT NULL, created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
-                        "CREATE UNIQUE INDEX IF NOT EXISTS ddc_url ON ddc(url)",
-                        "CREATE INDEX IF NOT EXISTS ddc_title ON ddc(title)",
 
                         "CREATE TABLE IF NOT EXISTS channels(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, type VARCHAR(8) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",
                         "CREATE TABLE IF NOT EXISTS playlist(id INTEGER PRIMARY KEY AUTOINCREMENT, cid VARCHAR(64) NOT NULL, pid VARCHAR(64) NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(1000), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",

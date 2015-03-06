@@ -67,7 +67,7 @@ public class SyncService extends IntentService {
                 downloadAndImport("videos");
                 break;
             case "ddc.sql":
-                downloadAndImport("ddc");
+                downloadAndUnzip("ddc");
                 break;
             case "musics.zip":
                 downloadAndUnzip("musics");
@@ -82,7 +82,7 @@ public class SyncService extends IntentService {
                 downloadAndImport("cbeta");
                 downloadAndImport("videos");
                 downloadAndUnzip("dict");
-                downloadAndImport("ddc");
+                downloadAndUnzip("ddc");
                 downloadAndUnzip("musics");
                 downloadAndUnzip("cbeta");
                 kh.set("sync://all.zip", new Date());

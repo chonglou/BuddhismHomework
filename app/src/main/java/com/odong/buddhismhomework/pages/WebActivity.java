@@ -57,7 +57,7 @@ public class WebActivity extends Activity {
                         Map<String, String> cfg = new HashMap<String, String>();
                         cfg.put("title", wv.getTitle());
                         cfg.put("url", wv.getUrl());
-                        ddh.setFavorite("www", 0, new Gson().toJson(cfg), true);
+                        ddh.setFavorite("www", 0, new Gson().toJson(cfg), null, true);
                         ddh.close();
                         new WidgetHelper(WebActivity.this).toast(getString(R.string.lbl_success), false);
                     }

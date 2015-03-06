@@ -20,9 +20,17 @@ public class Favorite implements Serializable {
 
     private String type;
     private String title;
+    private String extra;
     private int id;
     private int tid;
 
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
 
     public int getId() {
         return id;

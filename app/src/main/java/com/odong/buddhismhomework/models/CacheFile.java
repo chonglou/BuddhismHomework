@@ -55,7 +55,7 @@ public class CacheFile {
         return f != null && f.exists();
     }
 
-    public String getRootPath() {
+    public String getRootUrl() {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + context.getString(R.string.app_name);
     }
 
@@ -65,7 +65,7 @@ public class CacheFile {
             Log.d("SD卡", "状态[" + state + "]");
             return null;
         }
-        File dir = new File(getRootPath());
+        File dir = new File(getRootUrl());
         if (!dir.exists()) {
             dir.mkdirs();
         }

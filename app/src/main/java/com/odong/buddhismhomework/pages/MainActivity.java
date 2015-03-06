@@ -26,7 +26,6 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
-import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -64,7 +63,7 @@ public class MainActivity extends Activity {
                 try {
                     Intent storage = new Intent();
                     storage.setAction(Intent.ACTION_GET_CONTENT);
-                    storage.setData(Uri.parse(new CacheFile(this, "").getRootPath()));
+                    storage.setData(Uri.parse(new CacheFile(this, "").getRootUrl()));
                     storage.setType("file/*");
                     startActivity(storage);
                 } catch (ActivityNotFoundException e) {
@@ -195,10 +194,10 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_ddc, R.drawable.ic_ddc, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://ddc.sql", Date.class, null) == null) {
-                    new WidgetHelper(MainActivity.this).showSyncDialog("ddc.sql");
+                if (new KvHelper(MainActivity.this).get("sync://ddc.zip", Date.class, null) == null) {
+                    new WidgetHelper(MainActivity.this).showSyncDialog("ddc.zip");
                 } else {
-                    new WidgetHelper(MainActivity.this).showDdc(new DwDbHelper(MainActivity.this).getDdc("/mobile/index.php"));
+                    new WidgetHelper(MainActivity.this).showDdc("/mobile/index.php");
                 }
             }
         }));

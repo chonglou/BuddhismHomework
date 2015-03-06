@@ -71,7 +71,7 @@ public class FavoritesActivity extends Activity {
                         wh.showBook(ddh.getBook(fav.getTid()));
                         return;
                     case "ddc":
-                        wh.showDdc(ddh.getDdc(fav.getTid()));
+                        wh.showDdc(fav.getExtra());
                         break;
                 }
             }
@@ -90,7 +90,7 @@ public class FavoritesActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         Favorite fav = favorites.get(position);
                         DwDbHelper ddh = new DwDbHelper(FavoritesActivity.this);
-                        ddh.setFavorite(fav.getType(), fav.getTid(), null, false);
+                        ddh.setFavorite(fav.getType(), fav.getTid(), null, null, false);
                         ddh.close();
                         items.remove(position);
                         favorites.remove(position);
