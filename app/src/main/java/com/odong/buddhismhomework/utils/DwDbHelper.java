@@ -136,13 +136,14 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Favorite> listFavorite() {
         List<Favorite> favorites = new ArrayList<>();
 
-        Cursor c = getReadableDatabase().query("favorites", new String[]{"id", "tid", "type", "title"}, null, null, null, null, "id ASC");
+        Cursor c = getReadableDatabase().query("favorites", new String[]{"id", "tid", "type", "extra", "title"}, null, null, null, null, "id ASC");
         while (c.moveToNext()) {
             Favorite f = new Favorite();
             f.setId(c.getInt(c.getColumnIndex("id")));
             f.setTid(c.getInt(c.getColumnIndex("tid")));
             f.setType(c.getString(c.getColumnIndex("type")));
             f.setTitle(c.getString(c.getColumnIndex("title")));
+            f.setExtra(c.getString(c.getColumnIndex("extra")));
             favorites.add(f);
         }
         c.close();

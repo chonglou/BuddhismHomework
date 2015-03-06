@@ -85,7 +85,7 @@ public class DdcActivity extends Activity {
         wv.getSettings().setDomStorageEnabled(true);
 
         Log.d("打开", url);
-        wv.loadUrl(toUrl(url));
+        wv.loadUrl(url);
         setTitle(wv.getTitle());
     }
 
@@ -99,9 +99,7 @@ public class DdcActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private String toUrl(String s) {
-        return "file://" + new CacheFile(DdcActivity.this, "/ddc" + s).getRealFile().getAbsolutePath();
-    }
+
 
 
 }
