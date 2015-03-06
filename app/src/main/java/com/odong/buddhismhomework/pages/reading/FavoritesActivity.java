@@ -71,7 +71,7 @@ public class FavoritesActivity extends Activity {
                         wh.showBook(ddh.getBook(fav.getTid()));
                         return;
                     case "ddc":
-                        wh.showDdc(fav.getExtra());
+                        wh.showDdc(fav.getExtra(), fav.getTitle());
                         break;
                 }
             }

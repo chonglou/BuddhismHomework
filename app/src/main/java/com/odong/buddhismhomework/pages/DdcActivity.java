@@ -25,9 +25,8 @@ public class DdcActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
 
+        setTitle(getIntent().getStringExtra("title"));
         getActionBar().setIcon(getIntent().getIntExtra("icon", R.drawable.ic_ddc));
-
-
         initWebView(getIntent().getStringExtra("url"));
 
     }
@@ -85,7 +84,6 @@ public class DdcActivity extends Activity {
 
         Log.d("打开", url);
         wv.loadUrl(url);
-        setTitle(wv.getTitle());
     }
 
     @Override

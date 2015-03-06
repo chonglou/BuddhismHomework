@@ -197,7 +197,10 @@ public class MainActivity extends Activity {
                 if (new KvHelper(MainActivity.this).get("sync://ddc.zip", Date.class, null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("ddc.zip");
                 } else {
-                    new WidgetHelper(MainActivity.this).showDdc("file://" + new CacheFile(MainActivity.this, "/ddc" + "/mobile/index.php").getRealFile().getAbsolutePath());
+                    new WidgetHelper(MainActivity.this).showDdc(
+                            "file://" + new CacheFile(MainActivity.this, "/ddc" + "/mobile/index.php").getRealFile().getAbsolutePath(),
+                            getString(R.string.title_ddc)
+                    );
                 }
             }
         }));
@@ -222,7 +225,7 @@ public class MainActivity extends Activity {
         if (lc != null && (lc.getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24)) {
             return;
         }
-
+        new KvHelper(MainActivity.this).set("version.last_check", new Date());
         new AsyncTask<String, Void, Void>() {
 
             @Override
@@ -241,7 +244,6 @@ public class MainActivity extends Activity {
                         msg.what = UPGRADE;
                         versionHandler.sendMessage(msg);
                     }
-                    new KvHelper(MainActivity.this).set("version.last_check", new Date());
                 } catch (JsonParseException | IOException | URISyntaxException | PackageManager.NameNotFoundException e) {
                     new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
                 }
