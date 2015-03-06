@@ -177,14 +177,30 @@ public class EpubActivity extends Activity {
     }
 
     private void showBookByLink(String link) {
-        ((WebView) findViewById(R.id.wv_content)).loadUrl(book.toBaseUrl(this) + link);
+        try {
+            nl.siegmann.epublib.domain.Book epub = book.toEpub(this);
+            Spine spine = epub.getSpine();
+            List<SpineReference> srs = spine.getSpineReferences();
+            pageSize = srs.size();
+            for (int i = 0; i < pageSize; i++) {
+                if (link.startsWith(srs.get(i).getResource().getHref())) {
+                    curPage = i;
+                    break;
+                }
+            }
+
+            ((WebView) findViewById(R.id.wv_content)).loadUrl(book.toBaseUrl(this) + link);
+
+        } catch (IOException e) {
+            Log.d("读取", "EPUB", e);
+            new WidgetHelper(this).toast(getString(R.string.lbl_error_book_format), false);
+        }
     }
 
     private void showBookByPage() {
         WidgetHelper wh = new WidgetHelper(this);
 
         try {
-
             nl.siegmann.epublib.domain.Book epub = book.toEpub(this);
             Spine spine = epub.getSpine();
             List<SpineReference> srs = spine.getSpineReferences();
@@ -203,18 +219,7 @@ public class EpubActivity extends Activity {
             }
             wh.toast(getString(R.string.lbl_cur_page, curPage + 1, pageSize), false);
 
-            showBookByLink(srs.get(curPage).getResource().getHref());
-
-
-//            Resource res = spine.getResource(curPage);
-//            ((WebView) findViewById(R.id.wv_content)).loadDataWithBaseURL(
-//                    book.toBaseUrl(this),
-//                    new String(res.getData()),
-//                    "text/html",
-//                    "utf-8",
-//                    null
-//            );
-
+            ((WebView) findViewById(R.id.wv_content)).loadUrl(book.toBaseUrl(this) + srs.get(curPage).getResource().getHref());
 
         } catch (IOException e) {
             Log.d("读取", "EPUB", e);
