@@ -142,23 +142,37 @@ namespace :crawler do
     end
 
     if Dir.exist?(root)
-      puts '开始生成脚本'
-      name = "#{File.dirname __FILE__}/tmp/ddc.sql"
-      File.open(name, 'w') do |f|
-        f.puts 'DELETE FROM ddc;'
-        Dir["#{root}/**/*"].each do |fn|
-          if File.file?(fn)
-            content = File.open(fn, 'r').read
-            title = Nokogiri::HTML(content).css('p[style="text-align:center"]').first
-            if title
-              f.puts "INSERT INTO ddc(url, title, content) VALUES('#{fn[root.size..-1]}', '#{dump_str title.inner_text}', '#{dump_str content}');"
-            else
-              puts("找不到#{fn}的标题")
-            end
+      puts '开始批处理文件'
 
+      new_dir = "#{root}-#{Time.now.strftime '%Y%m%d%H%M%S'}"
+
+      Dir["#{root}/**/*"].each do |fn|
+        if File.file?(fn)
+
+          content = File.open(fn, 'r').read
+          title = Nokogiri::HTML(content).css('p[style="text-align:center"]').first.inner_text
+          name = "#{new_dir}/#{fn[root.size+1..-1]}"
+          if title
+            d = File.dirname name
+            FileUtils.mkpath(d) unless Dir.exists?(d)
+
+            File.open(name, 'w') do |f|
+              f.puts "<html><head><title>#{title}</title></head><body>"
+              f.puts content
+              f.puts '</body></html>'
+            end
+            `sed -i \"s/..\\/\\" rel=/..\\/index.php\\" rel=/g\" #{name}`
+          else
+            puts("找不到#{fn}的标题")
           end
+
         end
       end
+
+      `sed -i \"s/..\\/pc.htm/index.php/g\" #{new_dir}/mobile/index.php`
+
+      puts `cd #{new_dir} && zip -r #{new_dir}.zip *`
+      puts "完毕 #{new_dir}.zip"
     end
 
 
