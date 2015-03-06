@@ -66,7 +66,7 @@ public class SyncService extends IntentService {
             case "videos.sql":
                 downloadAndImport("videos");
                 break;
-            case "ddc.sql":
+            case "ddc.zip":
                 downloadAndUnzip("ddc");
                 break;
             case "musics.zip":

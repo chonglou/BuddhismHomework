@@ -98,10 +98,8 @@ def get_ddc(root, url, path)
   end
   File.open(fn, 'w') { |f| f.puts content }
 
-  ul = content.css('ul[data-role="listview"]')
-  return if ul.size == 0
 
-  ul.css('a').each do |a|
+  content.css('a').each do |a|
     href = a['href']
 
     if href.start_with?('http')
@@ -126,6 +124,10 @@ def get_ddc(root, url, path)
 
 end
 
+def random_name(name)
+  "#{name}-#{Time.now.strftime '%Y%m%d%H%M%S'}"
+end
+
 namespace :crawler do
   desc '采集DDC'
   task :ddc do
@@ -135,7 +137,7 @@ namespace :crawler do
     craw = ask('要更新目录么？(Y/n) ') { |q| q.default='n' }
     if craw == 'Y'
       if Dir.exist?(root)
-        FileUtils.move root, "#{root}-#{Time.now.strftime '%Y%m%d%H%M%S'}"
+        FileUtils.move root, random_name(root)
       end
       puts "抓取DDC 开始时间 #{Time.new}"
       get_ddc root, ddc.fetch('url'), ddc.fetch('home')
@@ -144,7 +146,7 @@ namespace :crawler do
     if Dir.exist?(root)
       puts '开始批处理文件'
 
-      new_dir = "#{root}-#{Time.now.strftime '%Y%m%d%H%M%S'}"
+      new_dir = random_name root
 
       Dir["#{root}/**/*"].each do |fn|
         if File.file?(fn)
