@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
@@ -16,6 +15,7 @@ import com.odong.buddhismhomework.models.Playlist;
 import com.odong.buddhismhomework.models.Video;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.YoutubePlayer;
+import com.odong.buddhismhomework.widgets.ColorListAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,6 @@ public class VideoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
-
         switch (getIntent().getStringExtra("type")) {
             case "channel":
                 initChannelList();
@@ -46,6 +45,7 @@ public class VideoActivity extends Activity {
 
     }
 
+
     private void initChannelList() {
         setTitle(R.string.title_videos);
         final List<Channel> channels = new DwDbHelper(this).listChannel();
@@ -59,7 +59,7 @@ public class VideoActivity extends Activity {
             map.put("details", shortTxt(c.getDescription()));
             items.add(map);
         }
-        ListAdapter adapter = new SimpleAdapter(this,
+        ListAdapter adapter = new ColorListAdapter(this,
                 items,
                 android.R.layout.two_line_list_item,
                 new String[]{"title", "details"},
@@ -94,7 +94,7 @@ public class VideoActivity extends Activity {
             map.put("details", shortTxt(pl.getDescription()));
             items.add(map);
         }
-        ListAdapter adapter = new SimpleAdapter(this,
+        ListAdapter adapter = new ColorListAdapter(this,
                 items,
                 android.R.layout.two_line_list_item,
                 new String[]{"title", "details"},
@@ -128,7 +128,7 @@ public class VideoActivity extends Activity {
             map.put("details", shortTxt(v.getDescription()));
             items.add(map);
         }
-        ListAdapter adapter = new SimpleAdapter(this,
+        ListAdapter adapter = new ColorListAdapter(this,
                 items,
                 android.R.layout.two_line_list_item,
                 new String[]{"title", "details"},
@@ -147,7 +147,6 @@ public class VideoActivity extends Activity {
     }
 
     private String shortTxt(String text) {
-        //String text = Jsoup.parse(html).text();
         return text.length() > 128 ? text.substring(0, 120) : text;
     }
 
