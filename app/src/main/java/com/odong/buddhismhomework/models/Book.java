@@ -13,9 +13,10 @@ import nl.siegmann.epublib.epub.EpubReader;
  * Created by flamen on 15-2-19.
  */
 public class Book implements Serializable {
-    public String toBaseUrl(Context context){
+    public String toBaseUrl(Context context) {
         return "file://" + toCacheFile(context) + "/OPS/";
     }
+
     public File toFile(Context context) {
         return new CacheFile(context, "/cbeta/" + name).getRealFile();
     }

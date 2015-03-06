@@ -33,6 +33,7 @@ public class ChapterActivity extends Activity {
         getActionBar().setIcon(R.drawable.ic_dzj);
         setTitle(getString(R.string.action_book_chapter) + ": " + book.getTitle());
         chapters = new ArrayList<>();
+        links = new ArrayList<>();
 
         try {
             nl.siegmann.epublib.domain.Book epub = book.toEpub(this);
@@ -51,7 +52,7 @@ public class ChapterActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ChapterActivity.this, EpubActivity.class);
                 intent.putExtra("book", new Gson().toJson(book));
-                intent.putExtra("page", position + 1);
+                intent.putExtra("link", links.get(position));
                 startActivity(intent);
             }
         });
@@ -69,12 +70,15 @@ public class ChapterActivity extends Activity {
                 sb.append("--");
             }
             sb.append(tr.getTitle());
+
             chapters.add(sb.toString());
+            links.add(tr.getCompleteHref());
             logTableOfContents(tr.getChildren(), depth + 1);
         }
     }
 
     private List<String> chapters;
+    private List<String> links;
 
 
 }

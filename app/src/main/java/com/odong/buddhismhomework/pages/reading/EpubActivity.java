@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
+import com.odong.buddhismhomework.pages.MainActivity;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.io.BufferedInputStream;
@@ -22,11 +24,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.Spine;
+import nl.siegmann.epublib.domain.SpineReference;
 
 /**
  * Created by flamen on 15-3-4.
@@ -37,12 +40,30 @@ public class EpubActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
-        current = getIntent().getIntExtra("page", 0);
+
         getActionBar().setIcon(R.drawable.ic_dzj);
         setTitle(book.getTitle());
 
+        try {
+            unzip();
+        } catch (IOException e) {
+            Log.d("读取", "EPUB", e);
+            new WidgetHelper(this).toast(getString(R.string.lbl_error_book_format), false);
+            book.toCacheFile(this).delete();
+            return;
+        }
 
-        showBook();
+        String link = getIntent().getStringExtra("link");
+        if (link == null) {
+            curPage = getIntent().getIntExtra("page", 0);
+            Log.d("EPUB", "第" + curPage + "页");
+            showBookByPage();
+        } else {
+            Log.d("EPUB", "地址: " + link);
+            showBookByLink(link);
+        }
+
+
     }
 
     @Override
@@ -70,12 +91,15 @@ public class EpubActivity extends Activity {
                 startActivity(info);
                 break;
             case R.id.action_page_next:
-                current++;
-                showBook();
+                curPage++;
+                showBookByPage();
+                break;
+            case R.id.action_home:
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.action_page_goto:
                 AlertDialog.Builder adbG = new AlertDialog.Builder(this);
-                adbG.setTitle(getString(R.string.lbl_goto_page, size));
+                adbG.setTitle(getString(R.string.lbl_goto_page, pageSize));
 
                 final EditText pg = new EditText(this);
                 pg.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -87,12 +111,12 @@ public class EpubActivity extends Activity {
 
                         try {
                             int p = Integer.parseInt(pg.getText().toString().trim());
-                            if (p < 1 || p > size) {
+                            if (p < 1 || p > pageSize) {
                                 wh.toast(getString(R.string.lbl_error_page_not_valid), false);
                                 return;
                             }
-                            current = p - 1;
-                            showBook();
+                            curPage = p - 1;
+                            showBookByPage();
                         } catch (NumberFormatException e) {
                             wh.toast(getString(R.string.lbl_error_page_not_valid), false);
                         }
@@ -102,8 +126,8 @@ public class EpubActivity extends Activity {
                 adbG.create().show();
                 break;
             case R.id.action_page_previous:
-                current--;
-                showBook();
+                curPage--;
+                showBookByPage();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,8 +136,13 @@ public class EpubActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        WebView wv = (WebView) findViewById(R.id.wv_content);
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()) {
+            wv.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void unzip() throws IOException {
@@ -127,7 +156,7 @@ public class EpubActivity extends Activity {
         ZipEntry ze;
         while ((ze = zis.getNextEntry()) != null) {
             File f = new File(dirF, ze.getName());
-            if(!f.getParentFile().exists()){
+            if (!f.getParentFile().exists()) {
                 f.getParentFile().mkdirs();
             }
             if (ze.isDirectory()) {
@@ -147,49 +176,56 @@ public class EpubActivity extends Activity {
         }
     }
 
-    private void showBook() {
+    private void showBookByLink(String link) {
+        ((WebView) findViewById(R.id.wv_content)).loadUrl(book.toBaseUrl(this) + link);
+    }
+
+    private void showBookByPage() {
         WidgetHelper wh = new WidgetHelper(this);
 
         try {
-            unzip();
 
             nl.siegmann.epublib.domain.Book epub = book.toEpub(this);
             Spine spine = epub.getSpine();
-            size = spine.getSpineReferences().size();
+            List<SpineReference> srs = spine.getSpineReferences();
+            pageSize = srs.size();
 
-            if (current < 0) {
-                current = 0;
+
+            if (curPage < 0) {
+                curPage = 0;
                 wh.toast(getString(R.string.lbl_error_first_page), false);
                 return;
             }
-            if (current >= size) {
-                current = size - 1;
+            if (curPage >= pageSize) {
+                curPage = pageSize - 1;
                 wh.toast(getString(R.string.lbl_error_last_page), false);
                 return;
             }
-            wh.toast(getString(R.string.lbl_cur_page, current + 1, size), false);
+            wh.toast(getString(R.string.lbl_cur_page, curPage + 1, pageSize), false);
 
-            Resource res = spine.getResource(current);
-            ((WebView) findViewById(R.id.wv_content)).loadDataWithBaseURL(
-                    book.toBaseUrl(this),
-                    new String(res.getData()),
-                    "text/html",
-                    "utf-8",
-                    null
-            );
+            showBookByLink(srs.get(curPage).getResource().getHref());
+
+
+//            Resource res = spine.getResource(curPage);
+//            ((WebView) findViewById(R.id.wv_content)).loadDataWithBaseURL(
+//                    book.toBaseUrl(this),
+//                    new String(res.getData()),
+//                    "text/html",
+//                    "utf-8",
+//                    null
+//            );
 
 
         } catch (IOException e) {
             Log.d("读取", "EPUB", e);
             wh.toast(getString(R.string.lbl_error_book_format), false);
-            book.toCacheFile(this).delete();
         }
 
     }
 
 
     private Book book;
-    private int current;
-    private int size;
+    private int curPage;
+    private int pageSize;
 
 }

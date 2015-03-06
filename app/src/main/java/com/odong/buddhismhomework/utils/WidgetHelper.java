@@ -199,6 +199,7 @@ public class WidgetHelper {
         } else {
             Intent intent = new Intent(context, EpubActivity.class);
             intent.putExtra("book", new Gson().toJson(book));
+            intent.putExtra("link", "TableOfContents.xhtml");
             context.startActivity(intent);
         }
     }
