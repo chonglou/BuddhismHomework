@@ -10,8 +10,6 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,9 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URL;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -70,11 +66,14 @@ public class SyncService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected synchronized void onHandleIntent(Intent intent) {
         increase(2);
         String type = intent.getStringExtra("type");
         dwDbHelper.addLog(SPACING + getString(R.string.lbl_begin_sync, type) + SPACING);
+
+
         try {
+
             initFiles();
 
             switch (type) {
@@ -113,6 +112,7 @@ public class SyncService extends IntentService {
             finish(false, getString(R.string.lbl_error_sync, type));
         }
 
+
     }
 
     private void downloadAndImport(String name) throws Exception {
@@ -132,7 +132,6 @@ public class SyncService extends IntentService {
         increase(5);
         kvHelper.set("sync://" + zip, new Date());
     }
-
 
 
     private void initFiles() throws Exception {
@@ -208,7 +207,7 @@ public class SyncService extends IntentService {
                     byte[] buf = new byte[1024];
                     int count;
                     Log.d("解压缩文件", f.getAbsolutePath());
-                    if(!f.getParentFile().exists()){
+                    if (!f.getParentFile().exists()) {
                         f.getParentFile().mkdirs();
                     }
                     FileOutputStream fos = new FileOutputStream(f);
@@ -228,19 +227,19 @@ public class SyncService extends IntentService {
 
     }
 
-    private String md5(File file) throws IOException,NoSuchAlgorithmException{
+    private String md5(File file) throws IOException, NoSuchAlgorithmException {
         FileInputStream fis = new FileInputStream(file);
         byte[] buf = new byte[1024];
         MessageDigest md = MessageDigest.getInstance("MD5");
         int read = 0;
-        while ((read = fis.read(buf))!= -1){
+        while ((read = fis.read(buf)) != -1) {
             md.update(buf, 0, read);
         }
         fis.close();
         byte[] mdb = md.digest();
         String val = "";
-        for(byte b : mdb){
-            val +=Integer.toString(( b & 0xff ) + 0x100, 16).substring(1);
+        for (byte b : mdb) {
+            val += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
         }
         return val;
     }
@@ -259,7 +258,7 @@ public class SyncService extends IntentService {
                 log(getString(R.string.lbl_already_exist, name));
                 return;
             } else {
-                Log.d("MD5不匹配", name+": "+ md5 + " VS " + newMd5);
+                Log.d("MD5不匹配", name + ": " + md5 + " VS " + newMd5);
                 log(getString(R.string.lbl_error_md5, name));
                 cf.getRealFile().delete();
             }
