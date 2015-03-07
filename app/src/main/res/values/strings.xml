@@ -35,9 +35,9 @@
     <string name="tv_setting_evening">晚课时间(每天%1$02d:%2$02d)</string>
     <string name="tv_clocks">从现在开始打坐：</string>
     <string name="tv_sync_log">
-        <b>上次检查</b>：\n <u>%1$s</u> \n
-        <b>数据目录</b>：\n <u>%2$s</u> \n
-        <b>日志记录</b>：\n <u>%3$s</u> \n
+        <b>上次检查</b>：\n<u>%1$s</u>\n
+        <b>数据目录</b>：\n<u>%2$s</u>\n
+        <b>日志记录</b>：\n<u>%3$s</u>\n
     </string>
 
     <string name="tv_replay">MP3循环播放</string>
@@ -97,6 +97,7 @@
 
 
     <string name="dlg_title_check_version">发现新版本</string>
+    <string name="dlg_clear_cache">确定要清理缓存么？</string>
     <string name="dlg_check_version">要安装么？</string>
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
     <string name="dlg_sync">下载[%s]会耗费流量，建议在WLAN连接下进行，导入数据很耗时，请耐心等待，在此期间请勿对本APP进行任何操作，确定要继续么？</string>
@@ -121,6 +122,7 @@
     <string name="lbl_progressing">正在处理(进度%d%%)</string>
     <string name="lbl_fail">操作失败</string>
     <string name="lbl_loading">努力加载中,请稍候。。。</string>
+    <string name="lbl_clear_cache">清理缓存目录, 请耐心等待！！！</string>
     <string name="lbl_about_me">
         1: <i>配套图书</i>《<b>佛教朝暮课诵本</b>》法鼓文化出版社 \n
         2: <i>BUG报告地址</i> <u>https://github.com/chonglou/BuddhismHomework/issues</u> \n
@@ -133,5 +135,6 @@
         注意：处理过程中请耐心等待，不要进行关于本APP的其它操作，完毕后在顶部消息栏会有提醒。\n
         友情提示，请仅用于学习交流用户，请勿用于任何商业用途！！！\n
     </string>
+
 
 </resources>

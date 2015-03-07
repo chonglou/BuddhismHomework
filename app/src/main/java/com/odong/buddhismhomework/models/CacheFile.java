@@ -23,6 +23,18 @@ public class CacheFile {
         this.context = context;
     }
 
+    public void delete() {
+        delete(getRealFile());
+    }
+
+    private void delete(File file) {
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                delete(f);
+            }
+        }
+        file.delete();
+    }
 
     public String read() {
         try {

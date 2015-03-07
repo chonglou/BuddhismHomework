@@ -114,13 +114,27 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
-
-            <ImageButton
-                android:id="@+id/btn_setting_sync"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/lbl_empty"
-                android:src="@drawable/ic_action_refresh" />
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/btn_setting_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/lbl_empty"
+                    android:src="@drawable/ic_action_refresh" />
+
+                <ImageButton
+                    android:layout_marginTop="50dp"
+                    android:id="@+id/btn_setting_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/lbl_empty"
+                    android:src="@android:drawable/ic_menu_delete" />
+            </LinearLayout>
+
 
         </LinearLayout>
 

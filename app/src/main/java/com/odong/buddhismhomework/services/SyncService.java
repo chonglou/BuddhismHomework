@@ -185,7 +185,8 @@ public class SyncService extends IntentService {
     private void unzip(String zip, String dir) throws Exception {
         log(getString(R.string.lbl_begin_uncompress, zip));
         File zipF = new File(new CacheFile(this, zip).getRealFile().getAbsolutePath());
-        File dirF = new File(new CacheFile(this, dir).getRealFile().getAbsolutePath());
+        CacheFile dirCF = new CacheFile(this, dir);
+        File dirF = new File(dirCF.getRealFile().getAbsolutePath());
 
         if (!zipF.exists()) {
             log(getString(R.string.lbl_file_not_exist, zip));
@@ -220,7 +221,7 @@ public class SyncService extends IntentService {
             }
             log(getString(R.string.lbl_uncompress_complete, zip));
         } catch (IOException e) {
-            dirF.delete();
+            dirCF.delete();
             Log.d("解压缩失败", zip, e);
             throw new Exception(getString(R.string.lbl_error_unzip, zip));
         }
@@ -260,7 +261,7 @@ public class SyncService extends IntentService {
             } else {
                 Log.d("MD5不匹配", name + ": " + md5 + " VS " + newMd5);
                 log(getString(R.string.lbl_error_md5, name));
-                cf.getRealFile().delete();
+                cf.delete();
             }
         }
 

@@ -3,6 +3,7 @@ package com.odong.buddhismhomework.pages;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,7 +46,7 @@ public class SettingsActivity extends Activity {
         new DwDbHelper(this).listLog(20, new DwDbHelper.LogCallback() {
             @Override
             public void call(String message, Date created) {
-                sb.append(created.toString());
+                sb.append(DateFormat.getDateTimeInstance().format(created));
                 sb.append(": ");
                 sb.append(message);
                 sb.append("\n");
@@ -134,6 +135,39 @@ public class SettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new KvHelper(SettingsActivity.this).set("mp3.replay", ((Switch) v).isChecked());
+            }
+        });
+
+        findViewById(R.id.btn_setting_clear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
+                adb.setTitle(R.string.lbl_are_you_sure);
+                adb.setMessage(R.string.dlg_clear_cache);
+                adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new AsyncTask<String, Void, Void>() {
+
+                            @Override
+                            protected Void doInBackground(String... params) {
+                                for (String f : params) {
+                                    new CacheFile(SettingsActivity.this, f).delete();
+                                }
+                                new DwDbHelper(SettingsActivity.this).addLog(getString(R.string.lbl_clear_cache));
+                                new WidgetHelper(SettingsActivity.this).toast(getString(R.string.lbl_success), true);
+                                return null;
+                            }
+                        }.execute("dict", "musics", "cache", "cbeta", "ddc");
+
+
+                    }
+                });
+                adb.setNegativeButton(android.R.string.no, null);
+                adb.create().show();
+
+
             }
         });
 
