@@ -15,6 +15,7 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Calendar;
 import com.odong.buddhismhomework.utils.AlarmHelper;
+import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -40,11 +41,21 @@ public class SettingsActivity extends Activity {
 
 
         Date lastSync = kv.get("sync://all.zip", Date.class, null);
+        final StringBuilder sb = new StringBuilder();
+        new DwDbHelper(this).listLog(20, new DwDbHelper.LogCallback() {
+            @Override
+            public void call(String message, Date created) {
+                sb.append(created.toString());
+                sb.append(": ");
+                sb.append(message);
+                sb.append("\n");
+            }
+        });
         ((TextView) findViewById(R.id.tv_setting_sync)).setText(
                 getString(R.string.tv_sync_log,
                         lastSync == null ? getString(R.string.lbl_never) : DateFormat.getDateTimeInstance().format(lastSync),
                         new CacheFile(this, "/").getRealFile().toString(),
-                        kv.get("sync.log", String.class, "")
+                        sb.toString()
                 ));
 
 
@@ -97,21 +108,6 @@ public class SettingsActivity extends Activity {
                     });
                     adb.setNegativeButton(android.R.string.cancel, null);
                     adb.create().show();
-//                    new TimePickerDialog(SettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
-//                        @Override
-//                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                            KvHelper kv = new KvHelper(SettingsActivity.this);
-//                            Calendar cal = kv.get(key, Calendar.class, new Calendar());
-//                            cal.setHour(hourOfDay);
-//                            cal.setMinute(minute);
-//                            cal.setEnable(true);
-//                            kv.set(key, cal);
-//
-//                            ((TextView) findViewById(tv)).setText(getString(tvs, cal.getHour(), cal.getMinute()));
-//                            new WidgetHelper(SettingsActivity.this).resetAlarms();
-//                            Log.d("设置闹钟", cal.toString());
-//                        }
-//                    }, cal.getHour(), cal.getMinute(), true).show();
 
                 } else {
                     cal.setEnable(false);

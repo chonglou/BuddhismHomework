@@ -6,6 +6,7 @@ require 'highline/import'
 require 'nokogiri'
 require 'open-uri'
 require 'fileutils'
+require 'digest'
 
 RES_ROOT = "#{File.dirname(__FILE__)}/../app/src/main/res"
 
@@ -26,6 +27,21 @@ def dump_str(s)
   s.gsub(/'/, "''")
 end
 
+desc '生成MD5文件'
+task :md5 do
+  files = load_cfg.fetch('download').map do |k, v|
+    n=v['name']
+    n ||= k
+    {
+        name: k,
+        dropbox: v.fetch('dropbox'),
+        md5: Digest::MD5.file("#{File.dirname __FILE__}/tmp/#{n}").hexdigest
+    }
+  end
+  File.open("#{File.dirname __FILE__}/tmp/file.lst", 'w') do |f|
+    f.puts files.to_json
+  end
+end
 
 desc '测试数据库脚本'
 task :sql do

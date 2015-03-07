@@ -9,13 +9,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.utils.DwDbHelper;
-import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
@@ -94,7 +92,7 @@ public class DdcActivity extends Activity {
         Log.d("打开", url);
         wv.loadUrl(url);
 
-      new WidgetHelper(this).setWebViewFont(R.id.wv_content);
+        new WidgetHelper(this).setWebViewFont(R.id.wv_content);
     }
 
     @Override

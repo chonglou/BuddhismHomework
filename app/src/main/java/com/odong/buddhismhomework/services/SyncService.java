@@ -10,11 +10,18 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.pages.MainActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -24,8 +31,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -40,7 +53,7 @@ public class SyncService extends IntentService {
     @Override
     public void onStart(Intent intent, int startId) {
         progress = 0;
-        stringBuilder = new StringBuilder();
+        files = new HashMap<>();
         dwDbHelper = new DwDbHelper(this);
         widgetHelper = new WidgetHelper(this);
         kvHelper = new KvHelper(this);
@@ -50,7 +63,7 @@ public class SyncService extends IntentService {
         updateIntent = new Intent(this, MainActivity.class);
         notification.contentView = new RemoteViews(getPackageName(), R.layout.notice_bar);
         notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, 0, false);
-        notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_progressing));
+        notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_progressing, 0));
         notification.contentIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
 
         super.onStart(intent, startId);
@@ -59,77 +72,104 @@ public class SyncService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         increase(2);
-        switch (intent.getStringExtra("type")) {
-            case "cbeta.sql":
-                downloadAndImport("cbeta");
-                break;
-            case "videos.sql":
-                downloadAndImport("videos");
-                break;
-            case "ddc.zip":
-                downloadAndUnzip("ddc");
-                break;
-            case "musics.zip":
-                downloadAndUnzip("musics");
-                break;
-            case "dict.zip":
-                downloadAndUnzip("dict");
-                break;
-            case "cbeta.zip":
-                downloadAndUnzip("cbeta");
-                break;
-            default:
-                downloadAndImport("cbeta");
-                downloadAndImport("videos");
-                downloadAndUnzip("dict");
-                downloadAndUnzip("ddc");
-                downloadAndUnzip("musics");
-                downloadAndUnzip("cbeta");
-                kvHelper.set("sync://all.zip", new Date());
-                break;
+        String type = intent.getStringExtra("type");
+        dwDbHelper.addLog(SPACING + getString(R.string.lbl_begin_sync, type) + SPACING);
+        try {
+            initFiles();
+
+            switch (type) {
+                case "cbeta.sql":
+                    downloadAndImport("cbeta");
+                    break;
+                case "videos.sql":
+                    downloadAndImport("videos");
+                    break;
+                case "ddc.zip":
+                    downloadAndUnzip("ddc");
+                    break;
+                case "musics.zip":
+                    downloadAndUnzip("musics");
+                    break;
+                case "dict.zip":
+                    downloadAndUnzip("dict");
+                    break;
+                case "cbeta.zip":
+                    downloadAndUnzip("cbeta");
+                    break;
+                default:
+                    downloadAndImport("cbeta");
+                    downloadAndImport("videos");
+                    downloadAndUnzip("dict");
+                    downloadAndUnzip("ddc");
+                    downloadAndUnzip("musics");
+                    downloadAndUnzip("cbeta");
+                    kvHelper.set("sync://all.zip", new Date());
+                    break;
+            }
+            finish(true, getString(R.string.lbl_sync_complete, type));
+        } catch (Exception e) {
+            Log.d("服务", "出错", e);
+            log(e.getMessage());
+            finish(false, getString(R.string.lbl_error_sync, type));
         }
-        success();
+
     }
 
-    private void downloadAndImport(String name) {
+    private void downloadAndImport(String name) throws Exception {
         String sql = name + ".sql";
-        download(fetchUrl(sql), sql);
+        download(sql);
         increase(5);
         dwDbHelper.loadSql(new CacheFile(this, sql).getRealFile());
         increase(5);
         kvHelper.set("sync://" + sql, new Date());
     }
 
-    private void downloadAndUnzip(String name) {
+    private void downloadAndUnzip(String name) throws Exception {
         String zip = name + ".zip";
-        download(fetchUrl(zip), zip);
+        download(zip);
         increase(5);
         unzip(zip, name);
         increase(5);
         kvHelper.set("sync://" + zip, new Date());
     }
 
-    //------------------------------------------------------------------
-    private String fetchUrl(String file) {
-        return Config.getUrlMap().get(kvHelper.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)).get(file);
+
+
+    private void initFiles() throws Exception {
+        String url;
+        String type;
+        switch (kvHelper.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)) {
+            case R.id.btn_setting_home_dropbox:
+                type = "dropbox";
+                url = Config.DROPBOX_FILE_LST;
+                break;
+            default:
+                throw new IOException(getString(R.string.lbl_no_valid_host));
+        }
+
+        String json = HttpClient.get(url);
+        Log.d("文件索引", json);
+
+        JsonArray ja = new JsonParser().parse(json).getAsJsonArray();
+        for (JsonElement je : ja) {
+            Map<String, String> map = new HashMap<>();
+            JsonObject jo = je.getAsJsonObject();
+            map.put("url", jo.get(type).getAsString());
+            map.put("md5", jo.get("md5").getAsString());
+            files.put(jo.get("name").getAsString(), map);
+        }
+        Log.d("文件列表", files.toString());
     }
 
-    private void fail(String msg) {
+    private void finish(boolean ok, String msg) {
+        dwDbHelper.addLog(SPACING + msg + SPACING);
         Message m = new Message();
-        m.what = FAIL;
-        log(msg);
+        m.what = ok ? SUCCESS : FAIL;
         handler.sendMessage(m);
     }
 
-    private void success() {
-        Message msg = new Message();
-        msg.what = SUCCESS;
-        handler.sendMessage(msg);
-    }
-
     private void log(String msg) {
-        stringBuilder.append(msg);
-        stringBuilder.append('\n');
+        dwDbHelper.addLog(msg);
         widgetHelper.toast(msg, true);
     }
 
@@ -143,7 +183,7 @@ public class SyncService extends IntentService {
     }
 
 
-    private void unzip(String zip, String dir) {
+    private void unzip(String zip, String dir) throws Exception {
         log(getString(R.string.lbl_begin_uncompress, zip));
         File zipF = new File(new CacheFile(this, zip).getRealFile().getAbsolutePath());
         File dirF = new File(new CacheFile(this, dir).getRealFile().getAbsolutePath());
@@ -168,6 +208,9 @@ public class SyncService extends IntentService {
                     byte[] buf = new byte[1024];
                     int count;
                     Log.d("解压缩文件", f.getAbsolutePath());
+                    if(!f.getParentFile().exists()){
+                        f.getParentFile().mkdirs();
+                    }
                     FileOutputStream fos = new FileOutputStream(f);
                     while ((count = zis.read(buf)) != -1) {
                         fos.write(buf, 0, count);
@@ -177,27 +220,49 @@ public class SyncService extends IntentService {
                 }
             }
             log(getString(R.string.lbl_uncompress_complete, zip));
-        } catch (Exception e) {
+        } catch (IOException e) {
             dirF.delete();
             Log.d("解压缩失败", zip, e);
-            fail(getString(R.string.lbl_error_unzip, zip));
+            throw new Exception(getString(R.string.lbl_error_unzip, zip));
         }
 
     }
 
-    private void download(String url, String name) {
+    private String md5(File file) throws IOException,NoSuchAlgorithmException{
+        FileInputStream fis = new FileInputStream(file);
+        byte[] buf = new byte[1024];
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        int read = 0;
+        while ((read = fis.read(buf))!= -1){
+            md.update(buf, 0, read);
+        }
+        fis.close();
+        byte[] mdb = md.digest();
+        String val = "";
+        for(byte b : mdb){
+            val +=Integer.toString(( b & 0xff ) + 0x100, 16).substring(1);
+        }
+        return val;
+    }
 
-        //String name = URLDecoder.decode(url.substring(url.lastIndexOf("/") + 1, url.indexOf("?")), "UTF-8");
+    private void download(String name) throws Exception {
+        Map<String, String> map = files.get(name);
+        String url = map.get("url");
+        String md5 = map.get("md5");
+
         CacheFile cf = new CacheFile(this, name);
 
         if (cf.exists()) {
-            log(getString(R.string.lbl_already_exist, name));
-            return;
-        }
 
-        if (url == null) {
-            fail(getString(R.string.lbl_no_valid_host));
-            return;
+            String newMd5 = md5(cf.getRealFile());
+            if (md5.equals(newMd5)) {
+                log(getString(R.string.lbl_already_exist, name));
+                return;
+            } else {
+                Log.d("MD5不匹配", name+": "+ md5 + " VS " + newMd5);
+                log(getString(R.string.lbl_error_md5, name));
+                cf.getRealFile().delete();
+            }
         }
 
         try {
@@ -214,10 +279,10 @@ public class SyncService extends IntentService {
             fos.flush();
             log(getString(R.string.lbl_download_success, name));
             Log.d("下载完成", name);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.e("下载", name, e);
             cf.remove();
-            fail(getString(R.string.lbl_error_download, name));
+            throw new Exception(getString(R.string.lbl_error_download, name));
         }
 
     }
@@ -229,9 +294,10 @@ public class SyncService extends IntentService {
     private NotificationManager notificationManager;
     private Notification notification;
     private Intent updateIntent;
-    private StringBuilder stringBuilder;
+    private Map<String, Map<String, String>> files;
     private int progress;
 
+    private final String SPACING = "------";
     private final int SUCCESS = 1;
     private final int FAIL = 2;
     private final int INCREASE = 3;
@@ -247,7 +313,6 @@ public class SyncService extends IntentService {
                     notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_success));
                     notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, 100, false);
                     notificationManager.notify(0, notification);
-                    kvHelper.set("sync.log", stringBuilder.toString());
                     stopService(updateIntent);
                     break;
                 case FAIL:
@@ -255,10 +320,10 @@ public class SyncService extends IntentService {
                     notification.flags |= Notification.FLAG_AUTO_CANCEL;
                     notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_fail));
                     notificationManager.notify(0, notification);
-                    kvHelper.set("sync.log", stringBuilder.toString());
                     stopService(updateIntent);
                     break;
                 case INCREASE:
+                    notification.contentView.setTextViewText(R.id.tv_notice_bar, getString(R.string.lbl_progressing, msg.arg1));
                     notification.contentView.setProgressBar(R.id.pb_notice_bar, 100, msg.arg1, false);
                     notificationManager.notify(0, notification);
                     break;

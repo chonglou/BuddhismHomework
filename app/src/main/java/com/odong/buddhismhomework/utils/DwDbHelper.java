@@ -221,7 +221,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public void listLog(int size, LogCallback callback) {
         Cursor c = getReadableDatabase().query("logs", new String[]{"message", "created"}, null, null, null, null, "id DESC", Integer.toString(size));
         while (c.moveToNext()) {
-            callback.call(c.getString(c.getColumnIndexOrThrow("id")), Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow("created"))));
+            callback.call(c.getString(c.getColumnIndexOrThrow("message")), Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow("created"))));
         }
         c.close();
     }
