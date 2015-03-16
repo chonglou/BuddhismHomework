@@ -117,7 +117,7 @@ public class SyncService extends IntentService {
 
     private void downloadAndImport(String name) throws Exception {
         String sql = name + ".sql";
-        download(sql);
+        download(sql, null);
         increase(5);
         dwDbHelper.loadSql(new CacheFile(this, sql).getRealFile());
         increase(5);
@@ -126,7 +126,7 @@ public class SyncService extends IntentService {
 
     private void downloadAndUnzip(String name) throws Exception {
         String zip = name + ".zip";
-        download(zip);
+        download(zip, name);
         increase(5);
         unzip(zip, name);
         increase(5);
@@ -245,7 +245,7 @@ public class SyncService extends IntentService {
         return val;
     }
 
-    private void download(String name) throws Exception {
+    private void download(String name, String  dir) throws Exception {
         Map<String, String> map = files.get(name);
         String url = map.get("url");
         String md5 = map.get("md5");
@@ -262,6 +262,9 @@ public class SyncService extends IntentService {
                 Log.d("MD5不匹配", name + ": " + md5 + " VS " + newMd5);
                 log(getString(R.string.lbl_error_md5, name));
                 cf.delete();
+                if(dir != null){
+                    new CacheFile(this, dir).delete();
+                }
             }
         }
 
