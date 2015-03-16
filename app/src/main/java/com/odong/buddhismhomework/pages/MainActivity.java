@@ -197,10 +197,7 @@ public class MainActivity extends Activity {
                 if (new KvHelper(MainActivity.this).get("sync://ddc.zip", Date.class, null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("ddc.zip");
                 } else {
-                    new WidgetHelper(MainActivity.this).showDdc(
-                            "file://" + new CacheFile(MainActivity.this, "/ddc" + "/mobile/index.php").getRealFile().getAbsolutePath(),
-                            getString(R.string.title_ddc)
-                    );
+                    new WidgetHelper(MainActivity.this).showDdc(null, null);
                 }
             }
         }));

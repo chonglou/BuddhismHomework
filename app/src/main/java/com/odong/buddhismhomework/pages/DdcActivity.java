@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -25,9 +26,21 @@ public class DdcActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
 
-        setTitle(getIntent().getStringExtra("title"));
         getActionBar().setIcon(getIntent().getIntExtra("icon", R.drawable.ic_ddc));
-        initWebView(getIntent().getStringExtra("url"));
+
+        String title = getIntent().getStringExtra("title");
+        index = "file://" + new CacheFile(DdcActivity.this, "/ddc/HTML/INDEX.HTM").getRealFile().getAbsolutePath();
+
+        if (title == null) {
+            getString(R.string.title_ddc);
+        }
+        String url = getIntent().getStringExtra("url");
+        if (url == null) {
+            url = index;
+        }
+
+        setTitle(title);
+        initWebView(url);
 
     }
 
@@ -87,6 +100,8 @@ public class DdcActivity extends Activity {
                 return true;
             }
         });
+
+        wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setDomStorageEnabled(true);
 
         Log.d("打开", url);
@@ -99,11 +114,17 @@ public class DdcActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         WebView wv = (WebView) findViewById(R.id.wv_content);
         if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()) {
-            wv.goBack();
+            // wv.goBack();
+            Log.d("返回", "首页");
+            wv.loadUrl(index);
+            setTitle(wv.getTitle());
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
+    private String index;
 
 
 }
