@@ -92,6 +92,22 @@ public class MainActivity extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.dlg_title_exit)
+                .setMessage(R.string.dlg_exit)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+
     private void initGrid() {
         List<NavIcon> icons = new ArrayList<NavIcon>();
         icons.add(new NavIcon(R.string.title_morning, R.drawable.ic_morning, new View.OnClickListener() {

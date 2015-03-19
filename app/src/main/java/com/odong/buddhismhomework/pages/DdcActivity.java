@@ -14,7 +14,9 @@ import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
+import com.odong.buddhismhomework.models.Point;
 import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
@@ -88,15 +90,51 @@ public class DdcActivity extends Activity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        saveScrollTo();
+        WebView wv = (WebView) findViewById(R.id.wv_content);
+        Log.d("当前地址", wv.getUrl());
+        if(wv.getUrl().endsWith("XD.htm")){
+            super.onBackPressed();
+        }
+        else {
+            loadUrl(index);
+        }
+    }
+
+    private void loadUrl(String url){
+        WebView view = (WebView)findViewById(R.id.wv_content);
+        Log.d("打开", url);
+        view.loadUrl(url);
+        setTitle(view.getTitle());
+
+        Point p = new KvHelper(this).get(getScrollKey(), Point.class, new Point());
+        view.scrollTo(p.getX(), p.getY());
+
+        new WidgetHelper(this).setWebViewFont(R.id.wv_content);
+    }
+
+    private void saveScrollTo(){
+        WebView wv = (WebView)findViewById(R.id.wv_content);
+        Point p = new Point();
+        p.setX(wv.getScrollX());
+        p.setY(wv.getScrollY());
+        new KvHelper(this).set(getScrollKey(), p);
+    }
+
+
+    private String getScrollKey(){
+        return "ddc://url/"+((WebView)findViewById(R.id.wv_content)).getUrl();
+    }
+
     private void initWebView(String url) {
         WebView wv = (WebView) findViewById(R.id.wv_content);
         wv.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("打开", url);
-                view.loadUrl(url);
-                setTitle(view.getTitle());
+                loadUrl(url);
                 return true;
             }
         });
@@ -104,24 +142,9 @@ public class DdcActivity extends Activity {
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setDomStorageEnabled(true);
 
-        Log.d("打开", url);
-        wv.loadUrl(url);
-
-        new WidgetHelper(this).setWebViewFont(R.id.wv_content);
+        loadUrl(url);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        WebView wv = (WebView) findViewById(R.id.wv_content);
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()) {
-            // wv.goBack();
-            Log.d("返回", "首页");
-            wv.loadUrl(index);
-            setTitle(wv.getTitle());
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
 
     private String index;
