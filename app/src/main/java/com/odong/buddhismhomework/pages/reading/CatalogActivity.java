@@ -33,8 +33,10 @@ public class CatalogActivity extends Activity {
 
         if ("fav".equals(type)) {
             getActionBar().setIcon(R.drawable.ic_books);
+            setTitle(R.string.title_books);
             initList(new DwDbHelper(this).getFavBookList());
         } else if ("dzj".equals(type)) {
+            setTitle(R.string.title_dzj);
             getActionBar().setIcon(R.drawable.ic_dzj);
             initList(new DwDbHelper(this).getBookList());
         }
