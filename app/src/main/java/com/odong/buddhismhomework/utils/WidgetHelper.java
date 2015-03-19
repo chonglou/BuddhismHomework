@@ -55,7 +55,7 @@ public class WidgetHelper {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DwDbHelper ddh = new DwDbHelper(context);
-                ddh.setFavorite("dzj", book.getId(), book.getTitle(), null, true);
+                ddh.addDzjFavorite(book.getId(), book.getTitle());
                 ddh.close();
                 toast(context.getString(R.string.lbl_success), false);
             }

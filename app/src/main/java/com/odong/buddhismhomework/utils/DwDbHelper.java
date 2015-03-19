@@ -136,7 +136,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     public List<Favorite> listFavorite() {
         List<Favorite> favorites = new ArrayList<>();
 
-        Cursor c = getReadableDatabase().query("favorites", new String[]{"id", "tid", "type", "extra", "title"}, null, null, null, null, "id ASC");
+        Cursor c = getReadableDatabase().query("favorites", new String[]{"id", "tid", "type", "extra", "title"}, null, null, null, null, "id DESC");
         while (c.moveToNext()) {
             Favorite f = new Favorite();
             f.setId(c.getInt(c.getColumnIndex("id")));
@@ -150,23 +150,23 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return favorites;
     }
 
-
-    public void setFavorite(String type, int tid, String title, String extra, boolean fav) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        if (fav) {
-            ContentValues cv = new ContentValues();
-            cv.put("type", type);
-            cv.put("tid", tid);
-            cv.put("title", title);
-            cv.put("extra", extra);
-            db.insert("favorites", null, cv);
-
-        } else {
-            db.delete("favorites", "tid = ? AND type = ? ", new String[]{"tid", "type"});
-
-        }
+    public void addWwwFavorite(String title, String url) {
+        addFavorite("www", 0, title, url);
     }
+
+    public void addDdcFavorite(String title, String url) {
+        addFavorite("ddc", 0, title, url);
+    }
+
+    public void addDzjFavorite(int id, String title) {
+        addFavorite("dzj", id, title, null);
+    }
+
+    public void delFavorite(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("favorites", "id = ?", new String[]{Integer.toString(id)});
+    }
+
 
     public List<Book> getBookList() {
         List<Book> books = new ArrayList<Book>();
@@ -257,6 +257,18 @@ public class DwDbHelper extends SQLiteOpenHelper {
         }
     }
 
+    private void addFavorite(String type, int tid, String title, String extra) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("type", type);
+        cv.put("tid", tid);
+        cv.put("title", title);
+        cv.put("extra", extra);
+        db.insert("favorites", null, cv);
+
+    }
 
     private Book createBook(Cursor c) {
         Book d = new Book();

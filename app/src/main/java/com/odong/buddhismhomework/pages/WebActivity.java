@@ -11,13 +11,9 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by flamen on 15-2-24.
@@ -54,10 +50,7 @@ public class WebActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         WebView wv = (WebView) findViewById(R.id.wv_content);
                         DwDbHelper ddh = new DwDbHelper(WebActivity.this);
-                        Map<String, String> cfg = new HashMap<String, String>();
-                        cfg.put("title", wv.getTitle());
-                        cfg.put("url", wv.getUrl());
-                        ddh.setFavorite("www", 0, new Gson().toJson(cfg), null, true);
+                        ddh.addWwwFavorite(wv.getTitle(), wv.getUrl());
                         ddh.close();
                         new WidgetHelper(WebActivity.this).toast(getString(R.string.lbl_success), false);
                     }
