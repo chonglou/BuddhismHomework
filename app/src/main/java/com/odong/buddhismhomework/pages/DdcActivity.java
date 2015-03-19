@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -94,17 +94,17 @@ public class DdcActivity extends Activity {
     public void onBackPressed() {
         saveScrollTo();
         WebView wv = (WebView) findViewById(R.id.wv_content);
+
         Log.d("当前地址", wv.getUrl());
-        if(wv.getUrl().endsWith("XD.htm")){
+        if (wv.canGoBack()) {
+            wv.goBack();
+        } else {
             super.onBackPressed();
-        }
-        else {
-            loadUrl(index);
         }
     }
 
-    private void loadUrl(String url){
-        WebView view = (WebView)findViewById(R.id.wv_content);
+    private void loadUrl(String url) {
+        WebView view = (WebView) findViewById(R.id.wv_content);
         Log.d("打开", url);
         view.loadUrl(url);
         setTitle(view.getTitle());
@@ -115,8 +115,8 @@ public class DdcActivity extends Activity {
         new WidgetHelper(this).setWebViewFont(R.id.wv_content);
     }
 
-    private void saveScrollTo(){
-        WebView wv = (WebView)findViewById(R.id.wv_content);
+    private void saveScrollTo() {
+        WebView wv = (WebView) findViewById(R.id.wv_content);
         Point p = new Point();
         p.setX(wv.getScrollX());
         p.setY(wv.getScrollY());
@@ -124,8 +124,8 @@ public class DdcActivity extends Activity {
     }
 
 
-    private String getScrollKey(){
-        return "ddc://url/"+((WebView)findViewById(R.id.wv_content)).getUrl();
+    private String getScrollKey() {
+        return "ddc://url/" + ((WebView) findViewById(R.id.wv_content)).getUrl();
     }
 
     private void initWebView(String url) {
@@ -139,12 +139,13 @@ public class DdcActivity extends Activity {
             }
         });
 
+        wv.setWebChromeClient(new WebChromeClient());
+        wv.setWebViewClient(new WebViewClient());
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setDomStorageEnabled(true);
 
         loadUrl(url);
     }
-
 
 
     private String index;

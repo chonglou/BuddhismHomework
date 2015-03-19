@@ -245,7 +245,7 @@ public class SyncService extends IntentService {
         return val;
     }
 
-    private void download(String name, String  dir) throws Exception {
+    private void download(String name, String dir) throws Exception {
         Map<String, String> map = files.get(name);
         String url = map.get("url");
         String md5 = map.get("md5");
@@ -262,7 +262,7 @@ public class SyncService extends IntentService {
                 Log.d("MD5不匹配", name + ": " + md5 + " VS " + newMd5);
                 log(getString(R.string.lbl_error_md5, name));
                 cf.delete();
-                if(dir != null){
+                if (dir != null) {
                     new CacheFile(this, dir).delete();
                 }
             }

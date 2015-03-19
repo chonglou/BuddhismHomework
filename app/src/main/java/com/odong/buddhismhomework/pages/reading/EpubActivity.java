@@ -7,10 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -52,6 +53,8 @@ public class EpubActivity extends Activity {
             book.toCacheFile(this).delete();
             return;
         }
+
+        initWebView();
 
         String link = getIntent().getStringExtra("link");
         if (link == null) {
@@ -143,13 +146,21 @@ public class EpubActivity extends Activity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public void onBackPressed() {
         WebView wv = (WebView) findViewById(R.id.wv_content);
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()) {
+        if (wv.canGoBack()) {
             wv.goBack();
-            return true;
+        } else {
+            super.onBackPressed();
         }
-        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initWebView() {
+        WebView wv = (WebView) findViewById(R.id.wv_content);
+        wv.setWebChromeClient(new WebChromeClient());
+        wv.setWebViewClient(new WebViewClient());
+        wv.getSettings().setJavaScriptEnabled(true);
+        wv.getSettings().setDomStorageEnabled(true);
     }
 
     private void unzip() throws IOException {
