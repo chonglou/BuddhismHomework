@@ -104,25 +104,54 @@ def random_name(name)
   "#{name}-#{Time.now.strftime '%Y%m%d%H%M%S'}"
 end
 
+def list_cbeta
+  cbeta = "#{File.dirname __FILE__}/tmp/cbeta"
+  puts `[ ! -d #{cbeta} ] && mkdir -pv #{cbeta} && cd #{cbeta} && unzip ../cbeta_epub_201405.zip`
+
+  books=[]
+  IO.foreach("#{cbeta}/filelist.txt") do |line|
+    ss = line.split "\t\t"
+    i = ss[1].index '【'
+
+    books << {
+        name: ss[0].chomp,
+        title: (ss[1][i-1] == '　' ? ss[1][0..i-2] : ss[1][0..i-1]).chomp,
+        author: ss[1][i..-1].chomp
+    }
+  end
+  books
+end
+
+
+namespace :book do
+  desc '转成mobi格式(by calibre)'
+  task :mobi do
+    books = list_cbeta
+    cur = File.dirname __FILE__
+    dest = "#{cur}/tmp/mobis"
+    unless Dir.exist?(dest)
+      FileUtils.mkdir_p dest
+    end
+    books.each do |b|
+      fn = "#{b.fetch :title}#{b.fetch :author}"
+      fn = fn.gsub ' ', '-'
+      fn = fn.gsub '(', '（'
+      fn = fn.gsub ')', '）'
+      fn = fn.gsub '　', '-'
+      fn = fn.gsub '--', '-'
+      fn = fn.gsub '【】', ''
+      puts `ebook-convert #{cur}/tmp/cbeta/#{b.fetch :name} #{dest}/#{fn}.mobi 2> #{cur}/tmp/convert.err`
+      #puts `cp #{cur}/tmp/cbeta/#{b.fetch :name} #{dest}/#{fn}.epub 2> #{cur}/tmp/convert.err`
+    end
+  end
+end
+
 namespace :crawler do
 
   desc '采集CBETA'
   task :cbeta do
-    cbeta = "#{File.dirname __FILE__}/tmp/cbeta"
-    puts `[ ! -d #{cbeta} ] && mkdir -pv #{cbeta} && cd #{cbeta} && unzip ../cbeta_epub_201405.zip`
 
-    books=[]
-    IO.foreach("#{cbeta}/filelist.txt") do |line|
-      ss = line.split "\t\t"
-      i = ss[1].index '【'
-
-      books << {
-          name: ss[0].chomp,
-          title: (ss[1][i-1] == '　' ? ss[1][0..i-2] : ss[1][0..i-1]).chomp,
-          author: ss[1][i..-1].chomp
-      }
-    end
-
+    books = list_cbeta
     name = "#{File.dirname __FILE__}/tmp/cbeta.sql"
     File.open(name, 'w') do |f|
       f.puts 'DELETE FROM books;'
