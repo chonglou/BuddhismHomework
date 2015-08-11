@@ -113,10 +113,12 @@ def list_cbeta
     ss = line.split "\t\t"
     i = ss[1].index '【'
 
+    name = ss[0].chomp
     books << {
-        name: ss[0].chomp,
+        name: name,
         title: (ss[1][i-1] == '　' ? ss[1][0..i-2] : ss[1][0..i-1]).chomp,
-        author: ss[1][i..-1].chomp
+        author: ss[1][i..-1].chomp,
+        size: File.stat("#{cbeta}/#{name}").size
     }
   end
   books
@@ -152,20 +154,17 @@ namespace :crawler do
   task :cbeta do
 
     books = list_cbeta
-    name = "#{File.dirname __FILE__}/tmp/cbeta.sql"
-    File.open(name, 'w') do |f|
-      f.puts 'DELETE FROM books;'
-      books.each do |b|
-        f.puts "INSERT INTO books(name, title, author) VALUES('#{b.fetch :name}', '#{b.fetch :title}', '#{b.fetch :author}');"
-      end
 
-      %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub T10/T10n0279.epub).each do |n|
-        f.puts "UPDATE books SET fav=1 WHERE name='#{n}';"
-      end
-
+    File.open("#{File.dirname __FILE__}/tmp/cbeta201405.json", 'w') do |f|
+      f.puts books.to_json
     end
+
     puts "采集到#{books.size}本书"
+    File.open("#{File.dirname __FILE__}/tmp/favorites.json", 'w') do |f|
+      f.puts %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub T10/T10n0279.epub).to_json
+    end
   end
+
 
   desc '采集youtube视频'
   task :youtube do
@@ -209,21 +208,9 @@ namespace :crawler do
       end
     end
 
-    name = "#{File.dirname __FILE__}/tmp/videos.sql"
+    name = "#{File.dirname __FILE__}/tmp/videos.json"
     File.open(name, 'w') do |f|
-      f.puts 'DELETE FROM channels;'
-      f.puts 'DELETE FROM playlist;'
-      f.puts 'DELETE FROM videos;'
-      channels.each do |ch|
-
-        f.puts "INSERT INTO channels(cid, type, title, description) VALUES('#{ch.fetch(:id)}', '#{ch.fetch(:type)}', '#{dump_str ch.fetch(:title)}', '#{dump_str ch.fetch(:description)}');"
-        ch.fetch(:playlist).each do |pl|
-          f.puts "INSERT INTO playlist(pid, cid, title, description) VALUES('#{pl.fetch(:id)}','#{ch.fetch(:id)}', '#{dump_str pl.fetch(:title)}', '#{dump_str pl.fetch(:description)}');"
-          pl.fetch(:videos).each do |v|
-            f.puts "INSERT INTO videos(vid, pid, title, description) VALUES('#{v.fetch(:id)}', '#{pl.fetch :id}', '#{dump_str v.fetch(:title)}', '#{dump_str v.fetch(:description)}');"
-          end
-        end
-      end
+      f.puts channels.to_json
     end
 
   end

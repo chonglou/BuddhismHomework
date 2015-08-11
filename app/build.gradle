@@ -8,8 +8,8 @@ android {
         applicationId "com.odong.buddhismhomework"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 22
-        versionName "v1.21"
+        versionCode 23
+        versionName "v1.22"
     }
     buildTypes {
         release {
@@ -17,11 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.jsoup:jsoup:1.8.1'
-
 }

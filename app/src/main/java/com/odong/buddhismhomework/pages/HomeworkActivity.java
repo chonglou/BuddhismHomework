@@ -1,8 +1,6 @@
 package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -40,22 +38,22 @@ public class HomeworkActivity extends Activity {
         initPlayButton();
     }
 
-    @Override
-    public void onBackPressed() {
-
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setMessage(R.string.dlg_will_pause);
-        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                HomeworkActivity.this.finish();
-            }
-        });
-        adb.setNegativeButton(android.R.string.no, null);
-        adb.setCancelable(false);
-        adb.create().show();
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+//        adb.setMessage(R.string.dlg_will_pause);
+//        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                HomeworkActivity.this.finish();
+//            }
+//        });
+//        adb.setNegativeButton(android.R.string.no, null);
+//        adb.setCancelable(false);
+//        adb.create().show();
+//
+//    }
 
     private void initSpinner() {
 

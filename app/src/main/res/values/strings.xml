@@ -102,6 +102,7 @@
     <string name="dlg_clear_cache">确定要清理缓存么？</string>
     <string name="dlg_check_version">要安装么？</string>
     <string name="dlg_will_pause">返回页面将会中断, 确定？</string>
+    <string name="dlg_will_pause_sitting">你确定要停止打坐么？</string>
     <string name="dlg_sync">下载[%s]会耗费流量，建议在WLAN连接下进行，导入数据很耗时，请耐心等待，在此期间请勿对本APP进行任何操作，确定要继续么？</string>
     <string name="lbl_search_result">搜索[%s]的结果</string>
     <string name="lbl_begin_sync">开始同步数据[%s]</string>
