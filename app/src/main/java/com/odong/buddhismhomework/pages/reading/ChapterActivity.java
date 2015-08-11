@@ -9,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -29,8 +28,8 @@ public class ChapterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
-        final Book book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
-        getActionBar().setIcon(R.drawable.ic_dzj);
+        final Book book = (Book) getIntent().getSerializableExtra("book");
+
         setTitle(getString(R.string.action_book_chapter) + ": " + book.getTitle());
         chapters = new ArrayList<>();
         links = new ArrayList<>();
@@ -51,7 +50,7 @@ public class ChapterActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ChapterActivity.this, EpubActivity.class);
-                intent.putExtra("book", new Gson().toJson(book));
+                intent.putExtra("book", book);
                 intent.putExtra("link", links.get(position));
                 startActivity(intent);
             }

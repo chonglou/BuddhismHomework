@@ -11,7 +11,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Music;
@@ -66,7 +65,7 @@ public class SectionActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SectionActivity.this, MusicActivity.class);
                 Music music = musics.get(position);
-                intent.putExtra("music", new Gson().toJson(music));
+                intent.putExtra("music", music);
                 intent.putExtra("type", type);
                 startActivity(intent);
             }

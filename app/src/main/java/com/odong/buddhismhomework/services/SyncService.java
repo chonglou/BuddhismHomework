@@ -10,10 +10,6 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
@@ -137,7 +133,7 @@ public class SyncService extends IntentService {
     private void initFiles() throws Exception {
         String url;
         String type;
-        switch (kvHelper.get("host.type", Integer.class, R.id.btn_setting_home_dropbox)) {
+        switch (kvHelper.get().getInt("host.type", R.id.btn_setting_home_dropbox)) {
             case R.id.btn_setting_home_dropbox:
                 type = "dropbox";
                 url = Config.DROPBOX_FILE_LST;
@@ -149,14 +145,14 @@ public class SyncService extends IntentService {
         String json = HttpClient.get(url);
         Log.d("文件索引", json);
 
-        JsonArray ja = new JsonParser().parse(json).getAsJsonArray();
-        for (JsonElement je : ja) {
-            Map<String, String> map = new HashMap<>();
-            JsonObject jo = je.getAsJsonObject();
-            map.put("url", jo.get(type).getAsString());
-            map.put("md5", jo.get("md5").getAsString());
-            files.put(jo.get("name").getAsString(), map);
-        }
+//        JsonArray ja = new JsonParser().parse(json).getAsJsonArray();
+//        for (JsonElement je : ja) {
+//            Map<String, String> map = new HashMap<>();
+//            JsonObject jo = je.getAsJsonObject();
+//            map.put("url", jo.get(type).getAsString());
+//            map.put("md5", jo.get("md5").getAsString());
+//            files.put(jo.get("name").getAsString(), map);
+//        }
         Log.d("文件列表", files.toString());
     }
 

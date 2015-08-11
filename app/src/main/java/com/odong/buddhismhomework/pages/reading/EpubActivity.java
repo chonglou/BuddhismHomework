@@ -14,7 +14,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.pages.MainActivity;
@@ -40,9 +39,8 @@ public class EpubActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-        book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
+        book = (Book) getIntent().getSerializableExtra("book");
 
-        getActionBar().setIcon(R.drawable.ic_dzj);
         setTitle(book.getTitle());
 
         try {
@@ -86,12 +84,12 @@ public class EpubActivity extends Activity {
                 break;
             case R.id.action_book_chapter:
                 Intent chapter = new Intent(this, ChapterActivity.class);
-                chapter.putExtra("book", new Gson().toJson(book));
+                chapter.putExtra("book", book);
                 startActivity(chapter);
                 break;
             case R.id.action_book_info:
                 Intent info = new Intent(this, InfoActivity.class);
-                info.putExtra("book", new Gson().toJson(book));
+                info.putExtra("book", book);
                 startActivity(info);
                 break;
             case R.id.action_page_next:

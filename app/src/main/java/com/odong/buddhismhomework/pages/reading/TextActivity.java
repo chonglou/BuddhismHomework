@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.CacheFile;
@@ -25,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 
 /**
  * Created by flamen on 15-2-19.
@@ -40,7 +40,7 @@ public class TextActivity extends Activity {
 
 
         type = getIntent().getStringExtra("type");
-        String file = getIntent().getStringExtra("file");
+        Serializable file = getIntent().getSerializableExtra("file");
 
 
         KvHelper kh = new KvHelper(this);
@@ -49,17 +49,15 @@ public class TextActivity extends Activity {
 
         try {
             if ("book".equals(type)) {
-                book = new Gson().fromJson(file, Music.class);
                 getActionBar().setIcon(R.drawable.ic_books);
                 setTitle(((Music) book).getName());
-                pager = kh.get(((Music) book).getScrollId(), Pager.class, new Pager());
+                pager = (Pager) kh.getObject(((Music) book).getScrollId(), new Pager());
 
 
             } else if ("dzj".equals(type)) {
                 getActionBar().setIcon(R.drawable.ic_dzj);
-                book = new Gson().fromJson(file, Book.class);
                 setTitle(((Book) book).getTitle());
-                pager = kh.get(((Book) book).getScrollId(), Pager.class, new Pager());
+                pager = (Pager) kh.getObject(((Book) book).getScrollId(), new Pager());
             }
 
             read(pager.getCur(), false);
@@ -90,9 +88,9 @@ public class TextActivity extends Activity {
         KvHelper kv = new KvHelper(this);
 
         if (type.equals("book")) {
-            kv.set(((Music) book).getScrollId(), pager);
+            kv.setObject(((Music) book).getScrollId(), pager);
         } else if (type.equals("dzj")) {
-            kv.set(((Book) book).getScrollId(), pager);
+            kv.setObject(((Book) book).getScrollId(), pager);
         }
         super.onBackPressed();
     }
@@ -229,10 +227,10 @@ public class TextActivity extends Activity {
         KvHelper kh = new KvHelper(this);
         switch (type) {
             case "book":
-                kh.set(((Music) book).getScrollId(), pager);
+                kh.setObject(((Music) book).getScrollId(), pager);
                 break;
             case "dzj":
-                kh.set(((Book) book).getScrollId(), pager);
+                kh.setObject(((Book) book).getScrollId(), pager);
                 break;
         }
     }

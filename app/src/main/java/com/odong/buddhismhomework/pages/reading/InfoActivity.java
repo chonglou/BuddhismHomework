@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -26,8 +25,8 @@ public class InfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
 
-        Book book = new Gson().fromJson(getIntent().getStringExtra("book"), Book.class);
-        getActionBar().setIcon(R.drawable.ic_dzj);
+        Book book = (Book) getIntent().getSerializableExtra("book");
+
         setTitle(getString(R.string.action_book_info) + ": " + book.getTitle());
 
 

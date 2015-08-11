@@ -310,6 +310,9 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
+            case 23:
+                db.execSQL("ALTER TABLE books ADD COLUMN size INTEGER(8) NOT NULL DEFAULT 0");
+                break;
             case 5:
                 for (String s : new String[]{
                         "CREATE TABLE IF NOT EXISTS favorites(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, type VARCHAR(16) NOT NULL, tid INTEGER NOT NULL, extra VARCHAR(500), created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)",

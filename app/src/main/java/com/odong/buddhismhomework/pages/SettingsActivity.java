@@ -38,10 +38,10 @@ public class SettingsActivity extends Activity {
 
     private void setTexts() {
         KvHelper kv = new KvHelper(this);
-        ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(kv.get("mp3.replay", Boolean.class, false));
+        ((Switch) findViewById(R.id.btn_settings_replay)).setChecked(kv.get().getBoolean("mp3.replay", false));
 
 
-        Date lastSync = kv.get("sync://all.zip", Date.class, null);
+        Date lastSync = kv.getDate("sync://all.zip", null);
         final StringBuilder sb = new StringBuilder();
         new DwDbHelper(this).listLog(20, new DwDbHelper.LogCallback() {
             @Override
@@ -73,7 +73,7 @@ public class SettingsActivity extends Activity {
 
 
     private void initCalendar(final int tv, final int tvs, int btn, final String key) {
-        Calendar cal = new KvHelper(this).get(key, Calendar.class, new Calendar());
+        Calendar cal = (Calendar) new KvHelper(this).getObject(key, new Calendar());
         ((TextView) findViewById(tv)).setText(getString(tvs, cal.getHour(), cal.getMinute()));
         Switch sw = (Switch) findViewById(btn);
         sw.setChecked(cal.isEnable());
@@ -83,7 +83,7 @@ public class SettingsActivity extends Activity {
             public void onClick(View v) {
                 Switch sw = (Switch) v;
                 KvHelper kv = new KvHelper(SettingsActivity.this);
-                Calendar cal = kv.get(key, Calendar.class, new Calendar());
+                Calendar cal = (Calendar) kv.getObject(key, new Calendar());
 
                 if (sw.isChecked()) {
                     AlertDialog.Builder adb = new AlertDialog.Builder(SettingsActivity.this);
@@ -96,7 +96,7 @@ public class SettingsActivity extends Activity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             KvHelper kv = new KvHelper(SettingsActivity.this);
-                            Calendar cal = kv.get(key, Calendar.class, new Calendar());
+                            Calendar cal = (Calendar) kv.getObject(key, new Calendar());
                             cal.setHour(picker.getCurrentHour());
                             cal.setMinute(picker.getCurrentMinute());
                             cal.setEnable(true);
@@ -177,7 +177,7 @@ public class SettingsActivity extends Activity {
     private void initHosts() {
         RadioGroup rg = (RadioGroup) findViewById(R.id.rg_setting_hosts);
 
-        int type = new KvHelper(this).get("host.type", Integer.class, R.id.btn_setting_home_dropbox);
+        int type = new KvHelper(this).get().getInt("host.type", R.id.btn_setting_home_dropbox);
 
         rg.check(type);
 

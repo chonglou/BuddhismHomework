@@ -43,6 +43,15 @@ public class Book implements Serializable {
     private String title;
     private boolean fav;
     private int id;
+    private int size;
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     public int getId() {
         return id;

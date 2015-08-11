@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Channel;
 import com.odong.buddhismhomework.models.Playlist;
@@ -36,10 +35,10 @@ public class VideoActivity extends Activity {
                 initChannelList();
                 break;
             case "playlist":
-                initPlaylist(new Gson().fromJson(getIntent().getStringExtra("channel"), Channel.class));
+                initPlaylist((Channel) getIntent().getSerializableExtra("channel"));
                 break;
             case "videos":
-                initVideosList(new Gson().fromJson(getIntent().getStringExtra("playlist"), Playlist.class));
+                initVideosList((Playlist) getIntent().getSerializableExtra("playlist"));
                 break;
         }
 
@@ -75,7 +74,7 @@ public class VideoActivity extends Activity {
                 Intent intent = new Intent(VideoActivity.this, VideoActivity.class);
                 Channel ch = channels.get(position);
                 intent.putExtra("type", "playlist");
-                intent.putExtra("channel", new Gson().toJson(ch));
+                intent.putExtra("channel", ch);
                 startActivity(intent);
             }
         });
@@ -110,7 +109,7 @@ public class VideoActivity extends Activity {
                 Intent intent = new Intent(VideoActivity.this, VideoActivity.class);
                 Playlist pl = playlist.get(position);
                 intent.putExtra("type", "videos");
-                intent.putExtra("playlist", new Gson().toJson(pl));
+                intent.putExtra("playlist", pl);
                 startActivity(intent);
             }
         });

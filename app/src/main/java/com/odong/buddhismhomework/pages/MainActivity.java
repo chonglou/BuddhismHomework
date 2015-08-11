@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.NavIcon;
@@ -30,6 +28,9 @@ import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 import com.odong.buddhismhomework.widgets.NavIconAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -135,7 +136,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_courses, R.drawable.ic_courses, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://musics.zip", Date.class, null) == null) {
+                if (new KvHelper(MainActivity.this).getDate("sync://musics.zip", null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("musics.zip");
                 } else {
                     Intent intent = new Intent(MainActivity.this, SectionActivity.class);
@@ -147,7 +148,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://cbeta.sql", Date.class, null) == null) {
+                if (new KvHelper(MainActivity.this).getDate("sync://cbeta.sql", null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
                 } else {
                     Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
@@ -159,7 +160,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_musics, R.drawable.ic_musics, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://musics.zip", Date.class, null) == null) {
+                if (new KvHelper(MainActivity.this).getDate("sync://musics.zip", null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("musics.zip");
                 } else {
                     Intent intent = new Intent(MainActivity.this, SectionActivity.class);
@@ -172,7 +173,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_videos, R.drawable.ic_videos, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://videos.sql", Date.class, null) == null) {
+                if (new KvHelper(MainActivity.this).getDate("sync://videos.sql", null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("videos.sql");
                 } else {
                     Intent intent = new Intent(MainActivity.this, VideoActivity.class);
@@ -185,7 +186,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_dict, R.drawable.ic_dict, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://dict.zip", Date.class, null) == null) {
+                if (new KvHelper(MainActivity.this).getDate("sync://dict.zip", null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("dict.zip");
                 } else {
                     startActivity(new Intent(MainActivity.this, DictActivity.class));
@@ -196,7 +197,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://cbeta.sql", Date.class, null) == null) {
+                if (new KvHelper(MainActivity.this).getDate("sync://cbeta.sql", null) == null) {
                     new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
                 } else {
                     Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
@@ -230,7 +231,7 @@ public class MainActivity extends Activity {
     }
 
     private void checkVersion() {
-        Date lc = new KvHelper(this).get("version.last_check", Date.class, null);
+        Date lc = new KvHelper(this).getDate("version.last_check", null);
         if (lc != null && (lc.getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24)) {
             return;
         }
@@ -246,14 +247,16 @@ public class MainActivity extends Activity {
                     PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
                     Log.d("当前版本号", pi.versionName);
                     Log.d("版本列表", pl);
-                    String version = new JsonParser().parse(pl).getAsJsonArray().get(0).getAsJsonObject().get("name").toString();
 
+
+                    String version = new JSONArray(pl).getJSONObject(0).getString("name");
+                    Log.d("最新版本", version);
                     if (version.compareTo(pi.versionName) > 0) {
                         Message msg = new Message();
                         msg.what = UPGRADE;
                         versionHandler.sendMessage(msg);
                     }
-                } catch (JsonParseException | IOException | URISyntaxException | PackageManager.NameNotFoundException e) {
+                } catch (JSONException | IOException | URISyntaxException | PackageManager.NameNotFoundException e) {
                     new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
                 }
 

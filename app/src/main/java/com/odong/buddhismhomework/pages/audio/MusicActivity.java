@@ -14,7 +14,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Music;
@@ -38,7 +37,7 @@ public class MusicActivity extends Activity {
 
         getActionBar().setIcon(getResources().getIdentifier("ic_" + type, "drawable", getPackageName()));
 
-        music = new Gson().fromJson(getIntent().getStringExtra("music"), Music.class);
+        music = (Music) getIntent().getSerializableExtra("music");
         setTitle(music.getName());
 
 
@@ -95,7 +94,7 @@ public class MusicActivity extends Activity {
                     mp3Player.prepare();
 
 
-                    boolean loop = new KvHelper(this).get("mp3.replay", Boolean.class, false);
+                    boolean loop = new KvHelper(this).get().getBoolean("mp3.replay", false);
 
                     if (loop) {
                         mp3Player.setLooping(true);

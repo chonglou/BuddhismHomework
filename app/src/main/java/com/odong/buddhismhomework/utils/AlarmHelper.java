@@ -21,7 +21,7 @@ public class AlarmHelper {
 
         KvHelper kv = new KvHelper(context);
         for (String k : new String[]{"homework.evening.cal", "homework.morning.cal"}) {
-            Calendar ca = kv.get(k, Calendar.class, new Calendar());
+            Calendar ca = (Calendar) kv.getObject(k, new Calendar());
             PendingIntent pi = getIntent(k);
             if (ca.isEnable()) {
                 java.util.Calendar cal = java.util.Calendar.getInstance();

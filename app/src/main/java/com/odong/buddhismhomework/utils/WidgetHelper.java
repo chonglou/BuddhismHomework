@@ -22,7 +22,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.pages.DdcActivity;
@@ -34,7 +33,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,13 +130,13 @@ public class WidgetHelper {
 
     public void initTextViewFont(int rid) {
         Activity context = (Activity) this.context;
-        float size = new KvHelper(context).get("book.font.size", Float.class, 20.0f);
+        float size = new KvHelper(context).get().getFloat("book.font.size", 20.0f);
         ((TextView) context.findViewById(rid)).setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
     }
 
     public void setWebViewFont(int rid) {
-        Integer font = new KvHelper(context).get("web.font.size", Integer.class, null);
-        if (font != null) {
+        int font = new KvHelper(context).get().getInt("web.font.size", -1);
+        if (font != -1) {
             Activity context = (Activity) this.context;
             WebSettings ws = (((WebView) context.findViewById(rid))).getSettings();
             ws.setTextZoom(font);
@@ -150,7 +148,7 @@ public class WidgetHelper {
         WebSettings ws = (((WebView) context.findViewById(rid))).getSettings();
         KvHelper kh = new KvHelper(context);
 
-        int i = kh.get("web.font.size", Integer.class, ws.getTextZoom());
+        int i = kh.get().getInt("web.font.size", ws.getTextZoom());
         int j = 10;
         int k = out ? (i + j) : (i - j);
         Log.d("字体大小", "" + i + "\t" + k);
@@ -163,7 +161,7 @@ public class WidgetHelper {
         TextView tv = ((TextView) context.findViewById(rid));
         KvHelper kh = new KvHelper(context);
 
-        float i = kh.get("text.font.size", Float.class, tv.getTextSize());
+        float i = kh.get().getFloat("text.font.size", tv.getTextSize());
         float j = 1f;
         float k = out ? (i + j) : (i - j);
 
@@ -218,11 +216,11 @@ public class WidgetHelper {
     }
 
     public void showBook(Book book) {
-        if (new KvHelper(context).get("sync://cbeta.zip", Date.class, null) == null) {
+        if (new KvHelper(context).getDate("sync://cbeta.zip", null) == null) {
             showSyncDialog("cbeta.zip");
         } else {
             Intent intent = new Intent(context, EpubActivity.class);
-            intent.putExtra("book", new Gson().toJson(book));
+            intent.putExtra("book", book);
             intent.putExtra("link", "TableOfContents.xhtml");
             context.startActivity(intent);
         }
