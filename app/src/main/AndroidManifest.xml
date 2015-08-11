@@ -51,13 +51,17 @@
             android:name=".pages.reading.EpubActivity" />
         <activity
             android:icon="@drawable/ic_dzj"
-            android:name=".pages.reading.ChapterActivity"/>
+            android:name=".pages.reading.ChapterActivity" />
         <activity
             android:icon="@drawable/ic_dzj"
-            android:name=".pages.reading.InfoActivity"/>
+            android:name=".pages.reading.InfoActivity" />
 
         <service
             android:name=".services.SyncService"
+            android:exported="false" />
+
+        <service
+            android:name=".services.IndexService"
             android:exported="false" />
 
         <receiver

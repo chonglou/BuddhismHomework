@@ -24,7 +24,7 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
-import com.odong.buddhismhomework.utils.DbHelper;
+import com.odong.buddhismhomework.services.IndexService;
 import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -47,8 +47,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         initGrid();
-        checkVersion();
-        checkIndex();
+        check();
+
     }
 
     @Override
@@ -224,32 +224,29 @@ public class MainActivity extends Activity {
 
     }
 
-    private void checkIndex() {
-        try {
-            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-            KvHelper kh = new KvHelper(MainActivity.this);
-            String frk = "first.run." + pi.versionName;
-            if (kh.get().getBoolean(frk, true)) {
-
-                new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_wait_for_index), true);
-                new DbHelper(MainActivity.this).index();
-                kh.set(frk, false);
-            }
-            kh.set(frk, false);
-        } catch (PackageManager.NameNotFoundException|IOException|JSONException e) {
-            Log.e("main", "创建索引出错", e);
-            new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_create_index), true);
-        }
-
-    }
-
-    private void checkVersion() {
+    private void check() {
         KvHelper kh = new KvHelper(this);
         Date lc = kh.getDate("version.last_check", null);
         if (lc != null && (lc.getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24)) {
             return;
         }
+
+        PackageInfo pi;
+        try {
+            pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            return;
+        }
+
+
+        final String versionName = pi.versionName;
+        Log.d("当前版本", versionName);
+
+        Intent intent = new Intent(this, IndexService.class);
+        intent.putExtra("version", versionName);
+        startService(intent);
 
         new AsyncTask<String, Void, Void>() {
 
@@ -258,8 +255,6 @@ public class MainActivity extends Activity {
                 String url = "https://api.github.com/repos/chonglou/BuddhismHomework/tags";
 
                 try {
-                    PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    Log.d("当前版本", pi.versionName);
 
 
                     String pl = HttpClient.get(url);
@@ -268,7 +263,7 @@ public class MainActivity extends Activity {
 
                     String version = new JSONArray(pl).getJSONObject(0).getString("name");
                     Log.d("最新版本", version);
-                    if (version.compareTo(pi.versionName) > 0) {
+                    if (version.compareTo(versionName) > 0) {
                         Message msg = new Message();
                         msg.what = UPGRADE;
                         versionHandler.sendMessage(msg);
@@ -276,7 +271,7 @@ public class MainActivity extends Activity {
 
                     KvHelper kh = new KvHelper(MainActivity.this);
                     kh.set("version.last_check", new Date());
-                } catch (JSONException | IOException | PackageManager.NameNotFoundException e) {
+                } catch (JSONException | IOException e) {
                     Log.e("main", "检查版本出错", e);
                     new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
                 }

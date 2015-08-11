@@ -19,6 +19,7 @@ import java.util.Date;
  * Created by flamen on 15-2-20.
  */
 public class KvHelper {
+
     public KvHelper(Context context) {
         settings = context.getSharedPreferences(
                 context.getString(R.string.app_name) + ".db",
