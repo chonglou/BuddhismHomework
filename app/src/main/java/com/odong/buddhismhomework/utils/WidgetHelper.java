@@ -211,10 +211,9 @@ public class WidgetHelper {
         }
     }
 
-    public void showDdc(String url, String title) {
+    public void showDdc(String url) {
         Intent intent = new Intent(context, DdcActivity.class);
         intent.putExtra("url", url);
-        intent.putExtra("title", title);
         context.startActivity(intent);
     }
 

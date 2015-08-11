@@ -27,9 +27,7 @@ public class SittingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitting);
-
         setTitle(R.string.title_sitting);
-        getActionBar().setIcon(R.drawable.ic_sitting);
         clocks = new XmlHelper(this).getClockList();
         initSpinner();
     }

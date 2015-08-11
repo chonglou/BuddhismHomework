@@ -1,5 +1,6 @@
 package com.odong.buddhismhomework.pages;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,7 +14,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.utils.DwDbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -25,20 +25,7 @@ public class DdcActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-
-        getActionBar().setIcon(getIntent().getIntExtra("icon", R.drawable.ic_ddc));
-
-
-        index = "file://" + new CacheFile(DdcActivity.this, "/ddc/HTML/XD.HTM").getRealFile().getAbsolutePath();
-
-
-        String url = getIntent().getStringExtra("url");
-        if (url == null) {
-            url = index;
-        }
-
-        initWebView(url);
-
+        initWebView(getIntent().getStringExtra("url"));
     }
 
     @Override
@@ -101,10 +88,11 @@ public class DdcActivity extends Activity {
         WebView view = (WebView) findViewById(R.id.wv_content);
         Log.d("打开", url);
         view.loadUrl(url);
+
         new WidgetHelper(this).setWebViewFont(R.id.wv_content);
     }
 
-
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView(String url) {
         final WebView wv = (WebView) findViewById(R.id.wv_content);
         wv.setWebViewClient(new WebViewClient() {
@@ -124,14 +112,12 @@ public class DdcActivity extends Activity {
                 super.onPageFinished(view, url);
             }
         });
+
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setDomStorageEnabled(true);
 
         loadUrl(url);
     }
-
-
-    private String index;
 
 
 }

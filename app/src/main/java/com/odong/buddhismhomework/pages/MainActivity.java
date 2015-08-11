@@ -210,11 +210,7 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_ddc, R.drawable.ic_ddc, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).get("sync://ddc.zip", Date.class, null) == null) {
-                    new WidgetHelper(MainActivity.this).showSyncDialog("ddc.zip");
-                } else {
-                    new WidgetHelper(MainActivity.this).showDdc(null, null);
-                }
+                new WidgetHelper(MainActivity.this).showDdc("http://ddc.shengyen.org/mobile/");
             }
         }));
 

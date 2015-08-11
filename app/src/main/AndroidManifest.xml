@@ -32,13 +32,16 @@
             android:name=".pages.audio.MusicActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:icon="@drawable/ic_sitting"
             android:name=".pages.SittingActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".pages.HomeworkActivity" />
         <activity android:name=".pages.VideoActivity" />
         <activity android:name=".pages.DictActivity" />
         <activity android:name=".pages.WebActivity" />
-        <activity android:name=".pages.DdcActivity" />
+        <activity
+            android:icon="@drawable/ic_ddc"
+            android:name=".pages.DdcActivity" />
         <activity android:name=".pages.reading.TextActivity" />
         <activity android:name=".pages.reading.CatalogActivity" />
         <activity android:name=".pages.reading.FavoritesActivity" />
