@@ -14,6 +14,7 @@ import com.odong.buddhismhomework.models.Channel;
 import com.odong.buddhismhomework.models.Favorite;
 import com.odong.buddhismhomework.models.Playlist;
 import com.odong.buddhismhomework.models.Video;
+import com.odong.buddhismhomework.receivers.ProgressReceiver;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -259,14 +260,10 @@ public class DbHelper extends SQLiteOpenHelper {
             install(db, i);
         }
 
-
     }
 
-    public interface IndexCallback {
-        void run(int progress);
-    }
 
-    public void index(IndexCallback callback) throws IOException, JSONException {
+    public void index(ProgressReceiver.Callback callback) throws IOException, JSONException {
 
         final SQLiteDatabase db = getWritableDatabase();
 

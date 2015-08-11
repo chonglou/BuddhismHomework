@@ -7,6 +7,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.odong.buddhismhomework.R;
+import com.odong.buddhismhomework.receivers.ProgressReceiver;
 import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -36,7 +37,7 @@ public class IndexService extends IntentService {
                 receiver.send(1, msg);
 
                 new WidgetHelper(this).toast(getString(R.string.lbl_wait_for_index), true);
-                new DbHelper(this).index(new DbHelper.IndexCallback() {
+                new DbHelper(this).index(new ProgressReceiver.Callback() {
                     @Override
                     public void run(int progress) {
                         Bundle msg = new Bundle();

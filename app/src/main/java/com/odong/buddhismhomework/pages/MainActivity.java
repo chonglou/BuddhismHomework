@@ -26,6 +26,7 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
+import com.odong.buddhismhomework.receivers.ProgressReceiver;
 import com.odong.buddhismhomework.services.IndexService;
 import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
@@ -256,7 +257,7 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(this, IndexService.class);
         intent.putExtra("version", versionName);
-        intent.putExtra("receiver", new IndexReceiver(new Handler()));
+        intent.putExtra("receiver", new ProgressReceiver(this));
         startService(intent);
 
         new AsyncTask<String, Void, Void>() {
@@ -327,37 +328,5 @@ public class MainActivity extends Activity {
         }
     });
 
-    private class IndexReceiver extends ResultReceiver {
-
-        public IndexReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            switch (resultCode) {
-                case 1:
-                    new WidgetHelper(MainActivity.this).setRotation(false);
-                    dlgProgress = new ProgressDialog(MainActivity.this);
-                    dlgProgress.setTitle(R.string.dlg_title_create_index);
-                    dlgProgress.setMessage(getString(R.string.dlg_create_index, 0));
-                    break;
-                case 0:
-                    int progress = resultData.getInt("progress");
-                    dlgProgress.setProgress(progress);
-                    dlgProgress.setMessage(getString(R.string.dlg_create_index, progress));
-                    dlgProgress.show();
-                    break;
-                case -1:
-                    dlgProgress.dismiss();
-                    new WidgetHelper(MainActivity.this).setRotation(true);
-                    break;
-
-
-            }
-        }
-    }
-
-    private ProgressDialog dlgProgress;
 
 }
