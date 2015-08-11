@@ -24,6 +24,7 @@ import com.odong.buddhismhomework.models.NavIcon;
 import com.odong.buddhismhomework.pages.audio.SectionActivity;
 import com.odong.buddhismhomework.pages.reading.CatalogActivity;
 import com.odong.buddhismhomework.pages.reading.FavoritesActivity;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
 
         initGrid();
         checkVersion();
+        checkIndex();
     }
 
     @Override
@@ -147,13 +149,11 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_books, R.drawable.ic_books, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).getDate("sync://cbeta.sql", null) == null) {
-                    new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
-                } else {
-                    Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
-                    intent.putExtra("type", "fav");
-                    startActivity(intent);
-                }
+
+                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                intent.putExtra("type", "fav");
+                startActivity(intent);
+
             }
         }));
         icons.add(new NavIcon(R.string.title_musics, R.drawable.ic_musics, new View.OnClickListener() {
@@ -172,13 +172,11 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_videos, R.drawable.ic_videos, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).getDate("sync://videos.sql", null) == null) {
-                    new WidgetHelper(MainActivity.this).showSyncDialog("videos.sql");
-                } else {
-                    Intent intent = new Intent(MainActivity.this, VideoActivity.class);
-                    intent.putExtra("type", "channel");
-                    startActivity(intent);
-                }
+
+                Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+                intent.putExtra("type", "channel");
+                startActivity(intent);
+
             }
         }));
 
@@ -196,13 +194,10 @@ public class MainActivity extends Activity {
         icons.add(new NavIcon(R.string.title_dzj, R.drawable.ic_dzj, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new KvHelper(MainActivity.this).getDate("sync://cbeta.sql", null) == null) {
-                    new WidgetHelper(MainActivity.this).showSyncDialog("cbeta.sql");
-                } else {
-                    Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
-                    intent.putExtra("type", "dzj");
-                    startActivity(intent);
-                }
+
+                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                intent.putExtra("type", "dzj");
+                startActivity(intent);
 
             }
         }));
@@ -229,23 +224,45 @@ public class MainActivity extends Activity {
 
     }
 
+    private void checkIndex() {
+        try {
+            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+
+            KvHelper kh = new KvHelper(MainActivity.this);
+            String frk = "first.run." + pi.versionName;
+            if (kh.get().getBoolean(frk, true)) {
+
+                new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_wait_for_index), true);
+                new DbHelper(MainActivity.this).index();
+                kh.set(frk, false);
+            }
+            kh.set(frk, false);
+        } catch (PackageManager.NameNotFoundException|IOException|JSONException e) {
+            Log.e("main", "创建索引出错", e);
+            new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_create_index), true);
+        }
+
+    }
+
     private void checkVersion() {
-        Date lc = new KvHelper(this).getDate("version.last_check", null);
+        KvHelper kh = new KvHelper(this);
+        Date lc = kh.getDate("version.last_check", null);
         if (lc != null && (lc.getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24)) {
             return;
         }
-        new KvHelper(MainActivity.this).set("version.last_check", new Date());
 
         new AsyncTask<String, Void, Void>() {
 
             @Override
             protected Void doInBackground(String... params) {
                 String url = "https://api.github.com/repos/chonglou/BuddhismHomework/tags";
-                try {
-                    String pl = HttpClient.get(url);
 
+                try {
                     PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
                     Log.d("当前版本", pi.versionName);
+
+
+                    String pl = HttpClient.get(url);
                     Log.d("版本列表", pl);
 
 
@@ -256,7 +273,11 @@ public class MainActivity extends Activity {
                         msg.what = UPGRADE;
                         versionHandler.sendMessage(msg);
                     }
+
+                    KvHelper kh = new KvHelper(MainActivity.this);
+                    kh.set("version.last_check", new Date());
                 } catch (JSONException | IOException | PackageManager.NameNotFoundException e) {
+                    Log.e("main", "检查版本出错", e);
                     new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
                 }
 

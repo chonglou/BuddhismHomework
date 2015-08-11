@@ -11,7 +11,7 @@ import android.widget.SimpleAdapter;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Favorite;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class FavoritesActivity extends Activity {
     }
 
     private void initList() {
-        DwDbHelper ddh = new DwDbHelper(this);
+        DbHelper ddh = new DbHelper(this);
         final List<Favorite> favorites = ddh.listFavorite();
         ddh.close();
 
@@ -64,7 +64,7 @@ public class FavoritesActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Favorite fav = favorites.get(position);
 
-                DwDbHelper ddh = new DwDbHelper(FavoritesActivity.this);
+                DbHelper ddh = new DbHelper(FavoritesActivity.this);
                 WidgetHelper wh = new WidgetHelper(FavoritesActivity.this);
                 switch (fav.getType()) {
                     case "dzj":
@@ -89,7 +89,7 @@ public class FavoritesActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Favorite fav = favorites.get(position);
-                        DwDbHelper ddh = new DwDbHelper(FavoritesActivity.this);
+                        DbHelper ddh = new DbHelper(FavoritesActivity.this);
                         ddh.delFavorite(fav.getId());
                         ddh.close();
                         items.remove(position);

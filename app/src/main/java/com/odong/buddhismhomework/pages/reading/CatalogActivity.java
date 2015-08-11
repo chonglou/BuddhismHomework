@@ -12,7 +12,7 @@ import android.widget.SimpleAdapter;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ public class CatalogActivity extends Activity {
         if ("fav".equals(type)) {
             getActionBar().setIcon(R.drawable.ic_books);
             setTitle(R.string.title_books);
-            initList(new DwDbHelper(this).getFavBookList());
+            initList(new DbHelper(this).getFavBookList());
         } else if ("dzj".equals(type)) {
             setTitle(R.string.title_dzj);
             getActionBar().setIcon(R.drawable.ic_dzj);
-            initList(new DwDbHelper(this).getBookList());
+            initList(new DbHelper(this).getBookList());
         }
     }
 

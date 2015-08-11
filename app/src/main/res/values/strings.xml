@@ -82,10 +82,12 @@
     <string name="lbl_are_you_sure">你确定要进行此操作么？</string>
     <string name="lbl_every_day">每天</string>
     <string name="lbl_already_exist">文件[%s]已经存在</string>
+    <string name="lbl_wait_for_index">正在创建索引，请稍候。</string>
     <string name="lbl_error_not_exists">数据不存在</string>
     <string name="lbl_error_io">读取数据出错。</string>
     <string name="lbl_error_book_format">图书格式不对</string>
     <string name="lbl_error_download">下载数据[%s]出错</string>
+    <string name="lbl_error_create_index">创建索引出错</string>
     <string name="lbl_error_check_version">检查新版本出错</string>
     <string name="lbl_error_import">导入数据出错</string>
     <string name="lbl_error_unzip">解压缩[%s]出错</string>

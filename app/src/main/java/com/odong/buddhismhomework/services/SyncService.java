@@ -14,7 +14,7 @@ import com.odong.buddhismhomework.Config;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.pages.MainActivity;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -45,7 +45,7 @@ public class SyncService extends IntentService {
     public void onStart(Intent intent, int startId) {
         progress = 0;
         files = new HashMap<>();
-        dwDbHelper = new DwDbHelper(this);
+        dwDbHelper = new DbHelper(this);
         widgetHelper = new WidgetHelper(this);
         kvHelper = new KvHelper(this);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -286,7 +286,7 @@ public class SyncService extends IntentService {
     }
 
 
-    private DwDbHelper dwDbHelper;
+    private DbHelper dwDbHelper;
     private WidgetHelper widgetHelper;
     private KvHelper kvHelper;
     private NotificationManager notificationManager;

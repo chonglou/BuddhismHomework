@@ -7,7 +7,7 @@ import android.util.Log;
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.utils.ChineseConverter;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class SearchActivity extends Activity {
     }
 
     private void initDzjList(String keyword) {
-        DwDbHelper ddh = new DwDbHelper(this);
+        DbHelper ddh = new DbHelper(this);
         List<Book> books = ddh.searchBook(keyword);
         new WidgetHelper(this).initBookList(R.id.lv_items, books, null);
     }

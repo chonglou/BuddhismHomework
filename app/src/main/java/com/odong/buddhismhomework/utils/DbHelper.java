@@ -8,17 +8,26 @@ import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
 import com.odong.buddhismhomework.models.Channel;
 import com.odong.buddhismhomework.models.Favorite;
 import com.odong.buddhismhomework.models.Playlist;
 import com.odong.buddhismhomework.models.Video;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +36,7 @@ import java.util.List;
 /**
  * Created by flamen on 15-2-7.
  */
-public class DwDbHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
 
     public List<Channel> listChannel() {
         List<Channel> channels = new ArrayList<>();
@@ -234,8 +243,9 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public DwDbHelper(Context context) {
+    public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -244,9 +254,105 @@ public class DwDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
         for (int i = oldVersion + 1; i <= newVersion; i++) {
             install(db, i);
+        }
+
+
+    }
+
+    public void index() throws IOException, JSONException {
+        final SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+
+        Log.d("db", "加载书籍");
+        db.delete("books", "1=1", null);
+        load(R.raw.cbeta201405, new JsonCallback() {
+            @Override
+            public void run(JSONObject jo) throws JSONException {
+                ContentValues cv = new ContentValues();
+                cv.put("title", jo.getString("title"));
+                cv.put("size", jo.getLong("size"));
+                cv.put("name", jo.getString("name"));
+                cv.put("author", jo.getString("author"));
+                db.insert("books", null, cv);
+            }
+        });
+
+        Log.d("db", "加载经典");
+        load(R.raw.favorites, new JsonCallback() {
+            @Override
+            public void run(JSONObject jo) throws JSONException {
+
+                ContentValues cv = new ContentValues();
+                cv.put("fav", 1);
+                db.update("books", cv, "name = ?", new String[]{jo.getString("name")});
+            }
+        });
+
+        Log.d("db", "加载视频");
+        db.delete("channels", "1=1", null);
+        db.delete("playlist", "1=1", null);
+        db.delete("videos", "1=1", null);
+        load(R.raw.videos, new JsonCallback() {
+            @Override
+            public void run(JSONObject joc) throws JSONException {
+
+
+                ContentValues cvc = new ContentValues();
+                cvc.put("cid", joc.getString("id"));
+                cvc.put("type", joc.getString("type"));
+                cvc.put("title", joc.getString("title"));
+                cvc.put("description", joc.getString("description"));
+                long cid = db.insert("channels", null, cvc);
+
+                JSONArray jap = joc.getJSONArray("playlist");
+                for (int ip = 0; ip < jap.length(); ip++) {
+                    JSONObject jop = jap.getJSONObject(ip);
+                    ContentValues cvp = new ContentValues();
+                    cvp.put("cid", cid);
+                    cvp.put("pid", jop.getString("id"));
+                    cvp.put("title", jop.getString("title"));
+                    cvp.put("description", jop.getString("description"));
+                    long pid = db.insert("playlist", null, cvp);
+
+                    JSONArray jav = jop.getJSONArray("videos");
+                    for (int iv = 0; iv < jav.length(); iv++) {
+                        JSONObject jov = jav.getJSONObject(iv);
+                        ContentValues cvv = new ContentValues();
+                        cvv.put("pid", pid);
+                        cvv.put("vid", jov.getString("id"));
+                        cvv.put("title", jov.getString("title"));
+                        cvv.put("description", jov.getString("description"));
+                        db.insert("videos", null, cvv);
+
+                    }
+                }
+            }
+        });
+        db.setTransactionSuccessful();
+
+    }
+
+    interface JsonCallback {
+        void run(JSONObject jo) throws JSONException;
+    }
+
+    private void load(int rid, JsonCallback callback) throws IOException, JSONException {
+
+        InputStream is = context.getResources().openRawResource(rid);
+        Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        Writer writer = new StringWriter();
+        int n;
+        char[] buf = new char[1024];
+        while ((n = reader.read(buf)) != -1) {
+            writer.write(buf, 0, n);
+        }
+        JSONArray ja = new JSONArray(writer.toString());
+        for (int i = 0; i < ja.length(); i++) {
+            callback.run(ja.getJSONObject(i));
         }
     }
 
@@ -261,12 +367,27 @@ public class DwDbHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
 
+        Cursor cur = db.query(
+                "favorites",
+                new String[]{"title"},
+                "tid = ? AND type = ?",
+                new String[]{Integer.toString(tid), type},
+                null,
+                null, null);
+        boolean exists = cur.moveToNext();
+        cur.close();
+
         ContentValues cv = new ContentValues();
-        cv.put("type", type);
-        cv.put("tid", tid);
+
         cv.put("title", title);
         cv.put("extra", extra);
-        db.insert("favorites", null, cv);
+        if (exists) {
+            db.update("favorites", cv, "tid = ? AND type = ?", new String[]{Integer.toString(tid), type});
+        } else {
+            cv.put("type", type);
+            cv.put("tid", tid);
+            db.insert("favorites", null, cv);
+        }
 
     }
 
@@ -310,7 +431,7 @@ public class DwDbHelper extends SQLiteOpenHelper {
     private void install(SQLiteDatabase db, int version) {
 
         switch (version) {
-            case 23:
+            case 6:
                 db.execSQL("ALTER TABLE books ADD COLUMN size INTEGER(8) NOT NULL DEFAULT 0");
                 break;
             case 5:
@@ -385,7 +506,8 @@ public class DwDbHelper extends SQLiteOpenHelper {
         return "DROP INDEX IF EXISTS " + name;
     }
 
-    public static final int DATABASE_VERSION = 5;
+    private Context context;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "BuddhismHomework.db";
 
 

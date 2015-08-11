@@ -12,7 +12,7 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Channel;
 import com.odong.buddhismhomework.models.Playlist;
 import com.odong.buddhismhomework.models.Video;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.YoutubePlayer;
 import com.odong.buddhismhomework.widgets.ColorListAdapter;
 
@@ -47,7 +47,7 @@ public class VideoActivity extends Activity {
 
     private void initChannelList() {
         setTitle(R.string.title_videos);
-        final List<Channel> channels = new DwDbHelper(this).listChannel();
+        final List<Channel> channels = new DbHelper(this).listChannel();
 
 
         List<Map<String, String>> items = new ArrayList<>();
@@ -82,7 +82,7 @@ public class VideoActivity extends Activity {
 
     private void initPlaylist(Channel channel) {
         setTitle(channel.getTitle());
-        final List<Playlist> playlist = new DwDbHelper(this).listPlaylist(channel.getCid());
+        final List<Playlist> playlist = new DbHelper(this).listPlaylist(channel.getCid());
 
 
         List<Map<String, String>> items = new ArrayList<>();
@@ -117,7 +117,7 @@ public class VideoActivity extends Activity {
 
     private void initVideosList(Playlist playlist) {
         setTitle(playlist.getTitle());
-        final List<Video> videos = new DwDbHelper(this).listVideo(playlist.getPid());
+        final List<Video> videos = new DbHelper(this).listVideo(playlist.getPid());
 
         List<Map<String, String>> items = new ArrayList<>();
 

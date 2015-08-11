@@ -16,7 +16,7 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.models.Calendar;
 import com.odong.buddhismhomework.utils.AlarmHelper;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -43,7 +43,7 @@ public class SettingsActivity extends Activity {
 
         Date lastSync = kv.getDate("sync://all.zip", null);
         final StringBuilder sb = new StringBuilder();
-        new DwDbHelper(this).listLog(20, new DwDbHelper.LogCallback() {
+        new DbHelper(this).listLog(20, new DbHelper.LogCallback() {
             @Override
             public void call(String message, Date created) {
                 sb.append(DateFormat.getDateTimeInstance().format(created));
@@ -155,7 +155,7 @@ public class SettingsActivity extends Activity {
                                 for (String f : params) {
                                     new CacheFile(SettingsActivity.this, f).delete();
                                 }
-                                new DwDbHelper(SettingsActivity.this).addLog(getString(R.string.lbl_clear_cache));
+                                new DbHelper(SettingsActivity.this).addLog(getString(R.string.lbl_clear_cache));
                                 new WidgetHelper(SettingsActivity.this).toast(getString(R.string.lbl_success), true);
                                 return null;
                             }

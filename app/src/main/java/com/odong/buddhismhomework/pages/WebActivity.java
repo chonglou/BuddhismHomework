@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.odong.buddhismhomework.R;
-import com.odong.buddhismhomework.utils.DwDbHelper;
+import com.odong.buddhismhomework.utils.DbHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
 /**
@@ -49,7 +49,7 @@ public class WebActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         WebView wv = (WebView) findViewById(R.id.wv_content);
-                        DwDbHelper ddh = new DwDbHelper(WebActivity.this);
+                        DbHelper ddh = new DbHelper(WebActivity.this);
                         ddh.addWwwFavorite(wv.getTitle(), wv.getUrl());
                         ddh.close();
                         new WidgetHelper(WebActivity.this).toast(getString(R.string.lbl_success), false);

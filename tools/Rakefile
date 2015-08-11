@@ -155,13 +155,14 @@ namespace :crawler do
 
     books = list_cbeta
 
-    File.open("#{File.dirname __FILE__}/tmp/cbeta201405.json", 'w') do |f|
+    File.open("#{File.dirname __FILE__}/../app/src/main/res/raw/cbeta201405.json", 'w') do |f|
       f.puts books.to_json
     end
 
     puts "采集到#{books.size}本书"
-    File.open("#{File.dirname __FILE__}/tmp/favorites.json", 'w') do |f|
-      f.puts %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub T10/T10n0279.epub).to_json
+    File.open("#{File.dirname __FILE__}/../app/src/main/res/raw/favorites.json", 'w') do |f|
+      f.puts %w(T08/T08n0235.epub T08/T08n0251.epub T17/T17n0842.epub T16/T16n0670.epub T19/T19n0945.epub T14/T14n0475.epub T48/T48n2008.epub T09/T09n0262.epub T10/T10n0279.epub).map { |name| {name:name}}.to_json
+
     end
   end
 
@@ -208,7 +209,7 @@ namespace :crawler do
       end
     end
 
-    name = "#{File.dirname __FILE__}/tmp/videos.json"
+    name = "#{File.dirname __FILE__}/../app/src/main/res/raw/videos.json"
     File.open(name, 'w') do |f|
       f.puts channels.to_json
     end

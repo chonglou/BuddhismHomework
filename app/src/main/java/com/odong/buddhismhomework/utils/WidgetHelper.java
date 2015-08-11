@@ -52,7 +52,7 @@ public class WidgetHelper {
         adbF.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DwDbHelper ddh = new DwDbHelper(context);
+                DbHelper ddh = new DbHelper(context);
                 ddh.addDzjFavorite(book.getId(), book.getTitle());
                 ddh.close();
                 toast(context.getString(R.string.lbl_success), false);
