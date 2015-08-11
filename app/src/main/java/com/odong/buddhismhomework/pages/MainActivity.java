@@ -2,6 +2,7 @@ package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -246,6 +248,7 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(this, IndexService.class);
         intent.putExtra("version", versionName);
+        intent.putExtra("receiver", new IndexReceiver(new Handler()));
         startService(intent);
 
         new AsyncTask<String, Void, Void>() {
@@ -316,5 +319,35 @@ public class MainActivity extends Activity {
         }
     });
 
+    private class IndexReceiver extends ResultReceiver {
+
+        public IndexReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            switch (resultCode) {
+                case 1:
+                    dlgProgress = new ProgressDialog(MainActivity.this);
+                    dlgProgress.setTitle(R.string.dlg_title_create_index);
+                    dlgProgress.setMessage(getString(R.string.dlg_create_index, 0));
+                    break;
+                case 0:
+                    int progress = resultData.getInt("progress");
+                    dlgProgress.setProgress(progress);
+                    dlgProgress.setMessage(getString(R.string.dlg_create_index, progress));
+                    dlgProgress.show();
+                    break;
+                case -1:
+                    dlgProgress.hide();
+                    break;
+
+
+            }
+        }
+    }
+
+    private ProgressDialog dlgProgress;
 
 }

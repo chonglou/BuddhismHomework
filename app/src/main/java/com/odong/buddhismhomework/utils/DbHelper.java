@@ -262,7 +262,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
-    public void index() throws IOException, JSONException {
+    public interface IndexCallback {
+        void run(int progress);
+    }
+
+    public void index(IndexCallback callback) throws IOException, JSONException {
 
         final SQLiteDatabase db = getWritableDatabase();
 
@@ -271,6 +275,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             Log.d("db", "加载书籍");
             db.delete("books", "1=1", null);
+            callback.run(5);
             load(R.raw.cbeta201405, new JsonCallback() {
                 @Override
                 public void run(JSONObject jo) throws JSONException {
@@ -282,6 +287,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     db.insert("books", null, cv);
                 }
             });
+            callback.run(30);
 
             Log.d("db", "加载经典");
             load(R.raw.favorites, new JsonCallback() {
@@ -293,6 +299,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     db.update("books", cv, "name = ?", new String[]{jo.getString("name")});
                 }
             });
+            callback.run(40);
 
             Log.d("db", "加载视频");
             db.delete("channels", "1=1", null);
@@ -310,7 +317,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     cvc.put("title", joc.getString("title"));
                     cvc.put("description", joc.getString("description"));
                     db.insert("channels", null, cvc);
-                    Log.d("channel", joc.getString("title")+" "+cid);
+                    Log.d("channel", joc.getString("title") + " " + cid);
 
                     JSONArray jap = joc.getJSONArray("playlist");
                     for (int ip = 0; ip < jap.length(); ip++) {
@@ -337,7 +344,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     }
                 }
             });
+            callback.run(95);
             db.setTransactionSuccessful();
+            callback.run(100);
         } finally {
             db.endTransaction();
         }

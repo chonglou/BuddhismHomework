@@ -97,6 +97,9 @@
     <string name="lbl_error_md5">文件[%s]MD5不正确</string>
 
 
+    <string name="dlg_title_create_index">正在创建索引</string>
+    <string name="dlg_create_index">请稍候, 当前进度[%d%%].</string>
+
     <string name="dlg_title_exit">Exit</string>
     <string name="dlg_exit">确定要退出APP么？</string>
     <string name="dlg_title_check_version">发现新版本</string>

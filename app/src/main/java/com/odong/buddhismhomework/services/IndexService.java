@@ -2,6 +2,8 @@ package com.odong.buddhismhomework.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.odong.buddhismhomework.R;
@@ -28,10 +30,22 @@ public class IndexService extends IntentService {
             KvHelper kh = new KvHelper(this);
             String frk = "first.run." + intent.getStringExtra("version");
             if (kh.get().getBoolean(frk, true)) {
+                final ResultReceiver receiver = intent.getParcelableExtra("receiver");
+
+                Bundle msg = new Bundle();
+                receiver.send(1, msg);
 
                 new WidgetHelper(this).toast(getString(R.string.lbl_wait_for_index), true);
-                new DbHelper(this).index();
+                new DbHelper(this).index(new DbHelper.IndexCallback() {
+                    @Override
+                    public void run(int progress) {
+                        Bundle msg = new Bundle();
+                        msg.putInt("progress", progress);
+                        receiver.send(0, msg);
+                    }
+                });
                 kh.set(frk, false);
+                receiver.send(-1, msg);
             }
             kh.set(frk, false);
         } catch (IOException | JSONException e) {
