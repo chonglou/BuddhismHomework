@@ -33,7 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -236,6 +235,7 @@ public class MainActivity extends Activity {
             return;
         }
         new KvHelper(MainActivity.this).set("version.last_check", new Date());
+
         new AsyncTask<String, Void, Void>() {
 
             @Override
@@ -245,7 +245,7 @@ public class MainActivity extends Activity {
                     String pl = HttpClient.get(url);
 
                     PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    Log.d("当前版本号", pi.versionName);
+                    Log.d("当前版本", pi.versionName);
                     Log.d("版本列表", pl);
 
 
@@ -256,7 +256,7 @@ public class MainActivity extends Activity {
                         msg.what = UPGRADE;
                         versionHandler.sendMessage(msg);
                     }
-                } catch (JSONException | IOException | URISyntaxException | PackageManager.NameNotFoundException e) {
+                } catch (JSONException | IOException | PackageManager.NameNotFoundException e) {
                     new WidgetHelper(MainActivity.this).toast(getString(R.string.lbl_error_check_version), true);
                 }
 

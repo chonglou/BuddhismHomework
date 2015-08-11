@@ -2,6 +2,7 @@ package com.odong.buddhismhomework.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 
 import com.odong.buddhismhomework.R;
@@ -19,7 +20,10 @@ import java.util.Date;
  */
 public class KvHelper {
     public KvHelper(Context context) {
-        settings = context.getSharedPreferences(context.getString(R.string.app_name), 0);
+        settings = context.getSharedPreferences(
+                context.getString(R.string.app_name) + ".db",
+                Context.MODE_PRIVATE);
+
     }
 
     public void set(String key, boolean val) {
@@ -38,8 +42,7 @@ public class KvHelper {
             String val = settings.getString(key, null);
             if (val != null) {
                 try {
-
-                    ByteArrayInputStream bais = new ByteArrayInputStream(val.getBytes());
+                    ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(val, Base64.DEFAULT));
                     ObjectInputStream ois = new ObjectInputStream(bais);
                     return ois.readObject();
                 } catch (IOException | ClassNotFoundException e) {
@@ -59,7 +62,7 @@ public class KvHelper {
             oos.flush();
 
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString(key, baos.toString());
+            editor.putString(key, Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
             editor.apply();
 
         } catch (IOException e) {
@@ -102,27 +105,7 @@ public class KvHelper {
         return settings;
     }
 
-//    public void set(String key, Object val) {
-//        SharedPreferences.Editor editor = settings.edit();
-//
-//        editor.putString(key, new Gson().toJson(val));
-//        editor.apply();
-//    }
-
-
-//    public <T> T get(String key, Class<T> clazz, T def) {
-//        String val = settings.getString(key, null);
-//        if (val != null) {
-//            return new Gson().fromJson(val, clazz);
-//        }
-//
-//        if (def != null) {
-//            set(key, def);
-//        }
-//        return def;
-//
-//    }
-
     private SharedPreferences settings;
+
 
 }

@@ -15,7 +15,6 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.pages.MainActivity;
 import com.odong.buddhismhomework.utils.DwDbHelper;
-import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
 
@@ -142,8 +141,8 @@ public class SyncService extends IntentService {
                 throw new IOException(getString(R.string.lbl_no_valid_host));
         }
 
-        String json = HttpClient.get(url);
-        Log.d("文件索引", json);
+//        String json = HttpClient.get(url);
+//        Log.d("文件索引", json);
 
 //        JsonArray ja = new JsonParser().parse(json).getAsJsonArray();
 //        for (JsonElement je : ja) {
