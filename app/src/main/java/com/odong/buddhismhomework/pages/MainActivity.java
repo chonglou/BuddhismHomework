@@ -111,6 +111,14 @@ public class MainActivity extends Activity {
                 .setNegativeButton(android.R.string.no, null).show();
     }
 
+// android.view.WindowLeaked: Activity *.MainActivity has leaked window com.android.internal.policy.impl.PhoneWindow$DecorView{2800140a V.E..... R....... 0,0-480,243} that was originally added here
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        if (dlgProgress != null && dlgProgress.isShowing()) {
+//            dlgProgress.dismiss();
+//        }
+//    }
 
     private void initGrid() {
         List<NavIcon> icons = new ArrayList<NavIcon>();
@@ -329,6 +337,7 @@ public class MainActivity extends Activity {
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             switch (resultCode) {
                 case 1:
+                    new WidgetHelper(MainActivity.this).setRotation(false);
                     dlgProgress = new ProgressDialog(MainActivity.this);
                     dlgProgress.setTitle(R.string.dlg_title_create_index);
                     dlgProgress.setMessage(getString(R.string.dlg_create_index, 0));
@@ -340,7 +349,8 @@ public class MainActivity extends Activity {
                     dlgProgress.show();
                     break;
                 case -1:
-                    dlgProgress.hide();
+                    dlgProgress.dismiss();
+                    new WidgetHelper(MainActivity.this).setRotation(true);
                     break;
 
 

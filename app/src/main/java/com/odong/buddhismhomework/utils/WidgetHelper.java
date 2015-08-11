@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -43,6 +45,41 @@ import java.util.Map;
 public class WidgetHelper {
     public WidgetHelper(Context context) {
         this.context = context;
+    }
+
+    public void setRotation(boolean enable) {
+        Activity activity = (Activity) context;
+        if (enable) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } else {
+            switch (context.getResources().getConfiguration().orientation) {
+                case Configuration.ORIENTATION_PORTRAIT:
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.FROYO) {
+                        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    } else {
+                        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();//api<8要将getRotation换成getOrientation
+                        if (rotation == android.view.Surface.ROTATION_90 || rotation == android.view.Surface.ROTATION_180) {
+                            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                        } else {
+                            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                        }
+                    }
+                    break;
+
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.FROYO) {
+                        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    } else {
+                        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();//同上
+                        if (rotation == android.view.Surface.ROTATION_0 || rotation == android.view.Surface.ROTATION_90) {
+                            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                        } else {
+                            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     public void showFavoriteDialog(final Book book) {
