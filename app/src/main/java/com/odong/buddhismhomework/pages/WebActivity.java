@@ -102,6 +102,15 @@ public class WebActivity extends Activity {
                 loadUrl(url);
                 return true;
             }
+
+// todo not work
+//            @Override
+//            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+//                Log.d("打开页面出错", failingUrl);
+//                view.stopLoading();
+//                view.loadData(getString(R.string.lbl_web_load_error), "text/html", "utf-8");
+//            }
+
         });
 
         wv.setWebChromeClient(new WebChromeClient());
@@ -115,6 +124,7 @@ public class WebActivity extends Activity {
 
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setDomStorageEnabled(true);
+
 
         loadUrl(url);
     }
