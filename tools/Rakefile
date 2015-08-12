@@ -85,7 +85,7 @@ end
 namespace :image do
   desc '转换图片大小'
   task :convert do
-    %w(books courses launcher morning musics evening sitting videos dict dzj zoom_in zoom_out action_favorite previous next ddc home help storage).each do |i|
+    %w(books courses cbeta launcher morning musics evening sitting videos dict dzj zoom_in zoom_out action_favorite previous next ddc home help storage).each do |i|
       j="ic_#{i}.png"
       t = "#{RES_ROOT}/drawable"
       if File.file?("images/#{j}")
