@@ -71,8 +71,10 @@ public class FavoritesActivity extends Activity {
                         wh.showBook(ddh.getBook(fav.getTid()));
                         return;
                     case "ddc":
-                        wh.showDdc(fav.getExtra());
+                    case "cbeta":
+                        wh.showWeb(fav.getExtra(), fav.getType());
                         break;
+
                 }
             }
         });

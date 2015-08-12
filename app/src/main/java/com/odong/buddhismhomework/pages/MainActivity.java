@@ -212,11 +212,19 @@ public class MainActivity extends Activity {
 
             }
         }));
+        icons.add(new NavIcon(R.string.title_cbeta, R.drawable.ic_cbeta, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new WidgetHelper(MainActivity.this).showWeb("http://tripitaka.cbeta.org/mobile/", "cbeta");
+
+            }
+        }));
 
         icons.add(new NavIcon(R.string.title_ddc, R.drawable.ic_ddc, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new WidgetHelper(MainActivity.this).showDdc("http://ddc.shengyen.org/mobile/");
+                new WidgetHelper(MainActivity.this).showWeb("http://ddc.shengyen.org/mobile/", "ddc");
             }
         }));
 

@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.Book;
-import com.odong.buddhismhomework.pages.DdcActivity;
+import com.odong.buddhismhomework.pages.WebActivity;
 import com.odong.buddhismhomework.pages.reading.EpubActivity;
 import com.odong.buddhismhomework.pages.reading.SearchActivity;
 import com.odong.buddhismhomework.services.SyncService;
@@ -246,9 +246,10 @@ public class WidgetHelper {
         }
     }
 
-    public void showDdc(String url) {
-        Intent intent = new Intent(context, DdcActivity.class);
+    public void showWeb(String url, String type) {
+        Intent intent = new Intent(context, WebActivity.class);
         intent.putExtra("url", url);
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 

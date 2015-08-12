@@ -20,7 +20,7 @@ import com.odong.buddhismhomework.utils.WidgetHelper;
 /**
  * Created by flamen on 15-3-5.
  */
-public class DdcActivity extends Activity {
+public class WebActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +30,7 @@ public class DdcActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_ddc, menu);
+        getMenuInflater().inflate(R.menu.menu_web, menu);
         return true;
     }
 
@@ -48,10 +48,10 @@ public class DdcActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         WebView wv = (WebView) findViewById(R.id.wv_content);
 
-                        DbHelper ddh = new DbHelper(DdcActivity.this);
-                        ddh.addDdcFavorite(wv.getTitle(), wv.getUrl());
+                        DbHelper ddh = new DbHelper(WebActivity.this);
+                        ddh.addWwwFavorite(getIntent().getStringExtra("type"), wv.getTitle(), wv.getUrl());
                         ddh.close();
-                        new WidgetHelper(DdcActivity.this).toast(getString(R.string.lbl_success), false);
+                        new WidgetHelper(WebActivity.this).toast(getString(R.string.lbl_success), false);
                     }
                 });
                 adbF.setNegativeButton(android.R.string.no, null);

@@ -40,7 +40,7 @@
         <activity android:name=".pages.DictActivity" />
         <activity
             android:icon="@drawable/ic_ddc"
-            android:name=".pages.DdcActivity" />
+            android:name=".pages.WebActivity" />
         <activity android:name=".pages.reading.TextActivity" />
         <activity android:name=".pages.reading.CatalogActivity" />
         <activity android:name=".pages.reading.FavoritesActivity" />

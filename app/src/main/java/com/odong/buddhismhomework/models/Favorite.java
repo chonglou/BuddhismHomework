@@ -14,6 +14,8 @@ public class Favorite implements Serializable {
                 return R.string.title_ddc;
             case "dzj":
                 return R.string.title_dzj;
+            case "cbeta":
+                return R.string.title_cbeta;
         }
         return R.string.lbl_null;
     }

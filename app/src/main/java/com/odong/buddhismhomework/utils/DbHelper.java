@@ -160,12 +160,16 @@ public class DbHelper extends SQLiteOpenHelper {
         return favorites;
     }
 
-    public void addWwwFavorite(String title, String url) {
-        addFavorite("www", 0, title, url);
+    public void addWwwFavorite(String type, String title, String url) {
+        addFavorite(type, url.hashCode(), title, url);
     }
 
     public void addDdcFavorite(String title, String url) {
-        addFavorite("ddc", 0, title, url);
+        addWwwFavorite("ddc", title, url);
+    }
+
+    public void addCbetaFavorite(String title, String url) {
+        addWwwFavorite("cbeta", title, url);
     }
 
     public void addDzjFavorite(int id, String title) {
