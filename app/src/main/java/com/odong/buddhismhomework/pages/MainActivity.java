@@ -2,7 +2,6 @@ package com.odong.buddhismhomework.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,6 +97,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(R.string.dlg_title_exit)
@@ -110,6 +109,7 @@ public class MainActivity extends Activity {
                     }
                 })
                 .setNegativeButton(android.R.string.no, null).show();
+
     }
 
 // android.view.WindowLeaked: Activity *.MainActivity has leaked window com.android.internal.policy.impl.PhoneWindow$DecorView{2800140a V.E..... R....... 0,0-480,243} that was originally added here
@@ -257,7 +257,8 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(this, IndexService.class);
         intent.putExtra("version", versionName);
-        intent.putExtra("receiver", new ProgressReceiver(this));
+        progressReceiver = new ProgressReceiver(this);
+        intent.putExtra("receiver", progressReceiver);
         startService(intent);
 
         new AsyncTask<String, Void, Void>() {
@@ -298,6 +299,7 @@ public class MainActivity extends Activity {
 
     final int UPGRADE = 1;
     final int ERROR = 2;
+    private ProgressReceiver progressReceiver;
     private Handler versionHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {

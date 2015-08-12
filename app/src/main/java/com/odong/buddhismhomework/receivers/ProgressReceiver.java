@@ -26,24 +26,33 @@ public class ProgressReceiver extends ResultReceiver {
                 dlg = new ProgressDialog(context);
                 dlg.setTitle(R.string.dlg_title_create_index);
                 dlg.setMessage(context.getString(R.string.dlg_create_index, 0));
+                dlg.setCancelable(false);
+                running = true;
                 break;
             case 0:
                 int progress = resultData.getInt("progress");
                 dlg.setProgress(progress);
                 dlg.setMessage(context.getString(R.string.dlg_create_index, progress));
                 dlg.show();
+                running = true;
                 break;
             case -1:
                 dlg.dismiss();
                 new WidgetHelper(context).setRotation(true);
+                running = false;
                 break;
 
 
         }
     }
+
     private Context context;
     private ProgressDialog dlg;
+    private boolean running;
 
+    public boolean isRunning() {
+        return running;
+    }
 
     public interface Callback {
         void run(int progress);

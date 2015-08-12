@@ -15,8 +15,12 @@ import com.odong.buddhismhomework.R;
 import com.odong.buddhismhomework.models.CacheFile;
 import com.odong.buddhismhomework.pages.MainActivity;
 import com.odong.buddhismhomework.utils.DbHelper;
+import com.odong.buddhismhomework.utils.HttpClient;
 import com.odong.buddhismhomework.utils.KvHelper;
 import com.odong.buddhismhomework.utils.WidgetHelper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -68,19 +72,8 @@ public class SyncService extends IntentService {
 
 
         try {
-
             initFiles();
-
             switch (type) {
-                case "cbeta.sql":
-                    downloadAndImport("cbeta");
-                    break;
-                case "videos.sql":
-                    downloadAndImport("videos");
-                    break;
-                case "ddc.zip":
-                    downloadAndUnzip("ddc");
-                    break;
                 case "musics.zip":
                     downloadAndUnzip("musics");
                     break;
@@ -91,10 +84,7 @@ public class SyncService extends IntentService {
                     downloadAndUnzip("cbeta");
                     break;
                 default:
-                    downloadAndImport("cbeta");
-                    downloadAndImport("videos");
                     downloadAndUnzip("dict");
-                    downloadAndUnzip("ddc");
                     downloadAndUnzip("musics");
                     downloadAndUnzip("cbeta");
                     kvHelper.set("sync://all.zip", new Date());
@@ -141,17 +131,16 @@ public class SyncService extends IntentService {
                 throw new IOException(getString(R.string.lbl_no_valid_host));
         }
 
-//        String json = HttpClient.get(url);
-//        Log.d("文件索引", json);
-
-//        JsonArray ja = new JsonParser().parse(json).getAsJsonArray();
-//        for (JsonElement je : ja) {
-//            Map<String, String> map = new HashMap<>();
-//            JsonObject jo = je.getAsJsonObject();
-//            map.put("url", jo.get(type).getAsString());
-//            map.put("md5", jo.get("md5").getAsString());
-//            files.put(jo.get("name").getAsString(), map);
-//        }
+        String json = HttpClient.get(url);
+        Log.d("文件索引", json);
+        JSONArray ja = new JSONArray(json);
+        for (int i = 0; i < ja.length(); i++) {
+            Map<String, String> map = new HashMap<>();
+            JSONObject jo = ja.getJSONObject(i);
+            map.put("url", jo.getString("dropbox"));
+            map.put("md5", jo.getString("md5"));
+            files.put(jo.getString("name"), map);
+        }
         Log.d("文件列表", files.toString());
     }
 
@@ -293,6 +282,7 @@ public class SyncService extends IntentService {
     private Notification notification;
     private Intent updateIntent;
     private Map<String, Map<String, String>> files;
+
     private int progress;
 
     private final String SPACING = "------";
